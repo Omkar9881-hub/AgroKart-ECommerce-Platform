@@ -1,0 +1,468 @@
+{% load static %}
+{% include "core/base_header.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgroKart – Products</title>
+  <style>
+* {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background-color: #f4f4f4;
+      overflow-x: hidden;
+      padding-top: 60px;
+    }
+    
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, #4CAF50, #2E7D32, #1B5E20);
+      color: white;
+      text-align: center;
+      padding: 80px 20px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1.5" fill="rgba(255,255,255,0.08)"/><circle cx="50" cy="10" r="1" fill="rgba(255,255,255,0.06)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+      opacity: 0.3;
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .hero-section h1 {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .hero-section p {
+      font-size: 20px;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+    
+    /* Products Section */
+    .products-section {
+      padding: 80px 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+    }
+    
+    .product-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+    
+    .product-image-container {
+      position: relative;
+      height: 250px;
+      overflow: hidden;
+    }
+    
+    .product-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .product-card:hover img {
+      transform: scale(1.05);
+    }
+    
+    .product-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: white;
+      background: #4CAF50;
+    }
+    
+    .product-content {
+      padding: 25px;
+    }
+    
+    .product-category {
+      color: #4CAF50;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    
+    .product-content h3 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+    
+    .product-description {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    
+    .product-features {
+      list-style: none;
+      margin-bottom: 25px;
+    }
+    
+    .product-features li {
+      color: #555;
+      font-size: 13px;
+      margin-bottom: 8px;
+      padding-left: 20px;
+      position: relative;
+    }
+    
+    .product-features li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #4CAF50;
+      font-weight: bold;
+    }
+    
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .product-price {
+      font-size: 24px;
+      font-weight: 700;
+      color: #4CAF50;
+    }
+    
+    .view-details-btn {
+      background: #4CAF50;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    
+    .view-details-btn:hover {
+      background: #45a049;
+      transform: translateY(-2px);
+    }
+    
+    .no-products {
+      text-align: center;
+      padding: 60px 20px;
+      color: #666;
+    }
+    
+    .no-products h3 {
+      font-size: 24px;
+      margin-bottom: 15px;
+      color: #333;
+    }
+    
+    /* Footer Styles */
+    footer {
+      background: linear-gradient(to right, #2e2929, #5a925c);
+      color: white;
+      padding: 40px 30px 0;
+    }
+    .footer-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-bottom: 30px;
+    }
+    .footer-section {
+      flex: 1;
+      min-width: 250px;
+      text-align: left;
+    }
+    .footer-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .footer-logo img {
+      height: 80px;
+      width: auto;
+      margin-bottom: 15px;
+    }
+    .footer-logo .description {
+      font-size: 0.95em;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      color: #e0e0e0;
+      background: transparent;
+    }
+    .footer-social-icons {
+      display: flex;
+      gap: 12px;
+    }
+    .footer-social-icons a {
+      width: 50px;
+      height: 50px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .footer-social-icons a:hover {
+      background: #4CAF50;
+    }
+    .footer-social-icons img {
+      width: 28px;
+      height: 28px;
+      filter: brightness(0) invert(1);
+    }
+    .footer-section h3 {
+      color: #4CAF50;
+      font-size: 1.2em;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+    }
+    .footer-section ul li {
+      margin-bottom: 8px;
+    }
+    .footer-section ul li a {
+      color: #e0e0e0;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .footer-section ul li a:hover {
+      color: #4CAF50;
+    }
+    .footer-section p {
+      color: #e0e0e0;
+      margin: 5px 0;
+      line-height: 1.4;
+    }
+    .footer-bottom {
+      border-top: 1px solid #555;
+      padding: 20px 0;
+      text-align: center;
+      color: #ccc;
+      font-size: 0.9em;
+    }
+    
+    @media (max-width: 768px) {
+      .hero-section h1 {
+        font-size: 32px;
+      }
+      .hero-section p {
+        font-size: 16px;
+      }
+      .products-section {
+        grid-template-columns: 1fr;
+        padding: 40px 15px;
+      }
+      .footer-main {
+        flex-direction: column;
+        gap: 25px;
+      }
+      .footer-section {
+        min-width: 100%;
+        text-align: center;
+      }
+      .footer-logo {
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="lang-text" data-en="Premium Agricultural Products" data-mr="प्रीमियम कृषी उत्पादने">Premium Agricultural Products</h1>
+      <p class="lang-text" 
+         data-en="Discover our extensive collection of high-quality seeds and agricultural products for sustainable farming"
+         data-mr="शाश्वत शेतीसाठी उच्च-गुणवत्तेच्या बियाण्यांचा आणि कृषी उत्पादनांचा आमचा विस्तृत संग्रह शोधा">
+        Discover our extensive collection of high-quality seeds and agricultural products for sustainable farming
+      </p>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section class="products-section">
+    {% if products %}
+      {% for product in products %}
+        {% if product.is_active %}
+          <div class="product-card">
+            <div class="product-image-container">
+              {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+              {% else %}
+                <img src="{% static 'images/agrokart.png' %}" alt="{{ product.name }}">
+              {% endif %}
+              {% if product.category %}
+                <div class="product-badge">{{ product.category }}</div>
+              {% endif %}
+            </div>
+            <div class="product-content">
+              <div class="product-category">{{ product.category|upper|default:"SEEDS" }}</div>
+              <h3>{{ product.name }}</h3>
+              <p class="product-description">
+                {{ product.description|truncatewords:20 }}
+              </p>
+              <ul class="product-features">
+                <li>Stock: {{ product.stock_quantity }} units available</li>
+                <li>Fresh & Quality Assured</li>
+                <li>Direct from Farm</li>
+                <li>Certified & Tested</li>
+              </ul>
+              <div class="product-footer">
+                <div class="product-price">₹{{ product.price }}/kg</div>
+                <a href="{% url 'productinfo' %}?product={{ product.id }}" class="view-details-btn">View Details</a>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      <div class="no-products">
+        <h3>No products available at the moment</h3>
+        <p>Please check back later or contact admin to add products.</p>
+      </div>
+    {% endif %}
+  </section>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="footer-main">
+      <!-- Left Section: Logo & Description -->
+      <div class="footer-section footer-logo">
+        <img src="{% static 'images/web_logo.png' %}" alt="AgroKart Logo">
+        <p class="description lang-text" 
+           data-en="Empowering farmers with quality seeds and modern agricultural solutions for sustainable farming and better yields."
+           data-mr="दर्जेदार बियाणे आणि आधुनिक शेती तंत्रज्ञानाने शेतकऱ्यांना सक्षम करत आहे, शाश्वत शेती आणि चांगल्या उत्पादनासाठी.">
+          Empowering farmers with quality seeds and modern agricultural solutions for sustainable farming and better yields.
+        </p>
+        <div class="footer-social-icons">
+          <a href="#" title="Facebook"><img src="{% static 'images/facebook.png' %}" alt="Facebook"></a>
+          <a href="#" title="Twitter"><img src="{% static 'images/twitter.png' %}" alt="Twitter"></a>
+          <a href="#" title="Instagram"><img src="{% static 'images/instagram.png' %}" alt="Instagram"></a>
+          <a href="#" title="LinkedIn"><img src="{% static 'images/linkedin.png' %}" alt="LinkedIn"></a>
+        </div>
+      </div>
+
+      <!-- Middle Left Section: Quick Links -->
+      <div class="footer-section">
+        <h3 class="lang-text" data-en="Quick Links" data-mr="द्रुत दुवे">Quick Links</h3>
+        <ul>
+          <li><a href="{% url 'home' %}" class="lang-text" data-en="Home" data-mr="मुख्यपृष्ठ">Home</a></li>
+          <li><a href="{% url 'aboutus' %}" class="lang-text" data-en="About Us" data-mr="आमच्याबद्दल">About Us</a></li>
+          <li><a href="{% url 'product' %}" class="lang-text" data-en="Products" data-mr="उत्पादने">Products</a></li>
+          <li><a href="{% url 'myorders' %}" class="lang-text" data-en="My Orders" data-mr="माझी ऑर्डर">My Orders</a></li>
+        </ul>
+      </div>
+
+      <!-- Middle Right Section: Contact Info -->
+      <div class="footer-section">
+        <h3 class="lang-text" data-en="Contact Info" data-mr="संपर्क माहिती">Contact Info</h3>
+        <p>✉️ info@agrokart.com</p>
+        <p>📞 +91 1234567890</p>
+        <p class="lang-text" 
+           data-en="📍 Pune, Maharashtra, India"
+           data-mr="📍 पुणे, महाराष्ट्र, भारत">📍 Pune, Maharashtra, India</p>
+      </div>
+
+      <!-- Rightmost Section: Newsletter -->
+      <div class="footer-section">
+        <h3 class="lang-text" data-en="Newsletter" data-mr="वृत्तपत्र">Newsletter</h3>
+        <p class="lang-text" 
+           data-en="Subscribe to get updates on new products and offers"
+           data-mr="नवीन उत्पादने आणि ऑफर्सची अपडेट्स मिळवण्यासाठी सबस्क्राइब करा">
+          Subscribe to get updates on new products and offers
+        </p>
+      </div>
+    </div>
+
+    <!-- Footer Bottom Strip -->
+    <div class="footer-bottom">
+      <p class="lang-text"
+         data-en="© 2025 AgroKart. All rights reserved. | Student Project"
+         data-mr="© 2025 AgroKart. सर्व हक्क राखीव. | विद्यार्थी प्रकल्प">
+        © 2025 AgroKart. All rights reserved. | Student Project
+      </p>
+    </div>
+  </footer>
+
+  <!-- Language Toggle Script -->
+  <script>
+    // Language toggle functionality
+    function toggleLanguage() {
+      const currentLang = localStorage.getItem('language') || 'en';
+      const newLang = currentLang === 'en' ? 'mr' : 'en';
+      localStorage.setItem('language', newLang);
+      updateLanguage(newLang);
+    }
+
+    function updateLanguage(lang) {
+      const elements = document.querySelectorAll('.lang-text');
+      elements.forEach(element => {
+        const text = element.getAttribute(`data-${lang}`);
+        if (text) {
+          element.textContent = text;
+        }
+      });
+    }
+
+    // Initialize language on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedLang = localStorage.getItem('language') || 'en';
+      updateLanguage(savedLang);
+    });
+  </script>
+</body>
+</html>

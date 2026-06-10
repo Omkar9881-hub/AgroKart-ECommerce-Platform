@@ -1,0 +1,733 @@
+{% load static %}
+{% include "core/base_header.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgroKart - My Orders</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      padding-top: 80px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 60px 0;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('{% static "images/pattern.png" %}') repeat;
+      opacity: 0.1;
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      background: linear-gradient(45deg, #fff, #e8f4fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.3rem;
+      opacity: 0.9;
+      font-weight: 300;
+    }
+
+    /* Main Container */
+    .orders-container {
+      max-width: 1400px;
+      margin: -40px auto 60px auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 3;
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 15px auto;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: white;
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      color: #718096;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    /* Orders Section */
+    .orders-section {
+      background: white;
+      border-radius: 25px;
+      padding: 40px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      margin-bottom: 40px;
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #f7fafc;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2d3748;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .filter-tabs {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .filter-tab {
+      padding: 10px 20px;
+      border: 2px solid #e2e8f0;
+      border-radius: 25px;
+      background: white;
+      color: #4a5568;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+    
+    .filter-tab.active,
+    .filter-tab:hover {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-color: transparent;
+    }
+
+    /* Order Cards */
+    .orders-grid {
+      display: grid;
+      gap: 25px;
+    }
+    
+    .order-card {
+      background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .order-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+    
+    .order-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    }
+    
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 25px;
+    }
+    
+    .order-info {
+      flex: 1;
+    }
+    
+    .order-id {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 8px;
+    }
+    
+    .order-date {
+      color: #718096;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .status-badge {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .status-pending {
+      background: linear-gradient(135deg, #fed7d7, #feb2b2);
+      color: #c53030;
+    }
+    
+    .status-processing {
+      background: linear-gradient(135deg, #fef5e7, #fbd38d);
+      color: #d69e2e;
+    }
+    
+    .status-shipped {
+      background: linear-gradient(135deg, #c6f6d5, #9ae6b4);
+      color: #38a169;
+    }
+    
+    .status-delivered {
+      background: linear-gradient(135deg, #bee3f8, #90cdf4);
+      color: #3182ce;
+    }
+    
+    .status-cancelled {
+      background: linear-gradient(135deg, #e2e8f0, #cbd5e0);
+      color: #4a5568;
+    }
+
+    /* Product Items */
+    .order-items {
+      margin-bottom: 25px;
+    }
+    
+    .order-item {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      background: white;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .order-item:hover {
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    
+    .item-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      object-fit: cover;
+      margin-right: 20px;
+      border: 3px solid #f7fafc;
+    }
+    
+    .item-details {
+      flex: 1;
+    }
+    
+    .item-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 8px;
+    }
+    
+    .item-meta {
+      display: flex;
+      gap: 20px;
+      color: #718096;
+      font-size: 0.9rem;
+    }
+    
+    .item-price {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #38a169;
+    }
+
+    /* Order Footer */
+    .order-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 20px;
+      border-top: 2px solid #f7fafc;
+    }
+    
+    .order-total {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #2d3748;
+    }
+    
+    .order-actions {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .action-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(135deg, #f7fafc, #edf2f7);
+      color: #4a5568;
+      border: 2px solid #e2e8f0;
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, #fed7d7, #feb2b2);
+      color: #c53030;
+    }
+    
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 80px 40px;
+      background: white;
+      border-radius: 25px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+    
+    .empty-icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 30px auto;
+      background: linear-gradient(135deg, #f7fafc, #edf2f7);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: #a0aec0;
+    }
+    
+    .empty-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 15px;
+    }
+    
+    .empty-subtitle {
+      color: #718096;
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+    
+    .cta-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .cta-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    /* Footer */
+    footer {
+      background: linear-gradient(135deg, #2d3748, #4a5568);
+      color: white;
+      padding: 60px 20px 30px;
+      margin-top: 80px;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+    }
+    
+    .footer-section h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: #e2e8f0;
+    }
+    
+    .footer-section p,
+    .footer-section a {
+      color: #a0aec0;
+      text-decoration: none;
+      line-height: 1.8;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-section a:hover {
+      color: #667eea;
+    }
+    
+    .footer-bottom {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid #4a5568;
+      color: #a0aec0;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .orders-section {
+        padding: 25px;
+        border-radius: 20px;
+      }
+      
+      .section-header {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+      }
+      
+      .filter-tabs {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      
+      .order-item {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .item-image {
+        margin-right: 0;
+        margin-bottom: 15px;
+      }
+      
+      .order-footer {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+      
+      .order-actions {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">My Orders</h1>
+      <p class="hero-subtitle">Track and manage your seed orders</p>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="orders-container">
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📦</div>
+        <div class="stat-number">{{ orders.count }}</div>
+        <div class="stat-label">Total Orders</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⏳</div>
+        <div class="stat-number">{{ orders|length|add:"-1" }}</div>
+        <div class="stat-label">Pending Orders</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-number">1</div>
+        <div class="stat-label">Completed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-number">₹{% for order in orders %}{{ order.total_price|add:0 }}{% if not forloop.last %}+{% endif %}{% endfor %}</div>
+        <div class="stat-label">Total Spent</div>
+      </div>
+    </div>
+
+    <!-- Orders Section -->
+    <div class="orders-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span>🛒</span>
+          Your Orders
+        </h2>
+        <div class="filter-tabs">
+          <div class="filter-tab active">All</div>
+          <div class="filter-tab">Pending</div>
+          <div class="filter-tab">Delivered</div>
+          <div class="filter-tab">Cancelled</div>
+        </div>
+      </div>
+
+      {% if orders %}
+        <div class="orders-grid">
+          {% for order in orders %}
+            <div class="order-card">
+              <div class="order-header">
+                <div class="order-info">
+                  <div class="order-id">Order #{{ order.id }}</div>
+                  <div class="order-date">
+                    <span>📅</span>
+                    {{ order.created_at|date:"d M Y, g:i A" }}
+                  </div>
+                </div>
+                <div class="status-badge status-{{ order.status }}">
+                  {{ order.status|title }}
+                </div>
+              </div>
+
+              <div class="order-items">
+                <div class="order-item">
+                  {% if order.product_image %}
+                    <img src="{{ order.product_image.url }}" alt="{{ order.product_name }}" class="item-image">
+                  {% else %}
+                    <img src="{% static 'images/agrokart.png' %}" alt="{{ order.product_name }}" class="item-image">
+                  {% endif %}
+                  <div class="item-details">
+                    <div class="item-name">{{ order.product_name }}</div>
+                    <div class="item-meta">
+                      <span>🔢 Qty: {{ order.quantity }}</span>
+                      <span>📍 {{ order.shipping_address|truncatechars:30 }}</span>
+                      <span>📱 {{ order.phone_number }}</span>
+                    </div>
+                  </div>
+                  <div class="item-price">₹{{ order.total_price }}</div>
+                </div>
+              </div>
+
+              <div class="order-footer">
+                <div class="order-total">
+                  Total: ₹{{ order.total_price }}
+                </div>
+                <div class="order-actions">
+                  {% if order.status == 'pending' %}
+                    <button class="action-btn btn-primary" onclick="editOrder({{ order.id }})">
+                      <span>✏️</span> Edit
+                    </button>
+                    <button class="action-btn btn-danger" onclick="cancelOrder({{ order.id }})">
+                      <span>❌</span> Cancel
+                    </button>
+                  {% elif order.status == 'delivered' %}
+                    <button class="action-btn btn-secondary">
+                      <span>📄</span> Receipt
+                    </button>
+                    <button class="action-btn btn-primary">
+                      <span>🔄</span> Reorder
+                    </button>
+                  {% else %}
+                    <button class="action-btn btn-secondary">
+                      <span>👁️</span> View Details
+                    </button>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+          <div class="empty-icon">🛒</div>
+          <h3 class="empty-title">No Orders Yet</h3>
+          <p class="empty-subtitle">
+            You haven't placed any orders yet. Start shopping for premium quality seeds and grow your farm with AgroKart.
+          </p>
+          <a href="{% url 'product' %}" class="cta-btn">
+            <span>🌱</span>
+            Start Shopping
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>AgroKart</h3>
+        <p>Connecting farmers with premium quality seeds. Your trusted partner in agriculture.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <p><a href="{% url 'home' %}">Home</a></p>
+        <p><a href="{% url 'product' %}">Products</a></p>
+        <p><a href="{% url 'myorders' %}">My Orders</a></p>
+      </div>
+      <div class="footer-section">
+        <h3>Support</h3>
+        <p><a href="#">Help Center</a></p>
+        <p><a href="#">Contact Us</a></p>
+        <p><a href="#">Track Order</a></p>
+      </div>
+      <div class="footer-section">
+        <h3>Connect</h3>
+        <p><a href="#">Facebook</a></p>
+        <p><a href="#">Twitter</a></p>
+        <p><a href="#">Instagram</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 AgroKart. All rights reserved. | Empowering Farmers, Growing Future</p>
+    </div>
+  </footer>
+
+  <script>
+    // Filter functionality
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        // Remove active class from all tabs
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        // Add active class to clicked tab
+        this.classList.add('active');
+        
+        // Filter logic can be added here
+        const filter = this.textContent.toLowerCase();
+        console.log('Filter by:', filter);
+      });
+    });
+
+    // Order actions
+    function editOrder(orderId) {
+      alert(`Edit order #${orderId} - Feature coming soon!`);
+    }
+
+    function cancelOrder(orderId) {
+      if (confirm('Are you sure you want to cancel this order?')) {
+        alert(`Order #${orderId} cancelled - Feature coming soon!`);
+      }
+    }
+
+    // Smooth animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // Observe all order cards
+    document.querySelectorAll('.order-card').forEach(card => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(30px)';
+      card.style.transition = 'all 0.6s ease';
+      observer.observe(card);
+    });
+  </script>
+</body>
+</html>

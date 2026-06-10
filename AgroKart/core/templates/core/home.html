@@ -1,0 +1,1354 @@
+{% load static %}
+{% include "core/base_header.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgroKart – Home</title>
+  <style>
+.cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px 4%;
+      max-width: 900px;
+      padding: 20px;
+      border-radius: 8px;
+      /* height: calc(100vh - 60px); */ /* removed to prevent unwanted scroll */
+      /* overflow-y: auto; */           /* removed to prevent unwanted scroll */
+      max-height: fit-content;
+      margin: 0 auto;
+    }
+    .cards-container .card {
+  flex: 0 1 48%;
+  max-width: 48%;
+  min-width: 380px;      /* वाढवले */
+  margin-bottom: 48px;   /* वाढवले */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  overflow: visible;
+  transform: translateZ(0);
+    }
+    @media (max-width: 900px) {
+      .cards-container .card {
+        flex: 1 1 100%;
+        max-width: 100%;
+      }
+      .cards-container {
+        gap: 24px 0;
+      }
+    }
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      overflow-x: hidden;
+      background-color: #b4deaa;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    .main-content {
+      position: relative;
+      top: 0;
+      margin-top: 0;
+      padding-top: 0;
+    }
+
+    /* Logo Intro Animation Styles */
+    .logo-intro {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(135deg, #0d4a0d, #1a5f1a, #2d8f2d, #4CAF50);
+      background-size: 400% 400%;
+      animation: gradientShift 4s ease-in-out infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 1;
+      visibility: visible;
+      transition: all 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      overflow: hidden;
+    }
+
+
+
+    .logo-intro.hide {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(-100%) scale(0.8);
+    }
+
+    .intro-logo {
+      text-align: center;
+      color: white;
+      position: relative;
+      z-index: 2;
+      animation: logoIntroAnimation 1.5s ease-in-out forwards;
+    }
+
+    .intro-logo-img {
+      width: 150px;
+      height: 150px;
+      margin-bottom: 30px;
+      opacity: 0;
+      transform: scale(0.3) rotate(-360deg);
+      animation: logoImageAnimation 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.5s forwards;
+      filter: drop-shadow(0 10px 30px rgba(0,0,0,0.6)) brightness(1.3) contrast(1.4);
+      border-radius: 50%;
+      background: rgba(255,255,255,0.95);
+      padding: 15px;
+      backdrop-filter: blur(10px);
+      border: 3px solid rgba(255,255,255,0.8);
+      box-shadow: 0 0 30px rgba(255,255,255,0.5), inset 0 0 20px rgba(255,255,255,0.3);
+    }
+
+    .intro-logo-text {
+      font-size: 5rem;
+      font-weight: 900;
+      margin-bottom: 15px;
+      opacity: 0;
+      transform: translateY(50px) scale(0.8);
+      animation: logoTextAnimation 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) 1.5s forwards;
+      text-shadow: 0 8px 20px rgba(0,0,0,0.8), 0 4px 10px rgba(0,0,0,0.6), 0 2px 5px rgba(0,0,0,0.4);
+      color: #ffffff;
+      letter-spacing: 2px;
+      -webkit-text-stroke: 2px rgba(255,255,255,0.8);
+      -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+      filter: brightness(1.2) contrast(1.3);
+    }
+
+    .intro-tagline {
+      font-size: 1.5rem;
+      opacity: 0;
+      transform: translateY(30px) scale(0.9);
+      animation: taglineAnimation 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) 2.2s forwards;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-shadow: 0 5px 15px rgba(0,0,0,0.7), 0 3px 8px rgba(0,0,0,0.5);
+      color: #ffffff;
+      filter: brightness(1.1) contrast(1.2);
+      -webkit-text-stroke: 1px rgba(255,255,255,0.5);
+      -webkit-text-stroke: 0.5px rgba(255,255,255,0.2);
+    }
+
+
+
+    .hero {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      opacity: 0;
+      animation: fadeIn 1s ease-in-out forwards;
+      width: 100vw;
+      height: calc(100vh - 60px);
+      margin-top: 60px;
+      overflow: hidden;
+      display: block;
+    }
+    .hero-img {
+      width: 100vw;
+      height: calc(100vh - 60px);
+      object-fit: cover;
+      filter: brightness(0.5);
+      display: block;
+      margin: 0;
+      padding: 0;
+      border: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+    .card {
+  overflow: visible;
+  width: 340px;          /* वाढवले */
+  height: 440px;         /* वाढवले */
+  perspective: 1000px;
+  margin-bottom: 48px;   /* वाढवले */
+  cursor: pointer;
+      }
+    @media (max-width: 900px) {
+      .card {
+        flex: 1 1 100%;
+        max-width: 100%;
+      }
+    }
+    .hero-text {
+      position: absolute;
+      top: 50%;
+      left: 7vw;
+      transform: translateY(-50%) translateX(-50px);
+      color: white;
+      text-align: left;
+      opacity: 0;
+      max-width: 600px;
+      animation: slideInLeft 1.8s ease-out 0.5s forwards;
+      z-index: 2;
+    }
+    #logoname {
+      font-size: 4rem;
+      color: #e0f5d8;
+      text-shadow: 2px 2px 12px #1a3d1a99;
+    }
+    .info-section {
+      background-color: #b4deaa;
+      padding: 80px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 80px;
+      margin-top: 0;
+    }
+    .info-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 200px;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s ease-out;
+    }
+    .info-box.animate {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .info-box img {
+      max-width: 380px;
+      border-radius: 12px;
+    }
+    .info-box div {
+      max-width: 500px;
+      text-align: center;
+    }
+    /* Alternate layout for even info-boxes */
+    .info-box.reverse {
+      flex-direction: row-reverse;
+    }
+    .info-box h2 {
+      font-size: 2rem;
+      margin-bottom: 14px;
+      color: #0b3d0b;
+    }
+    .info-box p {
+      font-size: 1.1rem;
+      color: #333;
+      margin: 4px 0;
+    }
+    /* Footer Styles */
+    #footer {
+      background:linear-gradient(135deg, #363f36, #2E7D32, #1B5E20);
+      color: white;
+      margin-top: 80px;
+    }
+    .footer-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 6px;
+    }
+    .footer-section {
+      display: flex;
+      flex-direction: column;
+    }
+    .footer-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .footer-logo img {
+      width: 120px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+    .footer-logo .description {
+      font-size: 0.95em;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      color: #e0e0e0;
+      background: transparent;
+    }
+    .footer-social-icons {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .footer-social-icons a {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+    }
+
+    .footer-social-icons a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+    .footer-social-icons img {
+      width: 20px;
+      height: 20px;
+    }
+    .footer-section h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: lightgreen;
+    }
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+    }
+    .footer-section ul li {
+      margin-bottom: 8px;
+    }
+    .footer-section p,
+    .footer-section a {
+      color: #f9fafc;
+      text-decoration: none;
+      margin-bottom: 10px;
+      line-height: 1.6;
+      transition: color 0.3s ease;
+    }
+
+    .footer-section a:hover {
+      color: #667eea;
+    }
+
+    .footer-section ul li a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .footer-bottom {
+      text-align: center;
+      margin-top: 4px;
+      padding-top: 4px;
+      border-top: 1px solid #4a5568;
+      color: #a0aec0;
+    }
+    .card {
+  overflow: visible;
+  width: 190px;
+  height: 254px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease-out;
+}
+.card.animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+.card:hover .content {
+  transform: rotateY(180deg);
+}
+.content {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 300ms;
+  box-shadow: 0px 0px 10px 1px #e4e0e0ee;
+  border-radius: 5px;
+}
+.front, .back {
+  background-color: #d5d1d1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.back {
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.back::before {
+  position: absolute;
+  content: ' ';
+  display: block;
+  width: 160px;
+  height: 160%;
+  /* background: linear-gradient(90deg, transparent, #ff9966, #ff9966, #ff9966, #ff9966, transparent); */
+
+}
+.back-content {
+  position: absolute;
+  width: 99%;
+  height: 99%;
+  background-color: rgb(169 255 184 / 25%);
+  border-radius: 5px;
+  color: #217a2c;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+
+.front {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  overflow: hidden;
+}
+  .front img {
+    width: 200px;          /* वाढवले */
+    height: 200px;         /* वाढवले */
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 32px;   /* वाढवले */
+    background: #fff;
+    box-shadow: 0 2px 8px #0002;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .front h3 {
+    color: #217a2c;
+    font-size: 1.9rem;     /* वाढवले */
+    font-weight: 700;
+    margin-bottom: 22px;   /* वाढवले */
+    text-align: center;
+  }
+.back {
+  transform: rotateY(180deg);
+}
+.front .front-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.front-content .badge {
+  background-color: #ffffff55;
+  padding: 2px 10px;
+  border-radius: 10px;
+  backdrop-filter: blur(2px);
+  width: fit-content;
+}
+.description {
+  
+  padding: 10px;
+  background-color: #00000099;
+  backdrop-filter: blur(5px);
+  border-radius: 5px;
+}
+.title {
+  font-size: 11px;
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.title p {
+  width: 50%;
+}
+.card-footer {
+  color: #ffffff88;
+  margin-top: 5px;
+  font-size: 8px;
+}
+.front img {
+  width: 100%;
+  height: 78%;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+  margin: 0;
+  flex-shrink: 0;
+  flex-grow: 0;
+  display: block;
+}
+.circle {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background-color: #ffbb66;
+  position: relative;
+  filter: blur(15px);
+
+}
+#bottom {
+  background-color: #ff8866;
+  left: 50px;
+  top: 0px;
+  width: 150px;
+  height: 150px;
+
+}
+#right {
+  background-color: #ff2233;
+  left: 160px;
+  top: -80px;
+  width: 30px;
+  height: 30px;
+
+}
+
+    @media (max-width: 900px) {
+      .footer-main {
+        flex-direction: column;
+        gap: 3px;
+      }
+      .footer-section {
+        min-width: 100%;
+        text-align: center;
+      }
+      .footer-logo {
+        align-items: center;
+      }
+      .hero-text {
+        left: 4vw;
+        max-width: 90vw;
+        font-size: 1.1em;
+      }
+      #logoname {
+        font-size: 2.2rem;
+      }
+      .footer-logo .description {
+        text-align: center;
+        max-width: 100%;
+        margin: 0 auto;
+      }
+    }
+    @media (max-width: 600px) {
+      footer {
+        padding: 4px 2px 0;
+      }
+      .footer-logo img {
+        height: 60px;
+      }
+      .footer-social-icons a {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9em;
+      }
+      .hero-text {
+        left: 2vw;
+        max-width: 98vw;
+        font-size: 1em;
+      }
+      #logoname {
+        font-size: 1.3rem;
+      }
+    }
+
+    /* Logo Intro Keyframe Animations */
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+
+
+    @keyframes logoIntroAnimation {
+      0% {
+        transform: scale(0.5) rotateY(-180deg);
+        opacity: 0;
+      }
+      30% {
+        transform: scale(0.8) rotateY(-90deg);
+        opacity: 0.5;
+      }
+      60% {
+        transform: scale(1.1) rotateY(10deg);
+        opacity: 1;
+      }
+      80% {
+        transform: scale(0.95) rotateY(-5deg);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1) rotateY(0deg);
+        opacity: 1;
+      }
+    }
+
+    @keyframes logoImageAnimation {
+      0% {
+        opacity: 0;
+        transform: scale(0.3) rotate(-360deg) translateY(100px);
+        filter: blur(10px);
+      }
+      30% {
+        opacity: 0.3;
+        transform: scale(0.6) rotate(-180deg) translateY(50px);
+        filter: blur(5px);
+      }
+      60% {
+        opacity: 0.8;
+        transform: scale(1.2) rotate(-45deg) translateY(-10px);
+        filter: blur(2px);
+      }
+      80% {
+        opacity: 1;
+        transform: scale(0.9) rotate(10deg) translateY(5px);
+        filter: blur(0px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg) translateY(0px);
+        filter: blur(0px);
+      }
+    }
+
+    @keyframes logoTextAnimation {
+      0% {
+        opacity: 0;
+        transform: translateY(50px) scale(0.8) rotateX(90deg);
+        filter: blur(5px);
+      }
+      40% {
+        opacity: 0.6;
+        transform: translateY(20px) scale(0.9) rotateX(45deg);
+        filter: blur(2px);
+      }
+      70% {
+        opacity: 0.9;
+        transform: translateY(-5px) scale(1.05) rotateX(-5deg);
+        filter: blur(0px);
+      }
+      85% {
+        opacity: 1;
+        transform: translateY(2px) scale(0.98) rotateX(2deg);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotateX(0deg);
+        filter: blur(0px);
+      }
+    }
+
+    @keyframes taglineAnimation {
+      0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9) rotateX(45deg);
+        filter: blur(3px);
+      }
+      50% {
+        opacity: 0.7;
+        transform: translateY(10px) scale(0.95) rotateX(20deg);
+        filter: blur(1px);
+      }
+      80% {
+        opacity: 0.95;
+        transform: translateY(-2px) scale(1.02) rotateX(-2deg);
+        filter: blur(0px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotateX(0deg);
+        filter: blur(0px);
+      }
+    }
+
+
+
+
+    /* Keyframe Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateY(-50%) translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+      }
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes bounceIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.3) translateY(50px);
+      }
+      50% { 
+        opacity: 1;
+        transform: scale(1.05) translateY(-10px);
+      }
+      70% {
+        transform: scale(0.95) translateY(5px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    /* Scroll animations */
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s ease-out;
+    }
+    .fade-in-up.animate {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-in-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: all 0.8s ease-out;
+    }
+    .fade-in-left.animate {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .fade-in-right {
+      opacity: 0;
+      transform: translateX(50px);
+      transition: all 0.8s ease-out;
+    }
+    .fade-in-right.animate {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .scale-in {
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.8s ease-out;
+    }
+    .scale-in.animate {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Enhanced card animations */
+    .cards-container .card {
+      animation-delay: calc(var(--card-index) * 0.2s);
+    }
+
+    /* Hover effects */
+    .info-box img {
+      transition: transform 0.3s ease;
+    }
+    .info-box:hover img {
+      transform: scale(1.05);
+    }
+
+    .footer-social-icons a {
+      transition: all 0.3s ease;
+    }
+    .footer-social-icons a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+    }
+
+    .intro-text {
+      margin: 16px 0 0 0;
+      line-height: 1.7;
+      font-size: 1.13rem;
+      letter-spacing: 0.01em;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    /* Message alert styling */
+    .message-alert.success {
+      background: linear-gradient(135deg, #d4edda, #c3e6cb);
+      color: #155724;
+      border-left: 4px solid #28a745;
+    }
+
+    .message-alert.error {
+      background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+      color: #721c24;
+      border-left: 4px solid #dc3545;
+    }
+
+    .message-alert.info {
+      background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+      color: #0c5460;
+      border-left: 4px solid #17a2b8;
+    }
+
+    .message-alert.warning {
+      background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+      color: #856404;
+      border-left: 4px solid #ffc107;
+    }
+
+    .message-alert {
+      animation: slideInRight 0.5s ease-out;
+    }
+    /* Auto hide messages after 5 seconds */
+    .message-alert {
+      animation: slideInRight 0.5s ease-out, fadeOut 0.5s ease-out 4.5s forwards;
+    }
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+    }
+    /* Force justification for info-box paragraphs */
+.info-box div p.lang-text {
+  text-align: justify !important;
+}
+
+  </style>
+</head>
+<body>
+  <!-- Header and Navbar -->
+
+
+  
+
+  <!-- Logo Intro Animation -->
+  <div id="logoIntro" class="logo-intro">
+    <div class="intro-logo">
+      <img src="{% static 'images/web_logo.png' %}" alt="AgroKart Logo" class="intro-logo-img">
+      <h1 class="intro-logo-text">AgroKart</h1>
+      <p class="intro-tagline">Connecting Farmers with Trusted Seeds</p>
+    </div>
+  </div>
+
+  <!-- Main Content (Initially Hidden) -->
+  <div id="mainContent" class="main-content" style="position: relative; top: 0; margin-top: 0;">
+    
+  <!-- Hero Section -->
+    <section class="hero" id="heroSection">
+      <img src="{% static 'images/seeds.jpg' %}" alt="Banner" class="hero-img">
+      <div class="hero-text" id="heroText">
+        <h1 id="logoname" class="lang-text" data-en="Welcome to AgroKart" data-mr="ऍग्रोकार्ट मध्ये आपले स्वागत आहे">Welcome to AgroKart</h1>
+        <h2 class="lang-text" data-en="Connecting Farmers with Trusted Seeds" data-mr="शेतकऱ्यांना विश्वसनीय बियाण्यांशी जोडतो" style="font-size: 1.5rem; margin-top:50px;">Connecting Farmers with Trusted Seeds</h2>
+        <p class="lang-text" data-en="Direct seeds. Direct trust. No middleman." data-mr="थेट बियाणं. थेट विश्वास. दलाल नाही." style="font-size: 1.3rem; margin-top:10px;">Direct seeds. Direct trust. No middleman.</p>
+        <a href="{% url 'product' %}" 
+   class="explore-btn lang-text" 
+   data-en="Explore Seeds" 
+   data-mr="बियाणे एक्सप्लोर करा">
+   <span style="display:inline-block; font-weight:600;">
+     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="vertical-align: middle; margin-right:8px;"><circle cx="12" cy="12" r="10" fill="#4CAF50"/><path d="M12 7v5l4 2" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+     <span class="lang-text" data-en="Explore Seeds" data-mr="बियाणे एक्सप्लोर करा">Explore Seeds</span>
+   </span>
+</a>
+<style>
+.explore-btn {
+  display: inline-block;
+  margin-top: 50px;
+  padding: 14px 36px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #fff !important;
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  border: none;
+  border-radius: 50px;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(34,139,34,0.18);
+  transition: all 0.3s ease;
+}
+.explore-btn:hover {
+  background: linear-gradient(135deg, #45a049, #1B5E20);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  color: #fff !important;
+}
+</style>
+      </div>
+    </section>
+
+    <!-- Messages Display Section -->
+    {% if messages %}
+      <div class="messages-container" style="position: fixed; top: 80px; right: 20px; z-index: 9999; max-width: 400px;">
+        {% for message in messages %}
+          <div class="message-alert {{ message.tags }}" style="
+            padding: 15px 20px; 
+            margin-bottom: 10px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: slideInRight 0.5s ease-out;
+            font-weight: 500;
+            position: relative;
+          ">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span>
+                {% if message.tags == 'success' %}✅{% elif message.tags == 'error' %}❌{% endif %}
+                {{ message }}
+              </span>
+              <button onclick="this.parentElement.parentElement.style.display='none'" style="
+                background: none; 
+                border: none; 
+                font-size: 18px; 
+                cursor: pointer; 
+                color: inherit;
+                margin-left: 10px;
+              ">×</button>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+  <section class="info-section">
+    <div class="info-box fade-in-up">
+      <img src="{% static 'images/intro4.png' %}" alt="Tech" class="fade-in-left">
+      <div class="fade-in-right">
+        <h2 class="lang-text" data-en="Transforming Farming with Technology" data-mr="तंत्रज्ञानासह शेतीत परिवर्तन">Transforming Farming with Technology</h2>
+        <p class="lang-text" data-en="AgroKart is on a mission to digitally transform Indian agriculture by providing a smart, simple, and accessible platform for farmers. With just a few clicks, farmers can explore a wide variety of high-quality seeds, check real-time availability, make secure payments, and receive digital receipts instantly. No more long travels or middlemen—AgroKart brings the marketplace directly to the farmer's fingertips. Our user-friendly interface is designed with rural needs in mind, supporting multiple languages and ensuring even first-time users can navigate easily. By integrating technology into farming practices, AgroKart empowers farmers with better choices, faster services, and greater control over their agricultural journey. This digital shift not only boosts productivity but also encourages trust and transparency, ultimately leading to a stronger, tech-enabled farming community." data-mr="अ‍ॅग्रोकार्ट भारतीय शेतीला डिजिटल रूप देण्यासाठी एक स्मार्ट, सोपी आणि सर्वांसाठी खुली व्यासपीठ उपलब्ध करून देत आहे. काही क्लिकमध्ये शेतकरी दर्जेदार बियाण्यांची विविधता पाहू शकतात, रिअल-टाइम उपलब्धता तपासू शकतात, सुरक्षित पेमेंट करू शकतात आणि त्वरित डिजिटल पावत्या मिळवू शकतात. आता लांब प्रवास किंवा दलालांची गरज नाही—अ‍ॅग्रोकार्ट बाजारपेठ थेट शेतकऱ्यांच्या हातात आणते. आमचे इंटरफेस ग्रामीण गरजा लक्षात घेऊन डिझाइन केले आहे, बहुभाषिक समर्थनासह, जेणेकरून नवख्या वापरकर्त्यांनाही सहज वापरता येईल. तंत्रज्ञानाचा शेतीत समावेश करून, अ‍ॅग्रोकार्ट शेतकऱ्यांना उत्तम पर्याय, जलद सेवा आणि शेती प्रवासावर अधिक नियंत्रण देते. हा डिजिटल बदल उत्पादकता वाढवतो, विश्वास आणि पारदर्शकता वाढवतो, आणि शेवटी एक मजबूत, तंत्रज्ञान-सक्षम शेती समुदाय घडवतो."></p>
+      </div>
+    </div>
+    <div class="info-box reverse fade-in-up">
+      <img src="{% static 'images/intro6.png' %}" alt="Better Tomorrow" class="fade-in-right">
+      <div class="fade-in-left">
+        <h2 class="lang-text" data-en="Reinventing Agriculture" data-mr="शेतीचे पुनराविष्कार">Reinventing Agriculture</h2>
+        <p class="lang-text" data-en="AgroKart is redefining the way agriculture works by putting the power back into the hands of farmers. We eliminate middlemen and long waiting times by creating a direct link between farmers and high-quality seed suppliers. Our platform makes the entire buying process transparent—farmers can view detailed seed information, track stock, compare options, and receive verified receipts, all in real time. With features like language translation, smart filtering, and instant payment gateways, AgroKart provides a smooth and secure shopping experience tailored to local needs. This new model supports small and marginal farmers with greater access to resources, enabling them to plan better and grow more. By reinventing traditional methods through digital innovation, AgroKart is creating a sustainable agricultural ecosystem where farmers are informed, independent, and future-ready." data-mr="अ‍ॅग्रोकार्ट शेतीची पद्धत नव्याने परिभाषित करत आहे आणि शेतकऱ्यांच्या हातात पुन्हा ताकद देत आहे. आम्ही दलाल आणि लांब प्रतीक्षा वेळा दूर करून शेतकरी आणि दर्जेदार बियाणे पुरवठादार यांच्यात थेट दुवा तयार करतो. आमचे व्यासपीठ संपूर्ण खरेदी प्रक्रिया पारदर्शक बनवते—शेतकरी तपशीलवार बियाण्याची माहिती पाहू शकतात, स्टॉक ट्रॅक करू शकतात, पर्यायांची तुलना करू शकतात आणि सत्यापित पावत्या मिळवू शकतात, हे सर्व रिअल-टाइममध्ये. भाषांतर, स्मार्ट फिल्टरिंग आणि त्वरित पेमेंट गेटवे यांसारख्या सुविधांसह, अ‍ॅग्रोकार्ट स्थानिक गरजेनुसार सुलभ आणि सुरक्षित खरेदी अनुभव देते. हा नवीन मॉडेल लहान आणि अल्पभूधारक शेतकऱ्यांना अधिक संसाधनांपर्यंत पोहोच मिळवून देतो, ज्यामुळे ते अधिक चांगली योजना करू शकतात आणि वाढवू शकतात. डिजिटल नवकल्पनांद्वारे पारंपरिक पद्धतींना पुनराविष्कार करून, अ‍ॅग्रोकार्ट एक शाश्वत शेती इकोसिस्टम तयार करत आहे जिथे शेतकरी माहितीपूर्ण, स्वतंत्र आणि भविष्याच्या दृष्टीने तयार आहेत."></p>
+      </div>
+    </div>
+    <div class="info-box fade-in-up">
+      <img src="{% static 'images/intro5.png' %}" alt="Future" class="fade-in-left">
+      <div class="fade-in-right">
+        <h2 class="lang-text" data-en="Designing a Smarter Future" data-mr="अधिक बुद्धिमान भविष्याची रचना">Designing a Smarter Future</h2>
+        <p class="lang-text" data-en="At AgroKart, we're building a smarter future for agriculture—where technology meets tradition to deliver smarter, faster, and more efficient farming. Our digital seed marketplace is designed to make every step—from browsing to buying—simple and reliable. We offer quality-checked products, transparent pricing, live stock updates, and multilingual support, ensuring every farmer has access to the best. Our platform is not just a store—it's a solution. It empowers farmers to make informed decisions, manage their time better, and save valuable resources. AgroKart's goal is to create a digital farming ecosystem where innovation helps every farmer grow—economically, personally, and sustainably. As agriculture moves into the future, AgroKart stands as a trusted partner, supporting smarter choices and a brighter tomorrow." data-mr="अ‍ॅग्रोकार्टमध्ये आम्ही शेतीसाठी अधिक बुद्धिमान भविष्य घडवत आहोत—जिथे तंत्रज्ञान आणि परंपरा एकत्र येतात आणि शेती अधिक स्मार्ट, जलद आणि कार्यक्षम बनते. आमचे डिजिटल बियाणे मार्केटप्लेस ब्राउझिंगपासून खरेदीपर्यंत प्रत्येक पाऊल सोपे आणि विश्वासार्ह बनवण्यासाठी डिझाइन केले आहे. आम्ही दर्जा तपासलेली उत्पादने, पारदर्शक किंमती, थेट स्टॉक अपडेट्स आणि बहुभाषिक समर्थन देतो, जेणेकरून प्रत्येक शेतकऱ्याला सर्वोत्तम मिळू शकेल. आमचे व्यासपीठ फक्त दुकान नाही—ते एक उपाय आहे. हे शेतकऱ्यांना माहितीपूर्ण निर्णय घेण्यास, वेळेचे व्यवस्थापन करण्यास आणि मौल्यवान संसाधने वाचवण्यास सक्षम करते. अ‍ॅग्रोकार्टचे उद्दिष्ट म्हणजे एक डिजिटल शेती इकोसिस्टम तयार करणे जिथे नवकल्पना प्रत्येक शेतकऱ्याच्या आर्थिक, वैयक्तिक आणि शाश्वत वाढीस मदत करते. शेती भविष्याकडे वाटचाल करत असताना, अ‍ॅग्रोकार्ट एक विश्वासार्ह भागीदार म्हणून उभा आहे, अधिक स्मार्ट निवडी आणि उज्ज्वल उद्याचा पाठिंबा देतो."></p>
+      </div>
+    </div>
+  <!-- Why Choose Us Section -->
+  <section class="why-choose-section" style="backdrop-filter: blur(10px); background: rgba(255,255,255,0.25); border-radius: 32px; box-shadow: 0 8px 32px 0 rgba(34,139,34,0.18), 0 1.5px 8px 0 rgba(34,139,34,0.10); padding: 60px 0 40px 0; margin: 40px 16px;">
+    <div>
+      <h2 class="lang-text" data-en="Why Choose Us?" data-mr="आम्हाला का निवडावे?" style="text-align: center; color: #217a2c; font-size: 2.4rem; font-weight: 800; margin-bottom: 36px; letter-spacing: 1px;">Why Choose Us?</h2>
+      <div class="cards-container" style="justify-content: center; gap: 32px; flex-wrap: wrap;">
+        <div class="card">
+          <img class="card__img" src="{% static 'images/wcu1.png' %}" alt="Premium Quality">
+          <div class="card__content">
+            <p class="card__title lang-text" data-en="Premium Quality" data-mr="प्रीमियम गुणवत्ता">Premium Quality</p>
+            <p class="card__description lang-text" data-en="We deliver only high-grade, certified seeds that go through strict quality checks. Every product is tested to ensure better germination and healthy crop growth. Our commitment is to offer seeds that bring maximum yield and farmer satisfaction." data-mr="आम्ही फक्त उच्च दर्जाचे, प्रमाणित बियाणे पुरवतो जे कठोर गुणवत्ता तपासणीतून जातात. प्रत्येक उत्पादन चांगले अंकुरण आणि निरोगी पीक वाढ सुनिश्चित करण्यासाठी तपासले जाते. आमची वचनबद्धता अशी आहे की जास्तीत जास्त उत्पादन आणि शेतकरी समाधान देणारे बियाणे देणे.">We deliver only high-grade, certified seeds that go through strict quality checks. Every product is tested to ensure better germination and healthy crop growth. Our commitment is to offer seeds that bring maximum yield and farmer satisfaction.</p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card__img" src="{% static 'images/wcu2.jpg' %}" alt="Direct to Farmer">
+          <div class="card__content">
+            <p class="card__title lang-text" data-en="Direct to Farmer" data-mr="थेट शेतकऱ्यांपर्यंत">Direct to Farmer</p>
+            <p class="card__description lang-text" data-en="AgroKart connects farmers directly to trusted suppliers, no middlemen involved. This helps reduce extra costs and builds trust through transparent pricing. We ensure that every product reaches the farmer straight from its genuine source." data-mr="AgroKart शेतकऱ्यांना थेट विश्वसनीय पुरवठादारांशी जोडते कोणतेही मध्यस्थ नाहीत. यामुळे अतिरिक्त खर्च कमी होतो आणि पारदर्शक किंमतीद्वारे विश्वास निर्माण होतो. आम्ही हे सुनिश्चित करतो की प्रत्येक उत्पादन शेतकऱ्यापर्यंत थेट त्याच्या वास्तविक स्रोतापासून पोहोचते.">AgroKart connects farmers directly to trusted suppliers, no middlemen involved. This helps reduce extra costs and builds trust through transparent pricing. We ensure that every product reaches the farmer straight from its genuine source.</p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card__img" src="{% static 'images/wcu3.jpg' %}" alt="Expert Support">
+          <div class="card__content">
+            <p class="card__title lang-text" data-en="Expert Support" data-mr="तज्ञ सहाय्य">Expert Support</p>
+            <p class="card__description lang-text" data-en="Our agricultural experts are always ready to guide you with personalized solutions. From seed selection to crop protection, we offer the right advice at every step. You can reach out to us anytime for support in your farming journey." data-mr="आमचे कृषी तज्ञ नेहमी वैयक्तिक उपायांसह तुम्हाला मार्गदर्शन करण्यास तयार आहेत. बियाणे निवडीपासून पीक संरक्षणापर्यंत, आम्ही प्रत्येक टप्प्यावर योग्य सल्ला देतो. तुमच्या शेती प्रवासात सहाय्यासाठी तुम्ही कधीही आमच्याशी संपर्क साधू शकता.">Our agricultural experts are always ready to guide you with personalized solutions. From seed selection to crop protection, we offer the right advice at every step. You can reach out to us anytime for support in your farming journey.</p>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card__img" src="{% static 'images/wcu4.jpg' %}" alt="Fast & Reliable Delivery">
+          <div class="card__content">
+            <p class="card__title lang-text" data-en="Fast & Reliable Delivery" data-mr="जलद आणि विश्वसनीय डिलिव्हरी">Fast & Reliable Delivery</p>
+            <p class="card__description lang-text" data-en="We ensure quick and secure delivery to every corner, urban or rural. Your time matters, so we dispatch products without delays. Track your orders easily and expect on-time arrival every time." data-mr="आम्ही प्रत्येक कोपऱ्यात जलद आणि सुरक्षित डिलिव्हरी सुनिश्चित करतो — शहरी किंवा ग्रामीण. तुमचा वेळ महत्त्वाचा आहे, म्हणून आम्ही उत्पादने विलंब न करता पाठवतो. तुमच्या ऑर्डरचा सहज मागोवा घ्या आणि प्रत्येक वेळी वेळेवर आगमनाची अपेक्षा करा.">We ensure quick and secure delivery to every corner, urban or rural. Your time matters, so we dispatch products without delays. Track your orders easily and expect on-time arrival every time.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Expertise Section -->
+  <section class="our-expertise-section" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 40px; padding: 80px 20px 60px 20px; margin: 60px 16px; background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(34,139,34,0.08) 100%); border-radius: 24px; box-shadow: 0 12px 40px rgba(34,139,34,0.15), 0 4px 16px rgba(34,139,34,0.10); min-height: 600px; position: relative; overflow: hidden;">
+    <!-- Decorative background elements -->
+    <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(34,139,34,0.1) 0%, transparent 70%); border-radius: 50%;"></div>
+    <div style="position: absolute; bottom: -30px; left: -30px; width: 100px; height: 100px; background: radial-gradient(circle, rgba(76,175,80,0.08) 0%, transparent 70%); border-radius: 50%;"></div>
+
+    <!-- Title centered at the top -->
+    <div style="text-align: center; margin-bottom: 20px; position: relative; z-index: 2;">
+      <h2 class="lang-text" data-en="Our Expertise" data-mr="आमचे तज्ञत्व" style="color: #217a2c; font-size: 3.2rem; font-weight: 800; margin: 0; letter-spacing: 1px; text-shadow: 0 2px 4px rgba(0,0,0,0.1); line-height: 1.2;">Our Expertise</h2>
+      <div style="width: 80px; height: 4px; background: linear-gradient(90deg, #4CAF50, #66BB6A); margin: 15px auto 0; border-radius: 2px;"></div>
+    </div>
+
+    <!-- Content row with video and text -->
+    <div style="display: flex; align-items: center; justify-content: center; gap: 60px; width: 100%; max-width: 1200px; position: relative; z-index: 2;">
+      <!-- Video Section -->
+      <div style="flex: 1 1 45%; max-width: 45%; display: flex; justify-content: center; align-items: center; min-width: 320px;">
+        <div style="width: 100%; max-width: 550px; aspect-ratio: 16/10; position: relative;">
+          <video id="expertise-video" width="100%" height="100%" poster="{% static 'images/videoimg.jpg' %}" style="border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.2), 0 4px 16px rgba(34,139,34,0.1); background: transparent; width: 100%; display: block; object-fit: contain;">
+            <source src="{% static 'videos/seedsgrowing.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+
+      <!-- Text Section -->
+      <div style="flex: 1 1 45%; max-width: 45%; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; min-width: 320px;">
+        <div style="background: white; border-radius: 20px; box-shadow: 0 8px 32px rgba(34,139,34,0.12), 0 4px 16px rgba(34,139,34,0.08); padding: 40px; width: 100%; max-width: 500px; backdrop-filter: blur(10px);  position: relative;">
+          <!-- Decorative accent -->
+          <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(180deg, #4CAF50, #66BB6A); border-radius: 2px 0 0 2px;"></div>
+
+          <div style="margin-bottom: 25px;">
+            <h3 class="lang-text" data-en="Trusted Seeds for Sustainable Growth" data-mr="विश्वसनीय बियाणे शाश्वत वाढीसाठी" style="color: #217a2c; font-size: 1.6rem; font-weight: 700; margin: 0 0 8px 0; line-height: 1.3;">Trusted Seeds for Sustainable Growth</h3>
+            <div style="width: 100%; height: 3px; background: #4CAF50; border-radius: 2px;"></div>
+          </div>
+
+          <div style="color: #2E7D32; font-size: 1.1rem; line-height: 1.8; font-weight: 500;">
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li style="margin-bottom: 16px; display: flex; align-items: flex-start; gap: 12px;">
+                <span style="color: #4CAF50; font-size: 1.2rem; font-weight: bold; flex-shrink: 0;">•</span>
+                <span class="lang-text" data-en="At AgroKart, we know every great harvest begins with a tiny seed." data-mr="AgroKart मध्ये, आम्हाला माहित आहे की प्रत्येक उत्तम कापणी एका लहान बियाण्यापासून सुरू होते.">At AgroKart, we know every great harvest begins with a tiny seed.</span>
+              </li>
+              <li style="margin-bottom: 16px; display: flex; align-items: flex-start; gap: 12px;">
+                <span style="color: #4CAF50; font-size: 1.2rem; font-weight: bold; flex-shrink: 0;">•</span>
+                <span class="lang-text" data-en="Our expertise lies in selecting seeds that are tested and suited for various soil and climate conditions." data-mr="आमचे तज्ञत्व विविध माती आणि हवामान परिस्थितीसाठी तपासलेले आणि योग्य असलेले बियाणे निवडण्यात आहे.">Our expertise lies in selecting seeds that are tested and suited for various soil and climate conditions.</span>
+              </li>
+              <li style="margin-bottom: 16px; display: flex; align-items: flex-start; gap: 12px;">
+                <span style="color: #4CAF50; font-size: 1.2rem; font-weight: bold; flex-shrink: 0;">•</span>
+                <span class="lang-text" data-en="We ensure seeds are packed to maintain their purity and growth potential." data-mr="आम्ही बियाण्यांची शुद्धता आणि वाढीची क्षमता राखण्यासाठी ते पॅक केले जाते याची खात्री करतो.">We ensure seeds are packed to maintain their purity and growth potential.</span>
+              </li>
+              <li style="margin-bottom: 16px; display: flex; align-items: flex-start; gap: 12px;">
+                <span style="color: #4CAF50; font-size: 1.2rem; font-weight: bold; flex-shrink: 0;">•</span>
+                <span class="lang-text" data-en="With the right guidance and techniques, these seeds transform into strong, productive crops." data-mr="योग्य मार्गदर्शन आणि तंत्रांसह, ही बियाणे मजबूत, उत्पादक पिकांमध्ये रूपांतरित होतात.">With the right guidance and techniques, these seeds transform into strong, productive crops.</span>
+              </li>
+              <li style="margin-bottom: 16px; display: flex; align-items: flex-start; gap: 12px;">
+                <span style="color: #4CAF50; font-size: 1.2rem; font-weight: bold; flex-shrink: 0;">•</span>
+                <span class="lang-text" data-en="Our team monitors seed performance, from lab to land." data-mr="आमची टीम प्रयोगशाळेपासून जमिनीपर्यंत बियाण्यांच्या कामगिरीचे निरीक्षण करते.">Our team monitors seed performance, from lab to land.</span>
+              </li>
+              <li style="margin-bottom: 16px; display: flex; align-items: flex-start; gap: 12px;">
+                <span style="color: #4CAF50; font-size: 1.2rem; font-weight: bold; flex-shrink: 0;">•</span>
+                <span class="lang-text" data-en="We also provide farmers with advice at every stage from sowing to harvesting." data-mr="आम्ही शेतकऱ्यांना प्रत्येक टप्प्यावर सल्ला देखील देतो — पेरणीपासून कापणीपर्यंत.">We also provide farmers with advice at every stage from sowing to harvesting.</span>
+              </li>
+              <li style="margin-bottom: 16px; display: flex; align-items: flex-start; gap: 12px;">
+                <span style="color: #4CAF50; font-size: 1.2rem; font-weight: bold; flex-shrink: 0;">•</span>
+                <span class="lang-text" data-en="This ensures better yield, reduced risks, and sustainable practices." data-mr="यामुळे चांगले उत्पादन, कमी जोखीम आणि टिकाऊ पद्धती सुनिश्चित होतात.">This ensures better yield, reduced risks, and sustainable practices.</span>
+              </li>
+              <li style="display: flex; align-items: flex-start; gap: 12px;">
+                <span style="color: #4CAF50; font-size: 1.2rem; font-weight: bold; flex-shrink: 0;">•</span>
+                <span class="lang-text" data-en="At AgroKart, seed growth isn't just a process—it's a promise of a better future." data-mr="AgroKart मध्ये, बियाणे वाढ ही केवळ एक प्रक्रिया नाही — ती चांगल्या भविष्याची वचन आहे.">At AgroKart, seed growth isn't just a process—it's a promise of a better future.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </section>
+
+  </div> <!-- End Main Content -->
+
+  <script>
+    // Logo Intro Animation Control
+    window.addEventListener('load', () => {
+      const logoIntro = document.getElementById('logoIntro');
+      const mainContent = document.getElementById('mainContent');
+      const isAuthenticated = "{{ user.is_authenticated|yesno:'true,false' }}".trim().toLowerCase() === "true";
+      
+      // Check if user has seen animation in this session
+      const hasSeenAnimationThisSession = sessionStorage.getItem('hasSeenLogoAnimation') === 'true';
+      
+      console.log("isAuthenticated:", isAuthenticated, "hasSeenAnimationThisSession:", hasSeenAnimationThisSession);
+
+      // Enable logo animation
+      console.log("Logo animation enabled - showing logo intro first");
+      // Ensure logoIntro is visible
+      logoIntro.style.display = 'flex';
+      logoIntro.style.opacity = '1';
+      logoIntro.style.visibility = 'visible';
+
+      // Hide main content initially
+      mainContent.style.opacity = '0';
+      mainContent.style.visibility = 'hidden';
+
+      // After animation completes (4 seconds), hide logo and show main content
+      setTimeout(() => {
+        logoIntro.classList.add('hide');
+        setTimeout(() => {
+          logoIntro.style.display = 'none';
+          mainContent.style.opacity = '1';
+          mainContent.style.visibility = 'visible';
+          mainContent.style.transition = 'opacity 1s ease-in-out';
+          initializeScrollAnimations();
+          initializeVideoAutoPlay();
+          window.dispatchEvent(new Event('scroll'));
+        }, 1200); // Wait for hide transition (1.2s)
+      }, 4000); // Wait for logo animation to complete
+
+      const preferredLang = localStorage.getItem("preferredLanguage") || "en";
+      setLanguage(preferredLang);
+    });
+
+    function setLanguage(lang) {
+  const elements = document.querySelectorAll(".lang-text");
+  elements.forEach(el => {
+    const text = el.getAttribute(`data-${lang}`);
+    if (text) el.innerHTML = text; // Use innerHTML so <br> renders as line break
+  });
+  localStorage.setItem("preferredLanguage", lang);
+}
+
+
+    function toggleLanguage() {
+      const currentLang = localStorage.getItem("preferredLanguage") || "en";
+      setLanguage(currentLang === "en" ? "mr" : "en");
+    }
+
+    function toggleDropdown() {
+      const dropdown = document.getElementById("dropdown");
+      if (dropdown) {
+        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+      }
+    }
+
+
+    function scrollToFooter() {
+      const footer = document.getElementById("footer");
+      if (footer) footer.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Initialize Scroll Animations Function
+    function initializeScrollAnimations() {
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate');
+          }
+        });
+      }, observerOptions);
+
+      // Observe info boxes
+      document.querySelectorAll('.info-box').forEach(box => {
+        observer.observe(box);
+      });
+
+      // Observe cards with staggered animation
+      document.querySelectorAll('.card').forEach((card, index) => {
+        setTimeout(() => {
+          observer.observe(card);
+        }, index * 100);
+      });
+
+      // Observe other animated elements
+      document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right, .scale-in').forEach(el => {
+        observer.observe(el);
+      });
+    }
+
+    // Auto-play video when scrolled to video section
+    function initializeVideoAutoPlay() {
+      const video = document.getElementById('expertise-video');
+      const videoSection = document.querySelector('.our-expertise-section');
+      
+      if (video && videoSection) {
+        // Remove controls to make it more seamless
+        video.removeAttribute('controls');
+        
+        // Set video properties for better auto-play
+        video.muted = true; // Muted videos are more likely to auto-play
+        video.loop = true; // Loop the video
+        video.playsInline = true; // Important for mobile devices
+        
+        const videoObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              // Video is visible, start playing automatically
+              video.play().then(() => {
+                console.log('Video auto-played successfully');
+              }).catch(error => {
+                console.log('Auto-play failed:', error);
+                // If auto-play fails, try with user interaction simulation
+                setTimeout(() => {
+                  video.play().catch(e => console.log('Retry auto-play failed:', e));
+                }, 100);
+              });
+            } else {
+              // Video is not visible, pause it
+              video.pause();
+            }
+          });
+        }, {
+          threshold: 0.2, // Start when 20% of video section is visible
+          rootMargin: '0px 0px -30px 0px'
+        });
+
+        videoObserver.observe(videoSection);
+        
+        // Also try to play when page loads if video is already visible
+        setTimeout(() => {
+          if (videoSection.getBoundingClientRect().top < window.innerHeight) {
+            video.play().catch(e => console.log('Initial auto-play failed:', e));
+          }
+        }, 1000);
+      }
+    }
+  </script>
+  {% include 'core/base_footer.html' %}
+  <style>
+    /* Remove white line above footer */
+    #footer {
+      border-top: none !important;
+      box-shadow: none !important;
+    }
+    .card {
+  position: relative;
+  width: 270px;
+  height: 270px;
+  background-color: #f2f2f2;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  perspective: 1000px;
+  box-shadow: 0 0 0 5px #ffffff80;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.card__img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  z-index: 2;
+  opacity: 1;
+  transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.card:hover .card__img {
+  opacity: 0;
+}
+.card__content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  opacity: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.card:hover .card__content {
+  opacity: 1;
+  pointer-events: auto;
+}
+.card__title {
+  margin: 0;
+  font-size: 30.24px;
+  color: #217a2c;
+  font-weight: 700;
+  text-align: center;
+}
+.card__description {
+  margin: 10px 0 0;
+  font-size: 19px;
+  font-weight: 500;
+  color: #217a2c;
+  line-height: 1.4;
+  text-align: justify;
+}
+@media (max-width: 900px) {
+  .card__title {
+    font-size: 18.18px;
+    color: #217a2c;
+  }
+  .card__description {
+    font-size: 13.13px;
+    font-weight: 500;
+    color: #217a2c;
+    text-align: justify;
+  }
+  .card {
+    width: 160px;
+    height: 160px;
+    min-width: 160px;
+  }
+  .card__img {
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+  }
+  .card__icon {
+    width: 38px;
+  }
+}
+@media (max-width: 600px) {
+  .card__title {
+    font-size: 15.15px;
+    color: #217a2c;
+  }
+  .card__description {
+    font-size: 11.11px;
+    color: #217a2c;
+    text-align: justify;
+  }
+  .card {
+    width: 100px;
+    height: 100px;
+    min-width: 100px;
+  }
+  .card__img {
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+  }
+  .card__icon {
+    width: 28px;
+  }
+}
+  </style>
+</body>
+</html>

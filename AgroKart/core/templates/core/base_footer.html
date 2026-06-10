@@ -1,0 +1,368 @@
+{% load static %}
+<footer class="footer" id="footer">
+  <div class="footer-container">
+    <!-- Left Column: Logo + Tagline -->
+    <div class="footer-left">
+      <img src="{% static 'images/web_logo.png' %}" alt="AgroKart Logo" class="footer-logo">
+      <p class="footer-tagline lang-text" 
+         data-en="Empowering farmers with quality seeds and modern agricultural solutions for sustainable farming and better yields."
+         data-mr="शेतकऱ्यांना गुणवत्तापूर्ण बियाणे आणि आधुनिक कृषी समाधानांसह सशक्त बनवून टिकाऊ शेती आणि चांगले उत्पादन मिळवणे.">
+        Empowering farmers with quality seeds and modern agricultural solutions for sustainable farming and better yields.
+      </p>
+    </div>
+    <!-- Middle Column: Quick Links -->
+    <div class="footer-middle">
+      <h3 class="lang-text" data-en="Quick Links" data-mr="द्रुत दुवे">Quick Links</h3>
+      <ul>
+        <li><a href="{% url 'home' %}" class="lang-text" data-en="Home" data-mr="मुख्यपृष्ठ">Home</a></li>
+        <li><a href="{% url 'aboutus' %}" class="lang-text" data-en="About Us" data-mr="आमच्याबद्दल">About Us</a></li>
+        <li><a href="{% url 'product' %}" class="lang-text" data-en="Products" data-mr="उत्पादने">Products</a></li>
+        <li><a href="{% url 'myorders' %}" class="lang-text" data-en="My Orders" data-mr="माझे ऑर्डर">My Orders</a></li>
+        <li><a href="{% url 'contact_us' %}" class="lang-text" data-en="Contact" data-mr="संपर्क">Contact</a></li>
+      </ul>
+    </div>
+    <!-- Right Column: Contact Info -->
+    <div class="footer-right">
+      <h3 class="lang-text" data-en="Contact" data-mr="संपर्क">Contact</h3>
+      <p><strong class="lang-text" data-en="Email:" data-mr="ईमेल:">Email:</strong> <a href="mailto:support@agrokart.com" style="color:#4fa3ff; text-decoration:none;">support@agrokart.com</a></p>
+      <p><strong class="lang-text" data-en="Phone:" data-mr="फोन:">Phone:</strong> +91 8261840336</p>
+      <p><strong class="lang-text" data-en="Address:" data-mr="पत्ता:">Address:</strong><br><span class="lang-text" data-en="123 Green Farm Road,Pune, Maharashtra - 411001" data-mr="१२३ ग्रीन फार्म रोड,पुणे, महाराष्ट्र - ४११००१">123 Green Farm Road,<br>Pune, Maharashtra - 411001</span></p>
+      <div class="social-icons">
+        <a href="#"><img src="{% static 'images/twitter2.png' %}" alt="Twitter"></a>
+        <a href="#"><img src="{% static 'images/facebook.png' %}" alt="Facebook"></a>
+        <a href="#"><img src="{% static 'images/instagram.png' %}" alt="Instagram"></a>
+        <a href="#"><img src="{% static 'images/linkedin.png' %}" alt="LinkedIn"></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2025 AgroKart. <span class="lang-text" data-en="All rights reserved." data-mr="सर्व हक्क राखीव.">All rights reserved.</span>
+  </div>
+</footer>
+<style>
+.footer {
+  background: linear-gradient(135deg, #363f36, #2E7D32, #1B5E20);
+  color: white;
+  padding: 40px 20px;
+  font-family: 'Poppins', sans-serif;
+}
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 40px;
+}
+.footer-left,
+.footer-middle,
+.footer-right {
+  flex: 1;
+  min-width: 220px;
+}
+.footer-logo {
+  width: 150px;
+  margin-bottom: 15px;
+}
+.footer-tagline {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #ccc;
+}
+.footer-middle ul {
+  list-style: none;
+  padding: 0;
+}
+.footer-middle ul li {
+  margin-bottom: 8px;
+}
+.footer-middle ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+}
+.footer-middle ul li a:hover {
+  text-decoration: underline;
+}
+.footer-right p {
+  font-size: 14px;
+  margin: 5px 0;
+}
+.social-icons img {
+  width: 24px;
+  margin-right: 10px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+.social-icons img:hover {
+  opacity: 1;
+}
+.footer-bottom {
+  text-align: center;
+  font-size: 13px;
+  color: #ccc;
+}
+.footer-main {
+  background: linear-gradient(135deg, #363f36, #2E7D32, #1B5E20);
+  color: #e0e0e0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.97em;
+  border-top: 2px solid #4CAF50;
+  padding: 0 10px;
+}
+@media (max-width: 900px) {
+  .footer-container {
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+  .footer-left, .footer-middle, .footer-right {
+    min-width: unset;
+    width: 100%;
+    text-align: center;
+  }
+  .footer-logo {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .social-icons {
+    justify-content: center;
+  }
+}
+/* === PREMIUM FOOTER REDESIGN === */
+.footer {
+  background: linear-gradient(145deg, #0d1e0d, #1B5E20, #0a3d0a);
+  color: #f5f5f5;
+  padding: 70px 40px;
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  overflow: hidden;
+  border-top: 4px solid #4CAF50;
+  box-shadow: 0 -6px 25px rgba(0,0,0,0.6);
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s ease-out;
+}
+
+/* Add animated texture overlay */
+.footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('https://www.transparenttextures.com/patterns/asfalt-light.png') repeat;
+  opacity: 0.06;
+  z-index: 0;
+  animation: movePattern 25s linear infinite;
+}
+
+@keyframes movePattern {
+  from { background-position: 0 0; }
+  to { background-position: 200px 200px; }
+}
+
+/* Extra tagline using pseudo-element */
+.footer::after {
+  /* content: 'Trusted by Farmers Since 2025'; */
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  color: #c8e6c9;
+  margin-top: 30px;
+  opacity: 0.9;
+  position: relative;
+  z-index: 2;
+}
+
+/* Make footer visible when in viewport (for JS animation later) */
+.footer.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Container styling */
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 60px;
+  max-width: 1300px;
+  margin: auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* Logo enhancement */
+.footer-logo {
+  width: 180px;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+  transition: all 0.6s ease-in-out;
+}
+.footer-logo:hover {
+  transform: scale(1.3);
+  filter: drop-shadow(0 0 20px #4CAF50) brightness(1.2);
+  animation: logoPulse 1.2s ease-in-out infinite;
+}
+@keyframes logoPulse {
+  0%, 100% { filter: drop-shadow(0 0 10px #4CAF50); }
+  50% { filter: drop-shadow(0 0 20px #81c784); }
+}
+
+/* Tagline styling */
+.footer-tagline {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #d9f5d9;
+  border-left: 4px solid #4CAF50;
+  padding-left: 12px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+/* Headings with stylish underline */
+.footer-middle h3,
+.footer-right h3 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #a7ff83;
+  margin-bottom: 18px;
+  position: relative;
+}
+.footer-middle h3::after,
+.footer-right h3::after {
+  content: '';
+  display: block;
+  width: 55px;
+  height: 3px;
+  background: linear-gradient(90deg, #4caf50, #a7ff83);
+  margin-top: 8px;
+  border-radius: 2px;
+}
+
+/* Quick Links styling */
+.footer-middle ul {
+  list-style: none;
+  padding: 0;
+}
+.footer-middle ul li {
+  margin-bottom: 14px;
+}
+.footer-middle ul li a {
+  color: #f1f1f1;
+  font-size: 16px;
+  font-weight: 500;
+  transition: color 0.3s ease, transform 0.3s ease;
+  display: inline-block;
+}
+.footer-middle ul li a:hover {
+  color: #4CAF50;
+  transform: translateX(8px);
+  text-shadow: 0 0 8px rgba(76,175,80,0.8);
+}
+
+/* Contact Info with Icons */
+.footer-right p {
+  font-size: 15px;
+  margin: 8px 0;
+  position: relative;
+  padding-left: 28px;
+  color: #e0e0e0;
+}
+.footer-right p::before {
+  position: absolute;
+  left: 0;
+  top: 3px;
+  font-size: 16px;
+  color: #4CAF50;
+}
+.footer-right p:nth-child(2)::before { content: '📧'; }
+.footer-right p:nth-child(3)::before { content: '📞'; }
+.footer-right p:nth-child(4)::before { content: '📍'; }
+
+/* Social Icons */
+.social-icons {
+  display: flex;
+  gap: 18px;
+  margin-top: 18px;
+}
+.social-icons img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  padding: 10px;
+  transition: all 0.4s ease;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+}
+.social-icons img:hover {
+  background: #4CAF50;
+  transform: scale(1.15) rotate(10deg);
+  box-shadow: 0 0 15px rgba(76,175,80,0.8);
+}
+
+/* Footer bottom */
+.footer-bottom {
+  text-align: center;
+  font-size: 15px;
+  color: #bbb;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.15);
+  letter-spacing: 0.6px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Reduce footer height without removing content or code */
+.footer {
+  padding: 28px 10px !important;
+}
+.footer-logo {
+  width: 110px !important;
+  margin-bottom: 8px !important;
+}
+.footer-tagline {
+  font-size: 13px !important;
+  padding-left: 6px !important;
+}
+.footer-middle h3,
+.footer-right h3 {
+  font-size: 1.15rem !important;
+  margin-bottom: 8px !important;
+}
+.footer-middle ul li a,
+.footer-right p {
+  font-size: 13px !important;
+}
+.social-icons img {
+  width: 28px !important;
+  height: 28px !important;
+  padding: 4px !important;
+}
+.footer-bottom {
+  font-size: 12px !important;
+  margin-top: 12px !important;
+  padding-top: 6px !important;
+}
+@media (max-width: 900px) {
+  .footer {
+    padding: 14px 4px !important;
+  }
+}
+</style> 
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const footer = document.getElementById("footer");
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) footer.classList.add("visible");
+      });
+    }, { threshold: 0.2 });
+    observer.observe(footer);
+    
+    // Apply saved language on page load
+    const savedLang = localStorage.getItem('lang') || 'en';
+    document.querySelectorAll('.lang-text').forEach(el => {
+      el.textContent = el.getAttribute(`data-${savedLang}`);
+    });
+  });
+</script>

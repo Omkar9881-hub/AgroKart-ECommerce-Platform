@@ -1,0 +1,307 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up – AgroKart</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    html, body {
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+      width: 100%;
+    }
+
+    .left {
+      width: 70%;
+      background-color: #e0f5d8;
+      padding: 3rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .left .logo img {
+      width: 100px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+
+    .left .welcome h1 {
+      font-size: 32px;
+      color: #0b3d0b;
+      margin-bottom: 20px;
+    }
+
+    .left .welcome p {
+      font-size: 20px;
+      color: #333;
+    }
+
+    .left .plant {
+      width: 500px;
+      margin-top: 10px;
+    }
+
+    .right {
+      width: 70%;
+      background-color: #e0f5d8;
+      background-image: url('{% static "images/leaves.png" %}');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .form-box {
+      width: 80%;
+      max-width: 500px;
+      background: rgb(95, 178, 95);
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .form-box h2 {
+      color: #2e4b3a;
+      margin-bottom: 25px;
+    }
+
+    .form-box label {
+      color: #2e4b3a;
+      align-self: flex-start;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .form-box input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      margin-bottom: 20px;
+      border-radius: 40px;
+      border: 1px solid #ccc;
+    }
+
+    .password-eye {
+      position: absolute;
+      right: 12px;
+      top: 40%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 1.2em;
+      color: #888;
+      display: block;
+      height: auto;
+    }
+
+    .form-box input[type="submit"] {
+      background-color: #804e46;
+      color: white;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .form-box input[type="submit"]:hover {
+      background-color: #6f1313;
+    }
+
+    .error {
+      color: #ffd4d4;
+      font-size: 13px;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    .login-link {
+      margin-top: 15px;
+      color: white;
+      font-size: 14px;
+    }
+
+    .login-link a {
+      color: #ffffff;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    .forgot-password {
+      display: block;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+      color: white;
+      text-decoration: underline;
+    }
+
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    @media screen and (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .left, .right {
+        width: 100%;
+        height: 50vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left">
+      <div class="logo">
+        <img src="{% static 'images/web_logo.png' %}" alt="Logo">
+      </div>
+      <div class="welcome">
+        <h1 class="lang-text" data-en="Welcome Back!" data-mr="परत आपले स्वागत आहे!">Welcome Back!</h1>
+        <p>Fill the form and get started with Agrokart. This platform is designed to provide the right agricultural seeds directly to farmers.</p>
+      </div>
+      <img src="{% static 'images/plant.png' %}" class="plant" alt="Plant">
+    </div>
+
+    <div class="right">
+      <div class="form-box">
+        <h2>Sign Up</h2>
+        <form name="signupForm" method="post" onsubmit="return validateForm()">
+          {% csrf_token %}
+          
+          <!-- Django Messages Display -->
+          {% if messages %}
+            {% for message in messages %}
+              <div class="message {{ message.tags }}" style="padding: 10px; margin: 10px 0; border-radius: 5px;">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+          
+          <div class="error" id="error-msg"></div>
+
+          <label>Username</label>
+          <input type="text" name="username" placeholder="Enter Name">
+
+          <label>Phone No</label>
+          <input type="tel" name="phone" placeholder="+91 9876543210">
+
+          <label>Email ID</label>
+          <input type="email" name="email" placeholder="example@gmail.com">
+
+          <label>Location</label>
+          <input type="text" name="location" placeholder="Enter your Place">
+
+          <label>Password</label>
+          <div style="position:relative;width:100%;">
+            <input type="password" name="password" id="password-input" placeholder="At least 6 characters with a letter" style="padding-right:40px;">
+            <span id="toggle-password" class="password-eye">
+              <i class="fa fa-eye" id="eye-icon"></i>
+            </span>
+          </div>
+
+          <label>Confirm Password</label>
+          <div style="position:relative;width:100%;">
+            <input type="password" name="confirm_password" id="confirm-password-input" placeholder="Re-enter password" style="padding-right:40px;">
+            <span id="toggle-confirm-password" class="password-eye">
+              <i class="fa fa-eye" id="eye-icon-confirm"></i>
+            </span>
+          </div>
+
+          <input type="submit" value="SignUp">
+        </form>
+
+        <!-- ✅ Login Button Section -->
+        <div class="login-link">
+          Already have an account?
+          <a href="{% url 'login' %}">Login</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+  <script>
+    function validateForm() {
+      const f = document.forms["signupForm"];
+      const { username, phone, email, location, password, confirm_password } = f;
+      const err = document.getElementById("error-msg");
+
+      if (!username.value || !phone.value || !email.value || !location.value || !password.value || !confirm_password.value) {
+        err.innerText = "All fields are required!";
+        return false;
+      }
+
+      if (password.value.length < 6 || !/[A-Za-z]/.test(password.value)) {
+        err.innerText = "Password must be at least 6 characters and contain at least one letter!";
+        return false;
+      }
+
+      if (password.value !== confirm_password.value) {
+        err.innerText = "Passwords do not match!";
+        return false;
+      }
+
+      return true;
+    }
+
+    // Password field
+    const togglePassword = document.getElementById('toggle-password');
+    const passwordInput = document.getElementById('password-input');
+    const eyeIcon = document.getElementById('eye-icon');
+    togglePassword.addEventListener('click', function() {
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+      }
+    });
+    // Confirm password field
+    const toggleConfirmPassword = document.getElementById('toggle-confirm-password');
+    const confirmPasswordInput = document.getElementById('confirm-password-input');
+    const eyeIconConfirm = document.getElementById('eye-icon-confirm');
+    toggleConfirmPassword.addEventListener('click', function() {
+      if (confirmPasswordInput.type === 'password') {
+        confirmPasswordInput.type = 'text';
+        eyeIconConfirm.classList.remove('fa-eye');
+        eyeIconConfirm.classList.add('fa-eye-slash');
+      } else {
+        confirmPasswordInput.type = 'password';
+        eyeIconConfirm.classList.remove('fa-eye-slash');
+        eyeIconConfirm.classList.add('fa-eye');
+      }
+    });
+  </script>
+</body>
+</html>

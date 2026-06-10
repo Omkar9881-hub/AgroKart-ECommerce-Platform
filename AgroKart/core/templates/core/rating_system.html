@@ -1,0 +1,131 @@
+<!-- Product Rating and Feedback System -->
+<div class="rating-container" style="margin: 30px 0; padding: 20px; background: #f9f9f9; border-radius: 10px;">
+    <h3 style="color: #1a3d1a; margin-bottom: 15px;">Rate this Product</h3>
+    
+    <!-- Star Rating -->
+    <div class="star-rating" id="star-rating">
+        <span class="star" data-rating="1">★</span>
+        <span class="star" data-rating="2">★</span>
+        <span class="star" data-rating="3">★</span>
+        <span class="star" data-rating="4">★</span>
+        <span class="star" data-rating="5">★</span>
+    </div>
+    
+    <!-- Feedback Form -->
+    <div id="feedback-form" style="display: none; margin-top: 15px;">
+        <textarea id="feedback-text" placeholder="Share your feedback about this product..." 
+                  rows="4" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit;"></textarea>
+        <button type="button" onclick="submitFeedback()" class="submit-btn" 
+                style="margin-top: 10px; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+            Submit Feedback
+        </button>
+    </div>
+    
+    <!-- Success Message -->
+    <div id="success-message" style="display: none; margin-top: 15px; padding: 15px; background: #d4edda; color: #155724; border-radius: 5px;">
+        <strong>Success!</strong> Your feedback has been submitted successfully.
+    </div>
+</div>
+
+<style>
+.star-rating {
+    font-size: 24px;
+    cursor: pointer;
+}
+.star {
+    color: #ddd;
+    transition: color 0.2s;
+}
+.star:hover,
+.star.active {
+    color: #ffc107;
+}
+</style>
+
+<script>
+// Rating system JavaScript
+let selectedRating = 0;
+
+document.addEventListener('DOMContentLoaded', function() {
+    const stars = document.querySelectorAll('.star');
+    const feedbackForm = document.getElementById('feedback-form');
+    
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            selectedRating = parseInt(this.getAttribute('data-rating'));
+            updateStars();
+            feedbackForm.style.display = 'block';
+        });
+        
+        star.addEventListener('mouseover', function() {
+            const rating = parseInt(this.getAttribute('data-rating'));
+            highlightStars(rating);
+        });
+        
+        star.addEventListener('mouseout', function() {
+            highlightStars(selectedRating);
+        });
+    });
+});
+
+function updateStars() {
+    const stars = document.querySelectorAll('.star');
+    stars.forEach((star, index) => {
+        if (index < selectedRating) {
+            star.classList.add('active');
+        } else {
+            star.classList.remove('active');
+        }
+    });
+}
+
+function highlightStars(rating) {
+    const stars = document.querySelectorAll('.star');
+    stars.forEach((star, index) => {
+        if (index < rating) {
+            star.style.color = '#ffc107';
+        } else {
+            star.style.color = '#ddd';
+        }
+    });
+}
+
+function submitFeedback() {
+    const feedbackText = document.getElementById('feedback-text').value;
+    const productId = document.getElementById('product-id')?.value || '{{ product.id }}';
+    
+    if (selectedRating === 0) {
+        alert('Please select a rating');
+        return;
+    }
+    
+    fetch('{% url "submit_feedback" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            product_id: productId,
+            rating: selectedRating,
+            comment: feedbackText
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('success-message').style.display = 'block';
+            document.getElementById('feedback-form').style.display = 'none';
+            setTimeout(() => {
+                document.getElementById('success-message').style.display = 'none';
+            }, 3000);
+        } else {
+            alert(data.message || 'Error submitting feedback');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error submitting feedback');
+    });
+}
+</script>

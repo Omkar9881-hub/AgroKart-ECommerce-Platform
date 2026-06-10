@@ -1,0 +1,725 @@
+{% load static %}
+{% include "core/base_header.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About Us – AgroKart</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    html, body {
+      overflow-x: hidden;
+      background: #fff;
+      min-height: 100vh;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, #4CAF50, #2E7D32, #1B5E20);
+      color: white;
+      text-align: center;
+      padding: 120px 20px 80px;
+      margin-top: 60px;
+    }
+    
+    .hero-section h1 {
+      font-size: 48px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+    
+    .hero-section p {
+      font-size: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Our Story Section */
+    .story-section {
+      padding: 80px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 60px;
+    }
+    
+    .story-content {
+      flex: 1;
+    }
+    
+    .story-content h2 {
+      font-size: 36px;
+      color: #2E7D32;
+      margin-bottom: 30px;
+      font-weight: bold;
+    }
+    
+    .story-content p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    
+    .story-image {
+      flex: 1;
+      text-align: center;
+    }
+    
+    .story-image img {
+      width: 100%;
+      height: 300px;
+      border-radius: 55px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    /* Foundation Section */
+    .foundation-section {
+      background: #f8f9fa;
+      padding: 80px 20px;
+      text-align: center;
+    }
+    
+    .foundation-header {
+      max-width: 800px;
+      margin: 0 auto 60px;
+    }
+    
+    .foundation-header h2 {
+      font-size: 36px;
+      color: #2E7D32;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+    
+    .foundation-header p {
+      font-size: 18px;
+      color: #666;
+      line-height: 1.6;
+    }
+    
+    .foundation-cards {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+    
+    .foundation-card {
+      background: linear-gradient(145deg, #ffffff, #f8f9fa);
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 
+        0 8px 32px rgba(0,0,0,0.1),
+        0 4px 16px rgba(0,0,0,0.05),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+      flex: 1;
+      min-width: 300px;
+      max-width: 350px;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-style: preserve-3d;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+    }
+    
+    .foundation-card:hover {
+      transform: translateY(-15px) scale(1.05) rotateX(5deg);
+      box-shadow: 
+        0 25px 60px rgba(0,0,0,0.25),
+        0 15px 35px rgba(0,0,0,0.15),
+        0 5px 15px rgba(76,175,80,0.2);
+      background: linear-gradient(145deg, #ffffff, #f0f8f0);
+      border: 1px solid rgba(76,175,80,0.3);
+    }
+    
+    .foundation-card:active {
+      transform: translateY(-8px) scale(1.02);
+      transition: all 0.1s ease;
+    }
+    
+    .foundation-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(
+        from 0deg,
+        transparent,
+        rgba(76,175,80,0.1),
+        rgba(255,255,255,0.3),
+        rgba(76,175,80,0.1),
+        transparent
+      );
+      transform: rotate(-45deg);
+      transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+      opacity: 0;
+    }
+    
+    .foundation-card:hover::before {
+      opacity: 1;
+      transform: rotate(45deg) scale(1.2);
+    }
+    
+    .foundation-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg, 
+        transparent, 
+        rgba(255,255,255,0.6), 
+        transparent
+      );
+      transition: left 0.8s ease;
+      z-index: 1;
+    }
+    
+    .foundation-card:hover::after {
+      left: 100%;
+    }
+    
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(60px) scale(0.8) rotateX(30deg);
+        filter: blur(5px);
+      }
+      50% {
+        opacity: 0.8;
+        transform: translateY(20px) scale(0.95) rotateX(10deg);
+        filter: blur(2px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotateX(0deg);
+        filter: blur(0px);
+      }
+    }
+    
+    @keyframes cardGlow {
+      0%, 100% {
+        box-shadow: 
+          0 8px 32px rgba(0,0,0,0.1),
+          0 4px 16px rgba(0,0,0,0.05);
+      }
+      50% {
+        box-shadow: 
+          0 8px 32px rgba(76,175,80,0.15),
+          0 4px 16px rgba(76,175,80,0.1);
+      }
+    }
+    
+    .foundation-card:nth-child(1) {
+      animation: 
+        fadeInUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s both,
+        cardGlow 3s ease-in-out 1s infinite;
+    }
+    
+    .foundation-card:nth-child(2) {
+      animation: 
+        fadeInUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.4s both,
+        cardGlow 3s ease-in-out 1.5s infinite;
+    }
+    
+    .foundation-card:nth-child(3) {
+      animation: 
+        fadeInUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s both,
+        cardGlow 3s ease-in-out 2s infinite;
+    }
+    
+    .foundation-card .icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #4CAF50, #45a049, #66BB6A);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 36px;
+      color: white;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform: scale(1);
+      position: relative;
+      z-index: 2;
+      box-shadow: 
+        0 4px 15px rgba(76,175,80,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+    
+    .foundation-card:hover .icon {
+      transform: scale(1.15) rotate(10deg) translateY(-5px);
+      background: linear-gradient(135deg, #66BB6A, #4CAF50, #81C784);
+      box-shadow: 
+        0 12px 30px rgba(76,175,80,0.4),
+        0 6px 15px rgba(76,175,80,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.4);
+      animation: iconPulse 0.6s ease-in-out;
+    }
+    
+    @keyframes iconPulse {
+      0%, 100% { transform: scale(1.15) rotate(10deg) translateY(-5px); }
+      50% { transform: scale(1.25) rotate(10deg) translateY(-8px); }
+    }
+    
+    .foundation-card h3 {
+      font-size: 24px;
+      color: #2E7D32;
+      margin-bottom: 15px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .foundation-card:hover h3 {
+      color: #1B5E20;
+      transform: translateY(-2px);
+      text-shadow: 0 2px 8px rgba(46,125,50,0.2);
+    }
+    
+    .foundation-card p {
+      font-size: 16px;
+      color: #666;
+      line-height: 1.6;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .foundation-card:hover p {
+      color: #555;
+      transform: translateY(-1px);
+    }
+
+    /* What We Do Section */
+    .whatwedo-section {
+      padding: 80px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 60px;
+    }
+    
+    .whatwedo-image {
+      flex: 1;
+      text-align: center;
+    }
+    
+    .whatwedo-image img {
+      width: 100%;
+      border-radius: 55px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    
+    .whatwedo-content {
+      flex: 1;
+    }
+    
+    .whatwedo-content h2 {
+      font-size: 36px;
+      color: #2E7D32;
+      margin-bottom: 30px;
+      font-weight: bold;
+    }
+    
+    .whatwedo-content p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    /* Footer */
+    footer {
+      background: linear-gradient(to right, #2e2929, #5a925c);
+      color: white;
+      padding: 40px 30px 0;
+    }
+    
+    .footer-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-bottom: 30px;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .footer-section {
+      flex: 1;
+      min-width: 250px;
+      text-align: left;
+    }
+    
+    .footer-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .footer-logo img {
+      height: 80px;
+      width: auto;
+      margin-bottom: 15px;
+    }
+    
+    .footer-logo .description {
+      font-size: 0.95em;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      color: #e0e0e0;
+    }
+    
+    .footer-social-icons {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .footer-social-icons a {
+      width: 50px;
+      height: 50px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    
+    .footer-social-icons a:hover {
+      background: #4CAF50;
+    }
+    
+    .footer-social-icons img {
+      width: 28px;
+      height: 28px;
+      filter: brightness(0) invert(1);
+    }
+    
+    .footer-section h3 {
+      color: #4CAF50;
+      font-size: 1.2em;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .footer-section ul li {
+      margin-bottom: 8px;
+    }
+    
+    .footer-section ul li a {
+      color: #e0e0e0;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .footer-section ul li a:hover {
+      color: #4CAF50;
+    }
+    
+    .footer-section p {
+      color: #e0e0e0;
+      margin: 5px 0;
+      line-height: 1.4;
+    }
+    
+    .footer-bottom {
+      border-top: 1px solid #555;
+      padding: 20px 0;
+      text-align: center;
+      color: #ccc;
+      font-size: 0.9em;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-section h1 {
+        font-size: 36px;
+      }
+      
+      .hero-section p {
+        font-size: 18px;
+      }
+      
+      .story-section,
+      .whatwedo-section {
+        flex-direction: column;
+        gap: 40px;
+        text-align: center;
+      }
+      
+      .foundation-cards {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .footer-main {
+        flex-direction: column;
+        gap: 25px;
+        text-align: center;
+      }
+      
+      .footer-logo {
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <h1 class="lang-text" data-en="About AgroKart" data-mr="AgroKart बद्दल">About AgroKart</h1>
+    <p class="lang-text" 
+       data-en="Leading the agricultural revolution with innovative solutions and premium quality seeds for sustainable farming."
+       data-mr="शाश्वत शेतीसाठी नाविन्यपूर्ण उपाय आणि उत्कृष्ट दर्जाच्या बियाण्यांसह कृषी क्रांतीचे नेतृत्व करत आहे.">
+      Leading the agricultural revolution with innovative solutions and premium quality seeds for sustainable farming.
+    </p>
+  </section>
+
+  <!-- Our Story Section -->
+  <section class="story-section">
+    <div class="story-content">
+      <h2 class="lang-text" data-en="Our Story" data-mr="आमची कहाणी">Our Story</h2>
+      <p class="lang-text" 
+         data-en="AgroKart was born from a vision to bridge the gap between traditional farming practices and modern agricultural technology. We recognized that Indian farmers needed a trusted partner who could provide not just quality products, but also the knowledge and support to maximize their agricultural potential."
+         data-mr="AgroKart हा पारंपारिक शेती पद्धती आणि आधुनिक कृषी तंत्रज्ञान यांच्यातील अंतर भरण्याच्या दृष्टिकोनातून जन्माला आला. आम्ही ओळखले की भारतीय शेतकऱ्यांना एक विश्वसनीय भागीदार हवा होता जो केवळ दर्जेदार उत्पादने नाही तर त्यांच्या कृषी क्षमतेचा अधिकतम उपयोग करण्यासाठी ज्ञान आणि समर्थन देऊ शकेल.">
+        AgroKart was born from a vision to bridge the gap between traditional farming practices and modern agricultural technology. We recognized that Indian farmers needed a trusted partner who could provide not just quality products, but also the knowledge and support to maximize their agricultural potential.
+      </p>
+      <p class="lang-text" 
+         data-en="Our journey began with a simple mission: to make high-quality agricultural products accessible to every farmer, regardless of their location or scale of operation. Today, we stand as a testament to the power of innovation, dedication, and the unwavering spirit of Indian agriculture."
+         data-mr="आमचा प्रवास एका साध्या मिशनने सुरू झाला: प्रत्येक शेतकऱ्याला त्यांचे स्थान किंवा कामकाजाचे प्रमाण काहीही असो, उच्च दर्जाची कृषी उत्पादने उपलब्ध करून देणे. आज आम्ही नवकल्पना, समर्पण आणि भारतीय शेतीच्या अटूट भावनेच्या शक्तीचा पुरावा म्हणून उभे आहोत.">
+        Our journey began with a simple mission: to make high-quality agricultural products accessible to every farmer, regardless of their location or scale of operation. Today, we stand as a testament to the power of innovation, dedication, and the unwavering spirit of Indian agriculture.
+      </p>
+    </div>
+    <div class="story-image">
+      <img src="{% static 'images/seeds3.jpg' %}">
+    </div>
+  </section>
+
+  <!-- Our Foundation Section -->
+  <section class="foundation-section">
+    <div class="foundation-header">
+      <h2 class="lang-text" data-en="Our Foundation" data-mr="आमचा पाया">Our Foundation</h2>
+      <p class="lang-text" 
+         data-en="Built on strong values and driven by a clear mission to revolutionize agriculture."
+         data-mr="मजबूत मूल्यांवर आधारित आणि कृषी क्रांती घडवून आणण्याच्या स्पष्ट मिशनने प्रेरित.">
+        Built on strong values and driven by a clear mission to revolutionize agriculture.
+      </p>
+    </div>
+    
+    <div class="foundation-cards">
+      <div class="foundation-card">
+        <div class="icon">🎯</div>
+        <h3 class="lang-text" data-en="Mission" data-mr="मिशन">Mission</h3>
+        <p class="lang-text" 
+           data-en="To empower farmers with premium quality seeds and sustainable solutions that enhance productivity while preserving the environment for future generations."
+           data-mr="भावी पिढ्यांसाठी पर्यावरण जतन करताना उत्पादकता वाढवणारे उत्कृष्ट दर्जाचे बियाणे आणि शाश्वत उपायांनी शेतकऱ्यांना सक्षम करणे.">
+          To empower farmers with premium quality seeds and sustainable solutions that enhance productivity while preserving the environment for future generations.
+        </p>
+      </div>
+      
+      <div class="foundation-card">
+        <div class="icon">👁️</div>
+        <h3 class="lang-text" data-en="Vision" data-mr="दृष्टिकोन">Vision</h3>
+        <p class="lang-text" 
+           data-en="To be India's leading agricultural technology platform, transforming farming through digital innovation and making quality agricultural solutions accessible to every farmer."
+           data-mr="डिजिटल नवकल्पनेद्वारे शेती बदलून आणि प्रत्येक शेतकऱ्याला दर्जेदार कृषी उपाय उपलब्ध करून देऊन भारताचे आघाडीचे कृषी तंत्रज्ञान व्यासपीठ बनणे.">
+          To be India's leading agricultural technology platform, transforming farming through digital innovation and making quality agricultural solutions accessible to every farmer.
+        </p>
+      </div>
+      
+      <div class="foundation-card">
+        <div class="icon">💎</div>
+        <h3 class="lang-text" data-en="Values" data-mr="मूल्ये">Values</h3>
+        <p class="lang-text" 
+           data-en="Trust, Quality, Innovation, Sustainability, and Long-term partnerships. We believe in building relationships that last and creating value that extends beyond transactions."
+           data-mr="विश्वास, गुणवत्ता, नवकल्पना, शाश्वतता आणि दीर्घकालीन भागीदारी. आम्ही टिकणारे नाते निर्माण करण्यावर आणि व्यवहारांच्या पलीकडे मूल्य निर्माण करण्यावर विश्वास ठेवतो.">
+          Trust, Quality, Innovation, Sustainability, and Long-term partnerships. We believe in building relationships that last and creating value that extends beyond transactions.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What We Do Section -->
+  <section class="whatwedo-section">
+    <div class="whatwedo-image">
+      <img src="{% static 'images/aboutus.jpg' %}">
+    </div>
+    <div class="whatwedo-content">
+      <h2 class="lang-text" data-en="What We Do" data-mr="आमच्या काय करतो">What We Do</h2>
+      <p class="lang-text" 
+         data-en="AgroKart offers a comprehensive range of certified seeds, including hybrid and organic varieties, alongside cutting-edge digital farming solutions. Our platform connects farmers with premium agricultural products, expert guidance, and innovative tools designed to optimize crop yields and farming efficiency."
+         data-mr="AgroKart प्रमाणित बियाण्यांची व्यापक श्रेणी ऑफर करते, ज्यामध्ये संकरित आणि सेंद्रिय जातींचा समावेश आहे, अत्याधुनिक डिजिटल शेती उपायांसह. आमचे व्यासपीठ शेतकऱ्यांना उत्कृष्ट कृषी उत्पादने, तज्ञ मार्गदर्शन आणि पीक उत्पादन आणि शेती कार्यक्षमता अनुकूल करण्यासाठी डिझाइन केलेली नाविन्यपूर्ण साधने यांच्याशी जोडते.">
+        AgroKart offers a comprehensive range of certified seeds, including hybrid and organic varieties, alongside cutting-edge digital farming solutions. Our platform connects farmers with premium agricultural products, expert guidance, and innovative tools designed to optimize crop yields and farming efficiency.
+      </p>
+      <p class="lang-text" 
+         data-en="Beyond products, we provide expert agricultural advice, real-time market data, weather insights, and personalized support to help farmers make informed decisions. Our commitment extends to building a sustainable agricultural ecosystem that benefits farmers, consumers, and the environment alike."
+         data-mr="उत्पादनांच्या पलीकडे, आम्ही शेतकऱ्यांना माहितीपूर्ण निर्णय घेण्यास मदत करण्यासाठी तज्ञ कृषी सल्ला, रिअल-टाइम बाजार डेटा, हवामान अंतर्दृष्टी आणि वैयक्तिकृत समर्थन प्रदान करतो. आमची वचनबद्धता शेतकरी, ग्राहक आणि पर्यावरण यांना समान फायदा होणारी शाश्वत कृषी परिस्थितिकी तंत्र निर्माण करण्यापर्यंत विस्तारित आहे.">
+        Beyond products, we provide expert agricultural advice, real-time market data, weather insights, and personalized support to help farmers make informed decisions. Our commitment extends to building a sustainable agricultural ecosystem that benefits farmers, consumers, and the environment alike.
+      </p>
+    </div>
+  </section>
+
+  <!-- Vanilla Tilt JS -->
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
+  <script>
+    // Wait for DOM to load before initializing animations
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize Vanilla Tilt for foundation cards
+      VanillaTilt.init(document.querySelectorAll(".foundation-card"), {
+        max: 20,
+        speed: 300,
+        glare: true,
+        "max-glare": 0.3,
+        "glare-prerender": false,
+        scale: 1.08,
+        perspective: 1200,
+        transition: true,
+        "speed-transition": true,
+        easing: "cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+        axis: null,
+        reset: true,
+        "reset-transition": true,
+        "mouse-event-element": null,
+        gyroscope: true,
+        gyroscopeMinAngleX: -45,
+        gyroscopeMaxAngleX: 45,
+        gyroscopeMinAngleY: -45,
+        gyroscopeMaxAngleY: 45
+      });
+      
+      console.log('Vanilla Tilt initialized for', document.querySelectorAll(".foundation-card").length, 'cards');
+      
+      // Enhanced interactive effects
+      const cards = document.querySelectorAll(".foundation-card");
+      cards.forEach((card, index) => {
+        // Mouse enter effect
+        card.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-15px) scale(1.05)';
+          this.style.zIndex = '10';
+          
+          // Add ripple effect
+          const ripple = document.createElement('div');
+          ripple.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(76,175,80,0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: rippleEffect 0.6s ease-out;
+            pointer-events: none;
+            z-index: 1;
+          `;
+          this.appendChild(ripple);
+          
+          setTimeout(() => ripple.remove(), 600);
+        });
+        
+        // Mouse leave effect
+        card.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0) scale(1)';
+          this.style.zIndex = '1';
+        });
+        
+        // Click effect
+        card.addEventListener('click', function() {
+          this.style.animation = 'none';
+          setTimeout(() => {
+            this.style.animation = `cardBounce 0.6s ease-out`;
+          }, 10);
+        });
+      });
+      
+      // Add ripple animation to CSS
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes rippleEffect {
+          0% {
+            width: 0;
+            height: 0;
+            opacity: 1;
+          }
+          100% {
+            width: 300px;
+            height: 300px;
+            opacity: 0;
+          }
+        }
+        
+        @keyframes cardBounce {
+          0%, 100% { transform: translateY(0) scale(1); }
+          25% { transform: translateY(-20px) scale(1.08); }
+          50% { transform: translateY(-10px) scale(1.05); }
+          75% { transform: translateY(-15px) scale(1.06); }
+        }
+      `;
+      document.head.appendChild(style);
+    });
+    
+    function setLanguage(lang) {
+      const elements = document.querySelectorAll(".lang-text");
+      elements.forEach(el => {
+        const text = el.getAttribute(`data-${lang}`);
+        if (text) el.innerText = text;
+      });
+      localStorage.setItem("preferredLanguage", lang);
+    }
+    // Set language on load
+    window.addEventListener('DOMContentLoaded', function() {
+      const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+      setLanguage(savedLang);
+    });
+    // Smooth scroll for nav links
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('nav ul li a').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href && href.startsWith('#')) {
+            e.preventDefault();
+            document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+    });
+    // Dropdown for user avatar
+    function toggleDropdown() {
+      const dropdown = document.getElementById("dropdown");
+      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    }
+  </script>
+  {% include 'core/base_footer.html' %}
+</body>
+</html>

@@ -1,0 +1,638 @@
+{% load static %}
+{% include "core/base_header.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgroKart – Product Info</title>
+  <style>
+* {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    html, body {
+      overflow-x: hidden;
+      background-color: #f5f5f5;
+    }
+    body {
+      padding-top: 90px;
+    }
+    .product-info-container {
+      background: #fff;
+      margin: 60px auto 40px auto;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(44, 62, 80, 0.13);
+      display: flex;
+      max-width: 950px;
+      min-width: 340px;
+      width: 90vw;
+      overflow: hidden;
+      align-items: stretch;
+    }
+    .product-img-section {
+      flex: 1.1;
+      background: #f2f7f2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px 48px 36px;
+      min-width: 260px;
+    }
+    .product-img-section img {
+      max-width: 320px;
+      max-height: 370px;
+      border-radius: 14px;
+      object-fit: contain;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+      background: #fff;
+      border: 1.5px solid #e0e0e0;
+    }
+    .product-details-section {
+      flex: 2;
+      padding: 48px 40px 40px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+    .product-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: #1a3d1a;
+      letter-spacing: 0.5px;
+    }
+    .product-desc {
+      font-size: 1.13rem;
+      color: #444;
+      margin-bottom: 22px;
+      line-height: 1.6;
+    }
+    .product-price {
+      font-size: 1.25rem;
+      color: #4CAF50;
+      font-weight: bold;
+      margin-bottom: 22px;
+    }
+    .quantity-row {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+    .quantity-row button {
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: #4CAF50;
+      color: #fff;
+      font-size: 1.4rem;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-shadow: 0 1px 4px rgba(44, 62, 80, 0.10);
+    }
+    .quantity-row button:hover {
+      background: #388e3c;
+    }
+    .quantity-row input {
+      width: 54px;
+      text-align: center;
+      font-size: 1.13rem;
+      border: 1.5px solid #b4deaa;
+      border-radius: 7px;
+      padding: 5px 0;
+      background: #f4f4f4;
+    }
+    .amount-row {
+      font-size: 1.13rem;
+      color: #1a3d1a;
+      margin-bottom: 28px;
+      font-weight: 500;
+    }
+    .add-to-cart-btn {
+      padding: 13px 38px;
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      font-size: 1.13rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-shadow: 0 1px 4px rgba(44, 62, 80, 0.10);
+    }
+    .add-to-cart-btn:hover {
+      background: #388e3c;
+    }
+    /* Footer */
+    footer {
+      background: linear-gradient(to right, #2e2929, #5a925c);
+      color: white;
+      padding: 40px 30px 0;
+    }
+    
+    .footer-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-bottom: 30px;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .footer-section {
+      flex: 1;
+      min-width: 250px;
+      text-align: left;
+    }
+    
+    .footer-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .footer-logo img {
+      height: 80px;
+      width: auto;
+      margin-bottom: 15px;
+    }
+    
+    .footer-logo .description {
+      font-size: 0.95em;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      color: #e0e0e0;
+    }
+    
+    .footer-social-icons {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .footer-social-icons a {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    
+    .footer-social-icons a:hover {
+      background: #4CAF50;
+    }
+    
+    .footer-social-icons img {
+      width: 28px;
+      height: 28px;
+    }
+    
+    .footer-section h3 {
+      color: #4CAF50;
+      font-size: 1.2em;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    
+    .footer-section ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .footer-section ul li {
+      margin-bottom: 8px;
+    }
+    
+    .footer-section ul li a {
+      color: #e0e0e0;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .footer-section ul li a:hover {
+      color: #4CAF50;
+    }
+    
+    .footer-section p {
+      color: #e0e0e0;
+      margin: 5px 0;
+      line-height: 1.4;
+    }
+    
+    .footer-bottom {
+      border-top: 1px solid #555;
+      padding: 20px 0;
+      text-align: center;
+      color: #ccc;
+      font-size: 0.9em;
+    }
+    @media (max-width: 900px) {
+      body {
+        padding-top: 110px;
+      }
+      .footer-main {
+        flex-direction: column;
+        gap: 25px;
+        text-align: center;
+      }
+      .footer-section {
+        min-width: 100%;
+      }
+      .footer-logo {
+        align-items: center;
+      }
+      .product-info-container {
+        flex-direction: column;
+        margin: 20px auto;
+      }
+      .product-img-section {
+        padding: 24px;
+      }
+      .product-details-section {
+        padding: 24px;
+      }
+    }
+    @media (max-width: 600px) {
+      footer {
+        padding: 20px 10px 0;
+      }
+      .product-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header and Navbar -->
+  
+
+  <div class="product-info-container">
+    <div class="product-img-section">
+      {% if product and product.image %}
+        <img id="product-img" src="{{ product.image.url }}" alt="{{ product.name }}">
+      {% else %}
+        <img id="product-img" src="{% static 'images/agrokart.png' %}" alt="Product Image">
+      {% endif %}
+    </div>
+    <div class="product-details-section">
+      {% if product %}
+        <div class="product-title" id="product-title">{{ product.name }}</div>
+        <div class="product-desc" id="product-desc">{{ product.description }}</div>
+        <div class="product-price" id="product-price">₹{{ product.price }} / 1kg</div>
+        <div class="stock-info" style="color: #666; margin-bottom: 15px;">
+          <span class="lang-text" data-en="Stock Available: {{ product.stock_quantity }} units" data-mr="स्टॉक उपलब्ध: {{ product.stock_quantity }} युनिट">Stock Available: {{ product.stock_quantity }} units</span>
+        </div>
+        <input type="hidden" id="product-id" value="{{ product.id }}">
+        <input type="hidden" id="product-stock" value="{{ product.stock_quantity }}">
+        <input type="hidden" id="product-price-value" value="{{ product.price }}">
+      {% else %}
+        <div class="product-title" id="product-title">Product Name</div>
+        <div class="product-desc" id="product-desc">Product description will appear here.</div>
+        <div class="product-price" id="product-price">₹200 / 1kg</div>
+      {% endif %}
+      
+      <div class="quantity-row">
+        <button onclick="changeQty(-1)">-</button>
+        <input type="number" id="qty-input" value="1" min="1" max="{% if product %}{{ product.stock_quantity }}{% else %}100{% endif %}" readonly>
+        <button onclick="changeQty(1)">+</button>
+      </div>
+      <div class="amount-row">
+        <span class="lang-text" data-en="Total Amount:" data-mr="एकूण रक्कम:">Total Amount:</span> <span id="total-amount">₹{% if product %}{{ product.price }}{% else %}200{% endif %}</span>
+      </div>
+      
+      {% if user.is_authenticated %}
+        <button class="add-to-cart-btn" onclick="addToCart()">
+          <span class="lang-text" data-en="Add to Cart" data-mr="कार्टमध्ये जोडा">Add to Cart</span>
+        </button>
+      {% else %}
+        <a href="{% url 'login' %}" class="add-to-cart-btn" style="text-decoration: none; display: inline-block; text-align: center;">
+          <span class="lang-text" data-en="Login to Buy" data-mr="खरेदीसाठी लॉगिन करा">Login to Buy</span>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+
+
+
+  <script>
+    // Language functionality
+    window.addEventListener('DOMContentLoaded', () => {
+      const preferredLang = localStorage.getItem("preferredLanguage") || "en";
+      setLanguage(preferredLang);
+      
+      // Product data is already loaded from Django backend
+      // No need to load data via JavaScript
+    });
+
+    function setLanguage(lang) {
+      const elements = document.querySelectorAll(".lang-text");
+      elements.forEach(el => {
+        const text = el.getAttribute(`data-${lang}`);
+        if (text) el.innerText = text;
+      });
+      localStorage.setItem("preferredLanguage", lang);
+    }
+
+    function toggleLanguage() {
+      const currentLang = localStorage.getItem("preferredLanguage") || "en";
+      setLanguage(currentLang === "en" ? "mr" : "en");
+    }
+
+    function toggleDropdown() {
+      const dropdown = document.getElementById("userDropdown");
+      if (dropdown) {
+        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+      }
+    }
+
+    function scrollToFooter() {
+      const footer = document.getElementById("footer");
+      if (footer) footer.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Product data
+    const productData = {
+      wheat_seeds: {
+        img: "{% static 'images/wheat_seeds.jpg' %}",
+        title: "Wheat Seeds",
+        titleMr: "गहू बियाणे",
+        desc: "Premium quality wheat seeds with excellent germination rate. Perfect for all soil types and weather conditions. Guaranteed high yield and disease resistance. Ideal for commercial farming.",
+        descMr: "उत्कृष्ट अंकुरण दरासह प्रिमियम दर्जाचे गहू बियाणे. सर्व प्रकारच्या मातीसाठी आणि हवामान परिस्थितीसाठी योग्य. उच्च उत्पादन आणि रोग प्रतिकारशक्तीची हमी. व्यावसायिक शेतीसाठी आदर्श.",
+        price: 210
+      },
+      rice_seeds: {
+        img: "{% static 'images/rice_seeds.jpg' %}",
+        title: "Rice Seeds",
+        titleMr: "तांदूळ बियाणे",
+        desc: "High-quality rice seeds with superior germination rate. Suitable for paddy cultivation in various climatic conditions. Ensures maximum yield with disease resistance.",
+        descMr: "उत्कृष्ट अंकुरण दरासह उच्च दर्जाचे तांदूळ बियाणे. विविध हवामान परिस्थितीत भात लागवडीसाठी योग्य. रोग प्रतिकारशक्तीसह कमाल उत्पादनाची हमी.",
+        price: 220
+      },
+      corn_seeds: {
+        img: "{% static 'images/corn_seeds.jpg' %}",
+        title: "Corn Seeds",
+        titleMr: "मका बियाणे",
+        desc: "Premium corn seeds with high yield potential. Perfect for both commercial and subsistence farming. Drought resistant and suitable for various soil conditions.",
+        descMr: "उच्च उत्पादन क्षमतेसह प्रिमियम मका बियाणे. व्यावसायिक आणि निर्वाह शेती दोन्हीसाठी योग्य. दुष्काळ प्रतिरोधी आणि विविध मातीच्या परिस्थितीसाठी उपयुक्त.",
+        price: 230
+      },
+      tomato_seeds: {
+        img: "{% static 'images/tomato_seeds.jpg' %}",
+        title: "Tomato Seeds",
+        titleMr: "टोमॅटो बियाणे",
+        desc: "High-quality tomato seeds for healthy and productive plants. Disease resistant variety with excellent fruit quality. Perfect for kitchen gardens and commercial cultivation.",
+        descMr: "निरोगी आणि उत्पादक रोपांसाठी उच्च दर्जाचे टोमॅटो बियाणे. उत्कृष्ट फळांच्या गुणवत्तेसह रोग प्रतिरोधी जात. स्वयंपाकघरातील बागा आणि व्यावसायिक लागवडीसाठी योग्य.",
+        price: 240
+      },
+      onion_seeds: {
+        img: "{% static 'images/onion_seeds.jpg' %}",
+        title: "Onion Seeds",
+        titleMr: "कांदा बियाणे",
+        desc: "Premium onion seeds with excellent storage quality. High yield variety suitable for different seasons. Disease resistant with good bulb formation.",
+        descMr: "उत्कृष्ट साठवण गुणवत्तेसह प्रिमियम कांदा बियाणे. विविध हंगामांसाठी योग्य उच्च उत्पादन जात. चांगल्या कंद निर्मितीसह रोग प्रतिरोधी.",
+        price: 250
+      },
+      carrot_seeds: {
+        img: "{% static 'images/carrot_seeds.jpg' %}",
+        title: "Carrot Seeds",
+        titleMr: "गाजर बियाणे",
+        desc: "High-quality carrot seeds for nutritious and sweet carrots. Perfect for home gardens and commercial farming. Rich in vitamins and minerals.",
+        descMr: "पौष्टिक आणि गोड गाजरांसाठी उच्च दर्जाचे गाजर बियाणे. घरगुती बागा आणि व्यावसायिक शेतीसाठी योग्य. जीवनसत्त्वे आणि खनिजांनी भरपूर.",
+        price: 260
+      },
+      fresh_wheat: {
+        img: "{% static 'images/fresh_wheat.jpg' %}",
+        title: "Fresh Wheat",
+        titleMr: "ताजा गहू",
+        desc: "Fresh, high-quality wheat grains directly from farms. Rich in nutrients and perfect for making flour. Organically grown without harmful chemicals.",
+        descMr: "शेतातून थेट आणलेले ताजे, उच्च दर्जाचे गहू दाणे. पोषक तत्वांनी भरपूर आणि पीठ बनवण्यासाठी योग्य. हानिकारक रसायनांशिवाय सेंद्रिय पद्धतीने उगवलेले.",
+        price: 270
+      },
+      fresh_rice: {
+        img: "{% static 'images/fresh_rice.jpg' %}",
+        title: "Fresh Rice",
+        titleMr: "ताजा तांदूळ",
+        desc: "Premium quality fresh rice with excellent taste and aroma. Naturally processed and free from chemicals. Perfect for daily consumption.",
+        descMr: "उत्कृष्ट चव आणि सुगंधासह प्रिमियम दर्जाचा ताजा तांदूळ. नैसर्गिकरित्या प्रक्रिया केलेला आणि रसायनांपासून मुक्त. दैनंदिन वापरासाठी योग्य.",
+        price: 280
+      },
+      fresh_corn: {
+        img: "{% static 'images/fresh_corn.jpg' %}",
+        title: "Fresh Corn",
+        titleMr: "ताजा मका",
+        desc: "Sweet and nutritious fresh corn directly from farms. Rich in fiber and vitamins. Perfect for cooking, roasting, or making corn flour.",
+        descMr: "शेतातून थेट आणलेला गोड आणि पौष्टिक ताजा मका. फायबर आणि जीवनसत्त्वांनी भरपूर. स्वयंपाक, भाजणे किंवा मक्याचे पीठ बनवण्यासाठी योग्य.",
+        price: 290
+      },
+      fresh_tomato: {
+        img: "{% static 'images/fresh_tomato.jpg' %}",
+        title: "Fresh Tomato",
+        titleMr: "ताजा टोमॅटो",
+        desc: "Fresh, juicy tomatoes with rich flavor and nutrients. Organically grown without pesticides. Perfect for cooking, salads, and making sauces.",
+        descMr: "समृद्ध चव आणि पोषक तत्वांसह ताजे, रसाळ टोमॅटो. कीटकनाशकांशिवाय सेंद्रिय पद्धतीने उगवलेले. स्वयंपाक, सॅलड आणि सॉस बनवण्यासाठी योग्य.",
+        price: 300
+      },
+      fresh_onion: {
+        img: "{% static 'images/fresh_onion.jpg' %}",
+        title: "Fresh Onion",
+        titleMr: "ताजा कांदा",
+        desc: "Fresh, high-quality onions with excellent storage life. Rich in antioxidants and essential nutrients. Perfect for daily cooking needs.",
+        descMr: "उत्कृष्ट साठवण आयुष्यासह ताजे, उच्च दर्जाचे कांदे. अँटिऑक्सिडंट्स आणि आवश्यक पोषक तत्वांनी भरपूर. दैनंदिन स्वयंपाकाच्या गरजांसाठी योग्य.",
+        price: 310
+      },
+      fresh_carrot: {
+        img: "{% static 'images/fresh_carrot.jpg' %}",
+        title: "Fresh Carrot",
+        titleMr: "ताजी गाजर",
+        desc: "Sweet and crunchy fresh carrots rich in beta-carotene and vitamins. Organically grown for maximum nutrition. Perfect for salads, cooking, and juices.",
+        descMr: "बीटा-कॅरोटीन आणि जीवनसत्त्वांनी भरपूर गोड आणि कुरकुरीत ताजी गाजर. कमाल पोषणासाठी सेंद्रिय पद्धतीने उगवलेली. सॅलड, स्वयंपाक आणि रसांसाठी योग्य.",
+        price: 320
+      }
+    };
+
+    let qty = 1;
+
+    // Backend product data is already loaded in template
+    // No need for loadProductData function as data comes from Django backend
+
+    function changeQty(val) {
+      const qtyInput = document.getElementById('qty-input');
+      const currentQty = parseInt(qtyInput.value);
+      const maxStock = parseInt(qtyInput.getAttribute('max')) || 100;
+      const priceElement = document.getElementById('product-price-value');
+      
+      let newQty = Math.max(1, currentQty + val);
+      newQty = Math.min(newQty, maxStock); // Don't exceed stock
+      
+      qtyInput.value = newQty;
+      
+      // Update total amount
+      if (priceElement) {
+        // Backend product
+        const price = parseFloat(priceElement.value);
+        document.getElementById('total-amount').textContent = `₹${newQty * price}`;
+      } else {
+        // Fallback - should not happen with backend products
+        console.log('Warning: No backend product data found');
+      }
+      
+      qty = newQty; // Update global qty variable for static products
+    }
+
+    function addToCart() {
+      {% if not user.is_authenticated %}
+        alert('Please login to add products to cart');
+        window.location.href = "{% url 'login' %}";
+        return;
+      {% endif %}
+      
+      const productId = document.getElementById('product-id')?.value;
+      const quantity = parseInt(document.getElementById('qty-input').value);
+      const stockAvailable = parseInt(document.getElementById('product-stock')?.value || 0);
+      
+      // Check if we have product data (backend product)
+      if (productId) {
+        // Check stock availability
+        if (quantity > stockAvailable) {
+          const currentLang = localStorage.getItem("preferredLanguage") || "en";
+          const message = currentLang === "mr" ? 
+            `फक्त ${stockAvailable} युनिट उपलब्ध आहेत!` : 
+            `Only ${stockAvailable} units available!`;
+          alert(message);
+          return;
+        }
+        
+        // Send to backend API
+        fetch('{% url "add_to_cart" %}', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+          },
+          body: JSON.stringify({
+            product_id: productId,
+            quantity: quantity,
+            current_order_id: localStorage.getItem('currentOrderId')
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Store order ID for potential "add more" functionality
+            if (data.order_id) {
+              localStorage.setItem('currentOrderId', data.order_id);
+              localStorage.setItem('orderStartTime', Date.now().toString());
+            }
+            
+            // Redirect to orders page without showing alert
+            window.location.href = data.redirect_url || "{% url 'myorders' %}";
+          } else {
+            alert(data.message || 'Error adding product to cart');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Error adding product to cart');
+        });
+        
+        return;
+      }
+      
+      // This should not happen with backend products
+      alert('Error: Product data not available');
+      return;
+      
+      const currentUser = '{{ user.username }}' || 'guest';
+      const userOrdersKey = `userOrders_${currentUser}`;
+      let orders = JSON.parse(localStorage.getItem(userOrdersKey) || '[]');
+      
+      // Check if this is adding to an existing order
+      const currentOrderId = localStorage.getItem('currentOrderId');
+      
+      if (currentOrderId) {
+        // Find the existing order
+        const existingOrderIndex = orders.findIndex(order => order.id === currentOrderId);
+        
+        if (existingOrderIndex !== -1) {
+          const existingOrder = orders[existingOrderIndex];
+          
+          // Check if time limit is still valid (10 minutes = 600000ms)
+          const timePassed = Date.now() - existingOrder.timestamp;
+          if (timePassed < 600000) {
+            // Create new product entry for the same order
+            const newProductData = {
+              id: currentOrderId, // Same order ID
+              product: data.title,
+              productMr: data.titleMr,
+              quantity: quantity,
+              price: data.price,
+              total: quantity * data.price,
+              date: existingOrder.date, // Keep same date
+              dateMr: existingOrder.dateMr,
+              status: 'pending',
+              image: data.img,
+              timestamp: existingOrder.timestamp, // Keep original timestamp
+              isAdditionalProduct: true // Mark as additional product
+            };
+            
+            // Add the new product to the order list
+            orders.splice(existingOrderIndex + 1, 0, newProductData);
+            localStorage.setItem(userOrdersKey, JSON.stringify(orders));
+            
+            // Clear the currentOrderId
+            localStorage.removeItem('currentOrderId');
+            
+            alert('Product added to your existing order successfully!');
+            window.location.href = "{% url 'myorders' %}";
+            return;
+          } else {
+            // Time limit expired
+            alert('Time limit expired! Cannot add more products to this order.');
+            localStorage.removeItem('currentOrderId');
+            window.location.href = "{% url 'myorders' %}";
+            return;
+          }
+        } else {
+          // Order not found, clear the reference
+          localStorage.removeItem('currentOrderId');
+        }
+      }
+      
+      // Create new order (normal flow)
+      const orderData = {
+        id: 'ORD' + Date.now(),
+        product: data.title,
+        productMr: data.titleMr,
+        quantity: qty,
+        price: data.price,
+        total: qty * data.price,
+        date: new Date().toLocaleDateString('en-GB'),
+        dateMr: new Date().toLocaleDateString('hi-IN'),
+        status: 'pending',
+        image: data.img,
+        timestamp: Date.now()
+      };
+
+      orders.unshift(orderData); // Add to beginning (first position)
+      localStorage.setItem(userOrdersKey, JSON.stringify(orders));
+
+      // Redirect to orders page without showing alert
+      window.location.href = "{% url 'myorders' %}";
+    }
+  </script>
+
+  <!-- Footer -->
+  {% include 'core/base_footer.html' %}
+
+</body>
+</html>
+

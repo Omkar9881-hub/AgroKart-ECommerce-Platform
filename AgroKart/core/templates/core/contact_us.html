@@ -1,0 +1,226 @@
+{% load static %}
+{% include "core/base_header.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Us – AgroKart</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      background: #b4deaa;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .contact-container {
+      max-width: 1000px;
+      margin: 60px auto 40px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(34,139,34,0.10);
+      padding: 40px 32px 32px 32px;
+    }
+    .contact-main {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+    }
+    .left-section {
+      flex: 1;
+    }
+    .right-section {
+      flex: 1;
+      text-align: center;
+    }
+    .farmer-image {
+      width: 400%;
+      height: 600px;
+      max-width: 500px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .address-section {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 1rem;
+      color: #000000;
+    }
+    .contact-title {
+      text-align: center;
+      color: #266217;
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+    .contact-info {
+      margin-bottom: 30px;
+      font-size: 1.1rem;
+      color: #000000;
+      line-height: 1.7;
+      text-align: center;
+    }
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+      font-size: 1rem;
+      color: #000000;
+      text-align: center;
+    }
+    .detail-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 0;
+      background: #f9f9f9;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+    .detail-item:hover {
+      background: #e8f5e8;
+    }
+    .detail-item i {
+      color: #4CAF50;
+      font-size: 1.2rem;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    label {
+      font-weight: 600;
+      color: #090909;
+      margin-bottom: 4px;
+    }
+    input, textarea {
+      padding: 10px 12px;
+      border: 1px solid #b4deaa;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #f7fff7;
+      color: #000000;
+      outline: none;
+      transition: border 0.2s;
+    }
+    input:focus, textarea:focus {
+      border-color: #4CAF50;
+    }
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    .submit-btn {
+      background: linear-gradient(135deg, #4CAF50, #2E7D32);
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 0;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin-top: 8px;
+      box-shadow: 0 2px 8px rgba(34,139,34,0.10);
+      transition: background 0.3s;
+    }
+    .submit-btn:hover {
+      background: linear-gradient(135deg, #45a049, #1B5E20);
+    }
+    .success-msg {
+      background: #d4edda;
+      color: #217a2c;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      margin-bottom: 18px;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(34,139,34,0.08);
+    }
+    .contact-container {
+      animation: fadeIn 0.5s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 768px) {
+      .contact-container {
+        margin: 20px;
+        padding: 20px;
+        max-width: 90%;
+      }
+      .contact-main {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .contact-title {
+        font-size: 1.8rem;
+      }
+      .contact-info {
+        font-size: 1rem;
+      }
+      .detail-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 4px;
+      }
+      form {
+        gap: 12px;
+      }
+      .farmer-image {
+        max-width: 250px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="contact-container">
+    <div class="contact-main">
+      <div class="left-section">
+        <div class="contact-title">AgroKart – Digital Agriculture Platform</div>
+        <div class="contact-info">
+          We connect farmers with trusted seed suppliers.<br>
+          Reach out for support, queries, or feedback!
+        </div>
+        {% if message_sent %}
+          <div class="success-msg">Thank you! Your message has been sent.</div>
+        {% endif %}
+        <form method="post">
+          {% csrf_token %}
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" value="{{ username }}" required>
+          <label for="email">Email ID</label>
+          <input type="email" id="email" name="email" value="{{ email }}" required>
+          <label for="phone">Phone Number</label>
+          <input type="text" id="phone" name="phone" value="{{ phone }}" required>
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Type your message here..." required></textarea>
+          <button type="submit" class="submit-btn">Submit</button>
+        </form>
+      </div>
+      <div class="right-section">
+        <video class="farmer-image" autoplay muted loop playsinline>
+          <source src="{% static 'videos/formfilling1.mp4' %}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <div class="contact-details">
+          <div class="detail-item">
+            <i class="fas fa-envelope"></i>
+            <span>Email: support@agrokart.com</span>
+          </div>
+          <div class="detail-item">
+            <i class="fas fa-phone"></i>
+            <span>Phone: +91 98765 43210</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="address-section">
+      <p>Address: AgroKart, 2nd Floor, Green Plaza, Pune-Nashik Highway, Pune, Maharashtra 411045</p>
+    </div>
+  </div>
+  {% include "core/base_footer.html" %}
+</body>
+</html>

@@ -1,0 +1,2178 @@
+{% load static %}
+{% include "core/base_header.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgroKart - My Orders</title>
+  <style>
+* {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      padding-top: 80px;
+      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, #4CAF50, #2E7D32, #1B5E20);
+      padding: 60px 0;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('{% static "images/pattern.png" %}') repeat;
+      opacity: 0.1;
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      background: linear-gradient(45deg, #fff, #e8f4fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.3rem;
+      opacity: 0.9;
+      font-weight: 300;
+    }
+    /* Main Container */
+    .orders-container {
+      max-width: 1400px;
+      margin: -40px auto 60px auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 3;
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 15px auto;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: white;
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      color: #718096;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    /* Orders Section */
+    .orders-section {
+      background: white;
+      border-radius: 25px;
+      padding: 40px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      margin-bottom: 40px;
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #f7fafc;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2d3748;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    /* Order Cards */
+    .orders-grid {
+      display: grid;
+      gap: 25px;
+    }
+    
+    .order-card {
+      background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .order-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+      background: linear-gradient(135deg, #d3d5db, #52a24b);
+    }
+    
+    .order-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    }
+    
+    .order-id {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .order-date {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    .order-content {
+      padding: 20px;
+    }
+    .order-item {
+      display: flex;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .order-item:last-child {
+      border-bottom: none;
+    }
+    .item-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-right: 15px;
+      border: 2px solid #f0f0f0;
+    }
+    .item-details {
+      flex: 1;
+    }
+    .item-name {
+      font-weight: bold;
+      color: #1a3d1a;
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+    .item-quantity {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+    }
+    .item-price {
+      color: #4CAF50;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+    .order-status {
+      text-align: right;
+    }
+    .status-badge {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .status-pending {
+      background: linear-gradient(135deg, #fed7d7, #feb2b2);
+      color: #c53030;
+    }
+    
+    .status-processing {
+      background: linear-gradient(135deg, #fef5e7, #fbd38d);
+      color: #d69e2e;
+    }
+    
+    .status-shipped {
+      background: linear-gradient(135deg, #c6f6d5, #9ae6b4);
+      color: #38a169;
+    }
+    
+    .status-delivered {
+      background: linear-gradient(135deg, #bee3f8, #90cdf4);
+      color: #3182ce;
+    }
+    
+    .status-cancelled {
+      background: linear-gradient(135deg, #e2e8f0, #cbd5e0);
+      color: #4a5568;
+    }
+
+    /* Order Header */
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 25px;
+    }
+    
+    .order-info {
+      flex: 1;
+    }
+    
+    .order-id {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 8px;
+    }
+    
+    .order-date {
+      color: #718096;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Product Items */
+    .order-items {
+      margin-bottom: 25px;
+    }
+    
+    .order-item {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      background: white;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .order-item:hover {
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    
+    .item-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      object-fit: cover;
+      margin-right: 20px;
+      border: 3px solid #f7fafc;
+    }
+    
+    .item-details {
+      flex: 1;
+    }
+    
+    .item-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 8px;
+    }
+    
+    .item-meta {
+      display: flex;
+      gap: 20px;
+      color: #718096;
+      font-size: 0.9rem;
+    }
+    
+    .item-price {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #38a169;
+    }
+
+    /* Order Footer */
+    .order-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 20px;
+      border-top: 2px solid #f7fafc;
+    }
+    
+    .order-total {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #2d3748;
+    }
+    
+    .order-actions {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .action-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-primary {
+      background:#539c4c;
+      color: white;
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(135deg, #f7fafc, #edf2f7);
+      color: #4a5568;
+      border: 2px solid #e2e8f0;
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, #fed7d7, #feb2b2);
+      color: #c53030;
+    }
+    
+    .btn-success {
+      background: linear-gradient(135deg, #c6f6d5, #9ae6b4);
+      color: #38a169;
+    }
+    
+    .time-remaining {
+      background: linear-gradient(135deg, #fef5e7, #fbd38d);
+      color: #d69e2e;
+      padding: 8px 12px;
+      border-radius: 15px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .status-info {
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: rgba(76, 175, 80, 0.1);
+      border-left: 3px solid #4CAF50;
+    }
+
+    .status-info small {
+      color: #2d3748;
+      font-weight: 500;
+      display: block;
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-content h3 {
+      margin-bottom: 20px;
+      color: #2d3748;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #4a5568;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .modal-actions button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    /* Tracking Pipeline Styles */
+    .tracking-pipeline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 30px 0;
+      position: relative;
+    }
+
+    .tracking-pipeline::before {
+      content: '';
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      right: 25px;
+      height: 3px;
+      background: #e2e8f0;
+      z-index: 1;
+    }
+
+    .tracking-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .step-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .tracking-step.active .step-icon {
+      background: linear-gradient(135deg, #4CAF50, #2E7D32);
+      color: white;
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+      transform: scale(1.1);
+    }
+
+    .step-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #718096;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    .step-time {
+      font-size: 0.8rem;
+      color: #4CAF50;
+      font-weight: 500;
+    }
+
+    .tracking-step.active .step-label {
+      color: #2d3748;
+      font-weight: 700;
+    }
+
+    .tracking-step {
+      position: relative;
+    }
+
+    .tracking-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 25px;
+      right: -50%;
+      width: 100%;
+      height: 3px;
+      background: #e2e8f0;
+      z-index: 1;
+    }
+
+    .tracking-step.active:not(:last-child)::after {
+      background: linear-gradient(90deg, #4CAF50, #2E7D32);
+    }
+
+    .status-summary {
+      background: linear-gradient(135deg, #f8f9fa, #e8f5e9) !important;
+      border: 2px solid #e8f5e9;
+    }
+
+    .current-status {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #2E7D32 !important;
+      margin: 10px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    /* Loading Spinner Animation */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 80px 40px;
+      background: white;
+      border-radius: 25px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+    
+    .empty-icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 30px auto;
+      background: linear-gradient(135deg, #f7fafc, #edf2f7);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: #a0aec0;
+    }
+    
+    .empty-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 15px;
+    }
+    
+    .empty-subtitle {
+      color: #718096;
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+    
+    .cta-btn {
+      background: linear-gradient(135deg, #2e7d32, #4caf50);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .cta-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    /* Footer Styles */
+    #footer {
+      background: linear-gradient(135deg, #363f36, #2E7D32, #1B5E20);
+      color: white;
+      margin-top: 80px;
+    }
+
+    .footer-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+    }
+
+    .footer-section {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .footer-logo img {
+      width: 120px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    .footer-section h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #e2e8f0;
+    }
+
+    .footer-section p,
+    .footer-section a {
+      color: #ffffff;
+      text-decoration: none;
+      margin-bottom: 10px;
+      line-height: 1.6;
+      transition: color 0.3s ease;
+    }
+
+    .footer-section a:hover {
+      color: #667eea;
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+
+    .footer-links a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid #4a5568;
+      color: #a0aec0;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+      }
+      
+      .orders-container {
+        margin: -20px auto 40px auto;
+        padding: 0 15px;
+      }
+      
+      .orders-section {
+        padding: 30px 20px;
+      }
+      
+      .order-card {
+        padding: 20px;
+      }
+      
+      .item-meta {
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .order-actions {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      
+      .action-btn {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+      }
+    }
+    .order-total {
+      text-align: right;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 2px solid #eee;
+    }
+    .total-amount {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #1a3d1a;
+    }
+    .no-orders {
+      text-align: center;
+      padding: 60px 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+    .no-orders img {
+      width: 120px;
+      height: 120px;
+      opacity: 0.5;
+      margin-bottom: 20px;
+    }
+    .no-orders h3 {
+      color: #666;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+    .no-orders p {
+      color: #999;
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+    .shop-now-btn {
+      display: inline-block;
+      background: #4CAF50;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+    .shop-now-btn:hover {
+      background: #45a049;
+    }
+    .order-actions {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .action-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .edit-btn {
+      background: #ffc107;
+      color: #000;
+    }
+    .edit-btn:hover:not(:disabled) {
+      background: #e0a800;
+    }
+    .cancel-btn {
+      background: #dc3545;
+      color: white;
+    }
+    .cancel-btn:hover:not(:disabled) {
+      background: #c82333;
+    }
+    .confirm-btn {
+      background: #28a745;
+      color: white;
+    }
+    .confirm-btn:hover:not(:disabled) {
+      background: #218838;
+    }
+    .add-more-btn {
+      background: #17a2b8;
+      color: white;
+    }
+    .add-more-btn:hover:not(:disabled) {
+      background: #138496;
+    }
+    .receipt-btn {
+      background: #6f42c1;
+      color: white;
+    }
+    .receipt-btn:hover:not(:disabled) {
+      background: #5a32a3;
+    }
+    .action-btn:disabled {
+      background: #6c757d;
+      color: #fff;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    .time-limit-info {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin: 8px 0;
+      font-size: 0.85rem;
+      color: #856404;
+    }
+    .time-expired {
+      background: #f8d7da;
+      border-color: #f5c6cb;
+      color: #721c24;
+    }
+    .time-active {
+      background: #d1ecf1;
+      border-color: #bee5eb;
+      color: #0c5460;
+    }
+    .timer-display {
+      background: #f8f9fa;
+      color: #495057;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      border: 1px solid #dee2e6;
+    }
+    .timer-expired {
+      background: #f8d7da;
+      color: #721c24;
+      border-color: #f5c6cb;
+    }
+    .new-order-badge {
+      background: #28a745;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-left: 10px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+    .additional-badge {
+      background: #17a2b8;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    .additional-product {
+      margin-left: 20px;
+      border-left: 3px solid #17a2b8;
+      background: #f8f9fa;
+    }
+    .order-grand-total {
+      font-weight: bold;
+      color: #28a745;
+      font-size: 1.1em;
+      margin-top: 5px;
+      padding-top: 5px;
+      border-top: 1px solid #eee;
+    }
+    .user-info-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    .user-info-content {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #666;
+    }
+    .close-modal:hover {
+      color: #000;
+    }
+    .user-info-title {
+      color: #1a3d1a;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .info-row {
+      display: flex;
+      margin-bottom: 15px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      align-items: center;
+    }
+    .info-label {
+      font-weight: bold;
+      color: #495057;
+      min-width: 120px;
+    }
+    .info-value {
+      color: #212529;
+      flex: 1;
+      margin-right: 10px;
+    }
+    .edit-info-btn {
+      background: #ffc107;
+      color: #000;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .edit-info-btn:hover {
+      background: #e0a800;
+    }
+    .edit-quantity-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    .edit-quantity-content {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+    }
+    .quantity-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .quantity-controls button {
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: #4CAF50;
+      color: white;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    .quantity-controls input {
+      width: 60px;
+      text-align: center;
+      font-size: 1.1rem;
+      border: 2px solid #4CAF50;
+      border-radius: 6px;
+      padding: 8px;
+    }
+    footer {
+      background:linear-gradient(135deg, #363f36, #2E7D32, #1B5E20);
+
+      color: white;
+      padding: 40px 30px 0;
+    }
+    .footer-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-bottom: 30px;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .footer-section {
+      flex: 1;
+      min-width: 250px;
+      text-align: left;
+    }
+    .footer-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .footer-logo .description {
+      font-size: 0.95em;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      color: #e0e0e0;
+    }
+    .footer-social-icons {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: flex-start;
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+    .footer-social-icons img {
+      width: 28px;
+      height: 28px;
+      transition: transform 0.2s;
+      display: block;
+    }
+    .footer-social-icons a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: none;
+      width: 36px;
+      height: 36px;
+      transition: background 0.2s;
+    }
+    .footer-social-icons a:hover img {
+      transform: scale(1.18);
+    }
+    .footer-section h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #4CAF50;
+    }
+    .footer-section p, .footer-section a {
+      color: #a0aec0;
+      text-decoration: none;
+      margin-bottom: 10px;
+      line-height: 1.6;
+      transition: color 0.3s ease;
+    }
+    .footer-section a:hover {
+      color: #66bb6a;
+    }
+    .footer-links {
+      list-style: none;
+      padding: 0;
+    }
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+    .footer-links a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .footer-bottom {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid #4a5568;
+      color: #a0aec0;
+    }
+    @media (max-width: 900px) {
+      .footer-main {
+        flex-direction: column;
+        gap: 25px;
+      }
+      .footer-section {
+        min-width: 100%;
+        text-align: center;
+      }
+      .footer-logo {
+        align-items: center;
+      }
+    }
+    @media (max-width: 600px) {
+      .footer-main {
+        padding: 0 10px;
+      }
+      .footer-logo img {
+        height: 60px;
+      }
+      .footer-social-icons a {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9em;
+      }
+    }
+    #successToast.show {
+      display: block !important;
+      opacity: 1;
+      animation: toastPop 0.7s cubic-bezier(.23,1.02,.64,1) 1;
+    }
+    @keyframes toastPop {
+      0% { transform: translateX(-50%) scale(0.7); opacity: 0; }
+      60% { transform: translateX(-50%) scale(1.05); opacity: 1; }
+      100% { transform: translateX(-50%) scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  
+
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title lang-text" data-en="My Orders" data-mr="माझी ऑर्डर">My Orders</h1>
+      <p class="hero-subtitle lang-text" data-en="Track and manage your seed orders" data-mr="तुमच्या बियाणे ऑर्डरचा मागोवा घ्या">Track and manage your seed orders</p>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="orders-container">
+
+    <!-- Orders Section -->
+    <div class="orders-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span>🛒</span>
+          <span class="lang-text" data-en="Your Orders" data-mr="तुमचे ऑर्डर">Your Orders</span>
+        </h2>
+      </div>
+
+    {% if user.is_authenticated %}
+      <!-- Debug Info -->
+      <div style="background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px;">
+        <strong>Debug Info:</strong> User: {{ user.username }}, Orders Count: {{ orders|length }}
+      </div>
+      
+      <!-- Backend Orders Display -->
+      {% if orders %}
+        <div class="orders-grid">
+          {% for order in orders %}
+            <div class="order-card">
+              <div class="order-header">
+                <div class="order-info">
+                  <div class="order-id">Order #{{ order.id }}</div>
+                  <div class="order-date">
+                    <span>📅</span>
+                    {{ order.created_at|date:"d M Y, g:i A" }}
+                  </div>
+                </div>
+                <div class="status-badge status-{{ order.status }}">
+                  {% if order.status == 'pending' %}
+                    <span class="lang-text" data-en="Pending" data-mr="प्रलंबित">Pending</span>
+                  {% elif order.status == 'confirmed' %}
+                    <span class="lang-text" data-en="Confirmed" data-mr="पुष्टी केली">Confirmed</span>
+                  {% elif order.status == 'shipped' %}
+                    <span class="lang-text" data-en="Shipped" data-mr="पाठवले">Shipped</span>
+                  {% elif order.status == 'out_for_delivery' %}
+                    <span class="lang-text" data-en="Out for Delivery" data-mr="डिलिव्हरीसाठी बाहेर">Out for Delivery</span>
+                  {% elif order.status == 'delivered' %}
+                    <span class="lang-text" data-en="Delivered" data-mr="वितरित">Delivered</span>
+                  {% elif order.status == 'cancelled' %}
+                    <span class="lang-text" data-en="Cancelled" data-mr="रद्द केले">Cancelled</span>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="order-items">
+                <div class="order-item">
+                  {% if order.product_image %}
+                    <img src="{{ order.product_image.url }}" alt="{{ order.product_name }}" class="item-image">
+                  {% else %}
+                    <img src="{% static 'images/agrokart.png' %}" alt="{{ order.product_name }}" class="item-image">
+                  {% endif %}
+                  <div class="item-details">
+                    <div class="item-name">{{ order.product_name }}</div>
+                  <div class="item-meta">
+                    <span>🔢 <span class="lang-text" data-en="Qty:" data-mr="प्रमाण:">Qty:</span> {{ order.quantity }}</span>
+                    <span>📍 Address: {% if user.first_name %}{{ user.first_name|truncatechars:30 }}{% else %}No address provided{% endif %}</span>
+                    {% if user.last_name %}
+                      <span>📱 {{ user.last_name }}</span>
+                    {% endif %}
+                    {% if user.email %}
+                      <span>📧 {{ user.email }}</span>
+                    {% endif %}
+                  </div>
+                  </div>
+                  <div class="item-price">₹{{ order.total_price }}</div>
+                </div>
+              </div>
+
+              <div class="order-footer">
+                <div class="order-total">
+                  <span class="lang-text" data-en="Total:" data-mr="एकूण:">Total:</span> ₹{{ order.total_price }}
+                </div>
+                <div class="order-actions">
+                  {% if order.status == 'confirmed' %}
+                    <button class="action-btn btn-primary" onclick="editUserDetails('{{ order.id }}')">
+                      <span>👤</span> <span class="lang-text" data-en="Edit Details" data-mr="तपशील संपादित करा">Edit Details</span>
+                    </button>
+                    <button class="action-btn btn-secondary bill-btn-{{ order.id }}" id="bill-btn-{{ order.id }}" onclick="generateBill('{{ order.id }}')" style="display: none;">
+                      <span>📄</span> <span class="lang-text" data-en="Generate Bill" data-mr="बिल तयार करा">Generate Bill</span>
+                    </button>
+                    <button class="action-btn btn-danger" onclick="cancelOrder('{{ order.id }}')">
+                      <span>❌</span> <span class="lang-text" data-en="Cancel Order" data-mr="ऑर्डर रद्द करा">Cancel Order</span>
+                    </button>
+                    <div class="status-info" style="background: #e8f5e9; border-left: 4px solid #28a745; margin-top:18px; padding:14px 18px; border-radius:10px;">
+                      <small class="lang-text"
+                        data-en="✅ Order confirmed, you may cancel or edit details within 24 hours, not after shipping."
+                        data-mr="✅ ऑर्डर पुष्टी केली, तुम्ही २४ तासांत रद्द किंवा तपशील संपादित करू शकता, शिपिंगनंतर नाही.">
+                        ✅ Order confirmed, you may cancel or edit details within 24 hours, not after shipping.
+                      </small>
+                    </div>
+                  {% elif order.status == 'shipped' %}
+                    <button class="action-btn btn-secondary" onclick="trackOrder('{{ order.id }}')">
+                      <span>📍</span> <span class="lang-text" data-en="Track Order" data-mr="ऑर्डर ट्रॅक करा">Track Order</span>
+                    </button>
+                    <button class="action-btn btn-primary" onclick="generateBill('{{ order.id }}')">
+                      <span>📄</span> <span class="lang-text" data-en="Generate Bill" data-mr="बिल तयार करा">Generate Bill</span>
+                    </button>
+                    <!-- Delivery Date Message -->
+                    <div class="delivery-date-message" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-left: 4px solid #4CAF50; margin-top: 12px; padding: 12px 16px; border-radius: 8px; font-size: 0.9rem;">
+                      <span class="lang-text" 
+                            data-en="📦 Your order will be delivered by {{ order.expected_delivery_date|date:'d M Y' }}" 
+                            data-mr="📦 तुमची ऑर्डर {{ order.expected_delivery_date|date:'d M Y' }} पर्यंत वितरित केली जाईल">
+                        📦 Your order will be delivered by {{ order.expected_delivery_date|date:'d M Y' }}
+                      </span>
+                    </div>
+                  {% elif order.status == 'out_for_delivery' %}
+                    <button class="action-btn btn-primary" onclick="generateBill('{{ order.id }}')">
+                      <span>📄</span> <span class="lang-text" data-en="Bill" data-mr="बिल">Bill</span>
+                    </button>
+                    <!-- Delivery Date Message -->
+                    <div class="delivery-date-message" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-left: 4px solid #4CAF50; margin-top: 12px; padding: 12px 16px; border-radius: 8px; font-size: 0.9rem;">
+                      <span class="lang-text" 
+                            data-en="📦 Your order will be delivered by {{ order.expected_delivery_date|date:'d M Y' }}" 
+                            data-mr="📦 तुमची ऑर्डर {{ order.expected_delivery_date|date:'d M Y' }} पर्यंत वितरित केली जाईल">
+                        📦 Your order will be delivered by {{ order.expected_delivery_date|date:'d M Y' }}
+                      </span>
+                    </div>
+                  {% elif order.status == 'delivered' %}
+                    <button class="action-btn btn-primary" onclick="generateBill('{{ order.id }}')">
+                      <span>📄</span> <span class="lang-text" data-en="Download Bill" data-mr="बिल डाउनलोड करा">Download Bill</span>
+                    </button>
+                    <!-- Feedback Button -->
+                    <button class="action-btn btn-success" onclick="showFeedbackForm('{{ order.id }}')">
+                      <span>⭐</span> <span class="lang-text" data-en="Give Feedback" data-mr="अभिप्राय द्या">Give Feedback</span>
+                    </button>
+                    <div class="status-info">
+                      <small class="lang-text" data-en="✅ Order delivered successfully!" data-mr="✅ ऑर्डर यशस्वीरित्या वितरित केली!">✅ Order delivered successfully!</small>
+                    </div>
+                  {% elif order.status == 'cancelled' %}
+                    <div class="status-info">
+                      <small class="lang-text" data-en="❌ Order was cancelled" data-mr="❌ ऑर्डर रद्द केली गेली">❌ Order was cancelled</small>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+          <div class="empty-icon">🛒</div>
+          <h3 class="empty-title lang-text" data-en="No Orders Yet" data-mr="अजून कोणतीही ऑर्डर नाही">No Orders Yet</h3>
+          <p class="empty-subtitle lang-text" data-en="You haven't placed any orders yet. Start shopping for premium quality seeds and grow your farm with AgroKart." data-mr="तुम्ही अजून कोणतीही ऑर्डर दिली नाही. प्रीमियम दर्जाच्या बियाण्यांसाठी खरेदी सुरू करा आणि AgroKart सह तुमचे शेत वाढवा.">
+            You haven't placed any orders yet. Start shopping for premium quality seeds and grow your farm with AgroKart.
+          </p>
+          <a href="{% url 'product' %}" class="cta-btn">
+            <span>🌱</span>
+            <span class="lang-text" data-en="Start Shopping" data-mr="खरेदी सुरू करा">Start Shopping</span>
+          </a>
+        </div>
+      {% endif %}
+    {% else %}
+      <!-- Not logged in message -->
+      <div class="empty-state">
+        <div class="empty-icon">🔐</div>
+        <h3 class="empty-title lang-text" data-en="Please Login to View Orders" data-mr="ऑर्डर पाहण्यासाठी कृपया लॉगिन करा">Please Login to View Orders</h3>
+        <p class="empty-subtitle lang-text" data-en="You need to be logged in to view your order history and track your seed purchases." data-mr="तुमचा ऑर्डर इतिहास पाहण्यासाठी आणि तुमच्या बियाणे खरेदीचा मागोवा घेण्यासाठी तुम्हाला लॉगिन करावे लागेल.">You need to be logged in to view your order history and track your seed purchases.</p>
+        <a href="{% url 'signup' %}" class="cta-btn">
+          <span>🚀</span>
+          <span class="lang-text" data-en="Login / Sign Up" data-mr="लॉगिन / नोंदणी करा">Login / Sign Up</span>
+        </a>
+      </div>
+    {% endif %}
+    </div>
+  </div>
+
+  <!-- Footer Start -->
+  {% include "core/base_footer.html" %}
+  <!-- Footer End -->
+
+  <!-- User Info Modal -->
+  <div id="userInfoModal" class="user-info-modal">
+    <div class="user-info-content">
+      <button class="close-modal" onclick="closeUserInfoModal()">&times;</button>
+      <h3 class="user-info-title lang-text" data-en="User Information" data-mr="वापरकर्ता माहिती">User Information</h3>
+      <div id="userInfoDetails">
+        <!-- User info will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Quantity Modal -->
+  <div id="editQuantityModal" class="edit-quantity-modal">
+    <div class="edit-quantity-content">
+      <button class="close-modal" onclick="closeEditModal()">&times;</button>
+      <h3 class="lang-text" data-en="Edit Quantity" data-mr="प्रमाण संपादित करा">Edit Quantity</h3>
+      <div class="quantity-controls">
+        <button onclick="changeEditQty(-1)">-</button>
+        <input type="number" id="editQtyInput" value="1" min="1" readonly>
+        <button onclick="changeEditQty(1)">+</button>
+      </div>
+      <p id="editTotalPrice">Total: ₹0</p>
+      <div style="margin-top: 20px;">
+        <button class="action-btn confirm-btn" onclick="saveQuantityEdit()">
+          <span class="lang-text" data-en="Save Changes" data-mr="बदल जतन करा">Save Changes</span>
+        </button>
+        <button class="action-btn cancel-btn" onclick="closeEditModal()" style="margin-left: 10px;">
+          <span class="lang-text" data-en="Cancel" data-mr="रद्द करा">Cancel</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bill Modal (matches uploaded format) -->
+  <div id="billModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.18); z-index:3000; justify-content:center; align-items:center;">
+    <div style="background:white; border-radius:16px; max-width:600px; width:96%; margin:40px auto; box-shadow:0 8px 32px rgba(56,161,105,0.18); padding:40px 32px; position:relative;">
+      <button onclick="closeBillModal()" style="position:absolute; top:18px; right:24px; background:none; border:none; font-size:1.6rem; color:#666; cursor:pointer;">&times;</button>
+      <div style="text-align:center; margin-bottom:18px;">
+        <img src="{% static 'images/web_logo.png' %}" alt="AgroKart Logo" style="height:60px; margin-bottom:10px;">
+        <h2 style="color:#28a745; font-size:2rem; font-weight:700;">AgroKart</h2>
+        <div style="font-size:1.1rem; color:#555;">Empowering Farmers with Quality Seeds</div>
+        <h3 style="margin-top:18px; color:#222; font-size:1.3rem; font-weight:600;">Order Receipt</h3>
+      </div>
+      <hr style="border-color:#28a745; margin:18px 0;">
+      <div style="margin-bottom:18px;">
+        <h4 style="color:#28a745; font-size:1.1rem; margin-bottom:8px;">Customer Information</h4>
+        <div><strong>Name:</strong> <span id="billName"></span></div>
+        <div><strong>Phone:</strong> <span id="billPhone"></span></div>
+        <div><strong>Email:</strong> <span id="billEmail"></span></div>
+        <div><strong>Address:</strong> <span id="billAddress"></span></div>
+      </div>
+      <div style="margin-bottom:18px;">
+        <h4 style="color:#28a745; font-size:1.1rem; margin-bottom:8px;">Order Details</h4>
+        <div><strong>Order ID:</strong> <span id="billOrderId"></span></div>
+        <div><strong>Date:</strong> <span id="billOrderDate"></span></div>
+        <div><strong>Status:</strong> <span id="billOrderStatus"></span></div>
+      </div>
+      <div>
+        <table style="width:100%; border-collapse:collapse; margin-bottom:10px;">
+          <thead>
+            <tr style="background:#e8f5e9;">
+              <th style="padding:8px; border:1px solid #ddd;">Sr.</th>
+              <th style="padding:8px; border:1px solid #ddd;">Product</th>
+              <th style="padding:8px; border:1px solid #ddd;">Quantity</th>
+              <th style="padding:8px; border:1px solid #ddd;">Rate</th>
+              <th style="padding:8px; border:1px solid #ddd;">Total</th>
+            </tr>
+          </thead>
+          <tbody id="billProductRows">
+            <!-- Product rows will be inserted here -->
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4" style="text-align:right; font-weight:bold; padding:8px; border:1px solid #ddd;">Grand Total:</td>
+              <td style="color:#28a745; font-weight:bold; font-size:1.1rem; padding:8px; border:1px solid #ddd;" id="billGrandTotal"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    <div style="margin-top:18px; text-align:center; color:#222;">
+      Thank you for your business!<br>
+      <span style="font-size:0.95em; color:#888;">Receipt Generated: <span id="billGeneratedTime"></span></span>
+    </div>
+    <div style="margin-top:20px; text-align:center;">
+      <button onclick="printBill()" style="background:#28a745; color:white; border:none; padding:12px 24px; border-radius:8px; font-size:1rem; font-weight:600; cursor:pointer; margin-right:10px;">
+        <span>🖨️</span> <span class="lang-text" data-en="Print Bill" data-mr="बिल प्रिंट करा">Print Bill</span>
+      </button>
+      <button onclick="closeBillModal()" style="background:#6c757d; color:white; border:none; padding:12px 24px; border-radius:8px; font-size:1rem; font-weight:600; cursor:pointer;">
+        <span class="lang-text" data-en="Close" data-mr="बंद करा">Close</span>
+      </button>
+    </div>
+    </div>
+  </div>
+
+  <!-- Cancel Confirmation Modal -->
+  <div id="cancelConfirmModal" class="user-info-modal" style="display:none;">
+    <div class="user-info-content">
+      <button class="close-modal" onclick="closeCancelConfirmModal()">&times;</button>
+      <h3 class="user-info-title lang-text" data-en="Confirm Cancellation" data-mr="रद्दीकरणाची पुष्टी करा">Confirm Cancellation</h3>
+      <p class="lang-text" data-en="Are you sure you want to cancel this order? This action cannot be undone." data-mr="तुम्हाला खरोखर ही ऑर्डर रद्द करायची आहे का? ही क्रिया पूर्ववत करता येणार नाही.">
+        Are you sure you want to cancel this order? This action cannot be undone.
+      </p>
+      <div class="modal-actions">
+        <button type="button" class="action-btn confirm-btn" onclick="proceedWithCancellation()">
+          <span class="lang-text" data-en="Yes, Cancel Order" data-mr="होय, ऑर्डर रद्द करा">Yes, Cancel Order</span>
+        </button>
+        <button type="button" class="action-btn cancel-btn" onclick="closeCancelConfirmModal()">
+          <span class="lang-text" data-en="No, Keep Order" data-mr="नाही, ऑर्डर ठेवा">No, Keep Order</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Details Modal -->
+  <div id="editDetailsModal" class="user-info-modal" style="display:none;">
+    <div class="user-info-content">
+      <button class="close-modal" onclick="closeEditDetailsModal()">&times;</button>
+      <h3 class="user-info-title lang-text" data-en="Edit Details" data-mr="तपशील संपादित करा">Edit Details</h3>
+      <form id="editDetailsForm">
+        <div class="form-group">
+          <label for="editName">Name</label>
+          <input type="text" id="editName" name="name" value="">
+        </div>
+        <div class="form-group">
+          <label for="editPhone">Phone No</label>
+          <input type="text" id="editPhone" name="phone" value="">
+        </div>
+        <div class="form-group">
+          <label for="editEmail">Email ID</label>
+          <input type="email" id="editEmail" name="email" value="">
+        </div>
+        <div class="form-group">
+          <label for="editAddress">Address</label>
+          <input type="text" id="editAddress" name="address" value="">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="action-btn confirm-btn" onclick="saveEditDetails()">
+            <span class="lang-text" data-en="Save" data-mr="जतन करा">Save</span>
+          </button>
+          <button type="button" class="action-btn cancel-btn" onclick="closeEditDetailsModal()">
+            <span class="lang-text" data-en="Cancel" data-mr="रद्द करा">Cancel</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Tracking Pipeline Modal -->
+  <div id="trackingModal" class="user-info-modal" style="display:none;">
+    <div class="user-info-content" style="max-width:600px;">
+      <button class="close-modal" onclick="closeTrackingModal()">&times;</button>
+      <h3 class="user-info-title lang-text" data-en="Track Order" data-mr="ऑर्डर ट्रॅक करा">Track Order</h3>
+      <div id="trackingPipelineContent">
+        <!-- Tracking pipeline will be rendered here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Modal -->
+  <div id="feedbackModal" class="user-info-modal" style="display:none;">
+    <div class="user-info-content" style="max-width:500px;">
+      <button class="close-modal" onclick="closeFeedbackModal()">&times;</button>
+      <h3 class="user-info-title lang-text" data-en="Rate Your Experience" data-mr="तुमचा अनुभव रेट करा">Rate Your Experience</h3>
+      <input type="hidden" id="feedbackOrderId" value="">
+      
+      <!-- Star Rating -->
+      <div class="star-rating" id="star-rating" style="font-size: 24px; cursor: pointer; text-align: center; margin: 20px 0;">
+        <span class="star" data-rating="1">★</span>
+        <span class="star" data-rating="2">★</span>
+        <span class="star" data-rating="3">★</span>
+        <span class="star" data-rating="4">★</span>
+        <span class="star" data-rating="5">★</span>
+      </div>
+      
+      <!-- Feedback Form -->
+      <div id="feedbackForm" style="display: none; margin-top: 15px;">
+        <textarea id="feedbackText" placeholder="Share your feedback about this order..." 
+                  rows="4" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit;"></textarea>
+        <button type="button" onclick="submitFeedback()" class="submit-btn action-btn btn-primary" 
+                style="margin-top: 10px; padding: 10px 20px; font-weight: bold; width: 100%;">
+          <span class="lang-text" data-en="Submit Feedback" data-mr="अभिप्राय सबमिट करा">Submit Feedback</span>
+        </button>
+      </div>
+      
+      <!-- Success Message -->
+      <div id="feedbackSuccessMessage" style="display: none; margin-top: 15px; padding: 15px; background: #d4edda; color: #155724; border-radius: 5px;">
+        <strong class="lang-text" data-en="Success!" data-mr="यशस्वी!">Success!</strong> <span class="lang-text" data-en="Your feedback has been submitted successfully." data-mr="तुमचा अभिप्राय यशस्वीरित्या सबमिट केला गेला आहे.">Your feedback has been submitted successfully.</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Language functionality
+    window.addEventListener('DOMContentLoaded', () => {
+      const preferredLang = localStorage.getItem("preferredLanguage") || "en";
+      setLanguage(preferredLang);
+      initializeAnimations();
+      
+      // Check for order status updates every 30 seconds
+      startOrderStatusPolling();
+    });
+
+    // Order status polling to automatically update the page when status changes
+    let statusPollingInterval;
+    function startOrderStatusPolling() {
+      if (statusPollingInterval) {
+        clearInterval(statusPollingInterval);
+      }
+      statusPollingInterval = setInterval(() => {
+        checkOrderStatusUpdates();
+      }, 30000);
+    }
+
+    function checkOrderStatusUpdates() {
+      const currentOrders = {};
+      document.querySelectorAll('.order-card').forEach(card => {
+        const orderIdElem = card.querySelector('.order-id');
+        if (!orderIdElem) return;
+        const orderId = orderIdElem.textContent.replace('Order #', '').trim();
+        const statusBadge = card.querySelector('.status-badge');
+        if (!statusBadge) return;
+        const status = Array.from(statusBadge.classList).find(cls => cls.startsWith('status-'));
+        if (status) {
+          currentOrders[orderId] = status.replace('status-', '');
+        }
+      });
+
+      fetch('/myorders/?check_updates=true', {
+        method: 'GET',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success && data.orders) {
+          data.orders.forEach(order => {
+            if (currentOrders[order.id] && currentOrders[order.id] !== order.status) {
+              showStatusUpdateNotification(order.id, order.status);
+            }
+          });
+        }
+      })
+      .catch(error => {
+        console.log('Status polling error:', error);
+      });
+    }
+
+    function showStatusUpdateNotification(orderId, newStatus) {
+      // Create a notification that status has changed
+      const notification = document.createElement('div');
+      notification.className = 'status-update-notification';
+      notification.innerHTML = `
+        <div style="background: linear-gradient(135deg, #4CAF50, #2E7D32); color: white; padding: 15px; border-radius: 8px; margin: 10px; box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15);">
+          <strong>📦 Order Update</strong>
+          <p>Order #${orderId} status has been updated to: ${newStatus}</p>
+          <button onclick="location.reload()" style="background: white; color: #4CAF50; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-top: 10px;">
+            Refresh Page
+          </button>
+        </div>
+      `;
+      
+      // Add to page
+      document.body.appendChild(notification);
+      
+      // Auto-remove after 10 seconds
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.remove();
+        }
+      }, 10000);
+    }
+
+    function setLanguage(lang) {
+      const elements = document.querySelectorAll(".lang-text");
+      elements.forEach(el => {
+        const text = el.getAttribute(`data-${lang}`);
+        if (text) el.innerText = text;
+      });
+      localStorage.setItem("preferredLanguage", lang);
+    }
+
+    function toggleLanguage() {
+      const currentLang = localStorage.getItem("preferredLanguage") || "en";
+      setLanguage(currentLang === "en" ? "mr" : "en");
+    }
+
+    function toggleDropdown() {
+      const dropdown = document.getElementById("dropdown");
+      if (dropdown) {
+        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+      }
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const dropdown = document.getElementById("dropdown");
+      const avatar = document.querySelector(".avatar");
+      
+      if (dropdown && avatar && !avatar.contains(event.target)) {
+        dropdown.style.display = "none";
+      }
+    });
+
+    // Store edited details in JS (per session, per user)
+    let editedUserDetails = null;
+    let currentEditingOrderId = null;
+
+    function editUserDetails(orderId) {
+      currentEditingOrderId = orderId; // Track which order is being edited
+      fetch('/api/current-user-details/', {
+        method: 'GET',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          const user = data.user;
+          
+          // Use the fetched user details to populate the form
+          document.getElementById('editName').value = user.username;
+          document.getElementById('editPhone').value = user.phone || ''; // Ensure it defaults to an empty string if not available
+          document.getElementById('editEmail').value = user.email;
+          document.getElementById('editAddress').value = user.address;
+        } else {
+          // Fallback to existing logic if API call fails
+          const order = window.ordersData?.find(o => o.id == orderId);
+          let phoneValue = "";
+          if (editedUserDetails?.phone && editedUserDetails.phone !== "Not provided") {
+            phoneValue = editedUserDetails.phone;
+          } else if (order && order.phone_number && order.phone_number !== "Not provided") {
+            phoneValue = order.phone_number;
+          } else if ("{{ user.phone_number|default_if_none:''|escapejs }}") {
+            phoneValue = "{{ user.phone_number|default_if_none:''|escapejs }}";
+          } else if ("{{ user.profile.phone_number|default_if_none:''|escapejs }}") {
+            phoneValue = "{{ user.profile.phone_number|default_if_none:''|escapejs }}";
+          }
+
+          document.getElementById('editName').value = editedUserDetails?.name || "{{ user.username|escapejs }}";
+          document.getElementById('editPhone').value = phoneValue;
+          document.getElementById('editEmail').value = editedUserDetails?.email || "{{ user.email|escapejs }}";
+          document.getElementById('editAddress').value = editedUserDetails?.address || "{{ user.first_name|default_if_none:''|escapejs }}";
+        }
+        
+        document.getElementById('editDetailsModal').style.display = 'flex';
+      })
+      .catch(error => {
+        console.error('Error fetching user details:', error);
+        // Fallback to existing logic on error
+        const order = window.ordersData?.find(o => o.id == orderId);
+        let phoneValue = "";
+        if (editedUserDetails?.phone && editedUserDetails.phone !== "Not provided") {
+          phoneValue = editedUserDetails.phone;
+        } else if (order && order.phone_number && order.phone_number !== "Not provided") {
+          phoneValue = order.phone_number;
+        } else if ("{{ user.phone_number|default_if_none:''|escapejs }}") {
+            phoneValue = "{{ user.phone_number|default_if_none:''|escapejs }}";
+        } else if ("{{ user.profile.phone_number|default_if_none:''|escapejs }}") {
+            phoneValue = "{{ user.profile.phone_number|default_if_none:''|escapejs }}";
+        }
+
+        document.getElementById('editName').value = editedUserDetails?.name || "{{ user.username|escapejs }}";
+        document.getElementById('editPhone').value = phoneValue;
+        document.getElementById('editEmail').value = editedUserDetails?.email || "{{ user.email|escapejs }}";
+        document.getElementById('editAddress').value = editedUserDetails?.address || "{{ user.first_name|default_if_none:''|escapejs }}";
+        document.getElementById('editDetailsModal').style.display = 'flex';
+      });
+    }
+
+    function closeEditDetailsModal() {
+      document.getElementById('editDetailsModal').style.display = 'none';
+    }
+
+    // Store edited details in localStorage so they persist across page reloads and all bills
+    function saveEditDetails() {
+      editedUserDetails = {
+        name: document.getElementById('editName').value,
+        phone: document.getElementById('editPhone').value,
+        email: document.getElementById('editEmail').value,
+        address: document.getElementById('editAddress').value
+      };
+      // Save to localStorage for persistence
+      localStorage.setItem('agrokart_edited_user_details', JSON.stringify(editedUserDetails));
+      closeEditDetailsModal();
+
+      // Show the "Generate Bill" button for the current editing order
+      if (currentEditingOrderId) {
+        const billBtn = document.getElementById(`bill-btn-${currentEditingOrderId}`);
+        if (billBtn) {
+          billBtn.style.display = 'inline-flex';
+        }
+      }
+
+      // Show popup message for success
+      let toast = document.getElementById('successToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'successToast';
+        toast.style.position = 'fixed';
+        toast.style.top = '30px';
+        toast.style.left = '50%';
+        toast.style.transform = 'translateX(-50%)';
+        toast.style.zIndex = '3000';
+        toast.style.minWidth = '260px';
+        toast.style.padding = '18px 36px';
+        toast.style.borderRadius = '30px';
+        toast.style.fontSize = '1.2rem';
+        toast.style.fontWeight = '600';
+        toast.style.boxShadow = '0 8px 32px rgba(56,161,105,0.18)';
+        toast.style.background = 'linear-gradient(90deg,#38a169,#48bb78)';
+        toast.style.color = 'white';
+        toast.style.display = 'block';
+        document.body.appendChild(toast);
+      }
+      toast.innerHTML = '<span style="margin-right:10px;">✅</span>Edit details successfully done';
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+        toast.style.display = 'none';
+      }, 2200);
+    }
+
+    // On page load, restore edited details from localStorage if present
+    window.addEventListener('DOMContentLoaded', () => {
+      // ...existing code...
+      const stored = localStorage.getItem('agrokart_edited_user_details');
+      if (stored) {
+        try {
+          editedUserDetails = JSON.parse(stored);
+        } catch (e) {
+          editedUserDetails = null;
+        }
+      }
+      // ...existing code...
+    });
+
+    // Generate bill by calling the backend API
+    function generateBill(orderId) {
+      // Open the bill in a new tab/window
+      window.open(`/generate-bill/${orderId}/`, '_blank');
+    }
+
+    function closeBillModal() {
+      document.getElementById('billModal').style.display = 'none';
+    }
+
+  // Language functionality
+  window.addEventListener('DOMContentLoaded', () => {
+    const preferredLang = localStorage.getItem("preferredLanguage") || "en";
+    setLanguage(preferredLang);
+    initializeAnimations();
+  });
+
+  function trackOrder(orderId) {
+    // Example pipeline data (simulate backend status/timestamps)
+    // You can pass real timestamps/status from backend if available
+    const order = window.ordersData?.find(o => o.id == orderId);
+    let status = order?.status || 'shipped';
+    let steps = [
+      { key: 'confirmed', label: 'Order Confirmed', icon: '✅', time: 'Confirmed' },
+      { key: 'shipped', label: 'Shipped', icon: '🚚', time: 'Shipped' },
+      { key: 'out_for_delivery', label: 'Out for Delivery', icon: '📦', time: 'Out for Delivery' },
+      { key: 'delivered', label: 'Delivered', icon: '🏠', time: 'Delivered' }
+    ];
+    let activeIndex = steps.findIndex(s => s.key === status);
+    if (activeIndex === -1) activeIndex = 1; // default to shipped
+
+    let html = '<div class="tracking-pipeline">';
+    steps.forEach((step, idx) => {
+      html += `<div class="tracking-step${idx <= activeIndex ? ' active' : ''}">
+        <div class="step-icon">${step.icon}</div>
+        <div class="step-label">${step.label}</div>
+        <div class="step-time">${idx <= activeIndex ? step.time : ''}</div>
+      </div>`;
+    });
+    html += '</div>';
+
+    html += `<div class="current-status" style="text-align:center; margin-top:18px;">
+      <span>Status: <b>${steps[activeIndex].label}</b></span>
+    </div>`;
+
+    document.getElementById('trackingPipelineContent').innerHTML = html;
+    document.getElementById('trackingModal').style.display = 'flex';
+  }
+
+  function closeTrackingModal() {
+    document.getElementById('trackingModal').style.display = 'none';
+  }
+
+  // Cancel Order Function
+  function cancelOrder(orderId) {
+    if (confirm('Are you sure you want to cancel this order?')) {
+      // Show loading state
+      const cancelBtn = document.querySelector(`button[onclick="cancelOrder('${orderId}')"]`);
+      if (cancelBtn) {
+        const originalText = cancelBtn.innerHTML;
+        cancelBtn.innerHTML = '<span>⏳</span> Cancelling...';
+        cancelBtn.disabled = true;
+      }
+      
+      fetch(`/cancel-order/${orderId}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': getCookie('csrftoken'),
+          'Content-Type': 'application/json',
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Show success message
+          showToast('✅ Order cancelled successfully!', 'success');
+          // Reload the page after a short delay to show updated status
+          setTimeout(() => {
+            location.reload();
+          }, 1500);
+        } else {
+          // Show error message
+          showToast('❌ Failed to cancel order: ' + (data.message || 'Unknown error'), 'error');
+          // Restore button state
+          if (cancelBtn) {
+            cancelBtn.innerHTML = originalText;
+            cancelBtn.disabled = false;
+          }
+        }
+      })
+      .catch(error => {
+        console.error('Error cancelling order:', error);
+        showToast('❌ Error cancelling order. Please try again.', 'error');
+        // Restore button state
+        if (cancelBtn) {
+          cancelBtn.innerHTML = originalText;
+          cancelBtn.disabled = false;
+        }
+      });
+    }
+  }
+
+  // Helper function to show toast notifications
+  function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+      position: fixed;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3000;
+      min-width: 260px;
+      padding: 18px 36px;
+      border-radius: 30px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      box-shadow: 0 8px 32px rgba(56,161,105,0.18);
+      color: white;
+      display: block;
+      animation: toastPop 0.7s cubic-bezier(.23,1.02,.64,1) 1;
+    `;
+    
+    if (type === 'success') {
+      toast.style.background = 'linear-gradient(90deg,#38a169,#48bb78)';
+    } else if (type === 'error') {
+      toast.style.background = 'linear-gradient(90deg,#e53e3e,#c53030)';
+    } else {
+      toast.style.background = 'linear-gradient(90deg,#667eea,#764ba2)';
+    }
+    
+    toast.innerHTML = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.remove();
+      }
+    }, 3000);
+  }
+
+  // Close User Info Modal
+  function closeUserInfoModal() {
+    document.getElementById('userInfoModal').style.display = 'none';
+  }
+
+  // Close Edit Modal
+  function closeEditModal() {
+    document.getElementById('editQuantityModal').style.display = 'none';
+  }
+
+  // Change Edit Quantity
+  function changeEditQty(delta) {
+    const input = document.getElementById('editQtyInput');
+    let currentQty = parseInt(input.value) || 1;
+    let newQty = currentQty + delta;
+    
+    if (newQty < 1) newQty = 1;
+    if (newQty > 100) newQty = 100; // Reasonable limit
+    
+    input.value = newQty;
+    updateEditTotalPrice(newQty);
+  }
+
+  // Update Edit Total Price
+  function updateEditTotalPrice(qty) {
+    // This would need to fetch the product price from somewhere
+    // For now, we'll use a placeholder
+    const pricePerUnit = 100; // This should come from the product data
+    const total = qty * pricePerUnit;
+    document.getElementById('editTotalPrice').innerText = `Total: ₹${total}`;
+  }
+
+  // Save Quantity Edit
+  function saveQuantityEdit() {
+    const newQty = parseInt(document.getElementById('editQtyInput').value) || 1;
+    // This would need to send the update to the server
+    alert(`Quantity updated to ${newQty}. This would save to the server in a real implementation.`);
+    closeEditModal();
+  }
+
+  // Initialize Animations
+  function initializeAnimations() {
+    // Add any animation initialization code here
+    console.log('Animations initialized');
+  }
+
+  // Get CSRF Token
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  // Fix: Ensure all button onclick handlers are globally accessible
+  window.editUserDetails = editUserDetails;
+  window.saveEditDetails = saveEditDetails;
+  window.closeEditDetailsModal = closeEditDetailsModal;
+  window.generateBill = generateBill;
+  window.closeBillModal = closeBillModal;
+  window.trackOrder = trackOrder;
+  window.closeTrackingModal = closeTrackingModal;
+  window.cancelOrder = cancelOrder;
+  window.closeEditModal = closeEditModal;
+  window.saveQuantityEdit = saveQuantityEdit;
+  window.changeEditQty = changeEditQty;
+  window.closeUserInfoModal = closeUserInfoModal;
+  window.initializeAnimations = initializeAnimations;
+
+  // Feedback system JavaScript
+  let selectedRating = 0;
+  let currentOrderId = null;
+
+  function showFeedbackForm(orderId) {
+    currentOrderId = orderId;
+    document.getElementById('feedbackOrderId').value = orderId;
+    document.getElementById('feedbackModal').style.display = 'flex';
+    document.getElementById('feedbackForm').style.display = 'none';
+    document.getElementById('feedbackSuccessMessage').style.display = 'none';
+    document.getElementById('feedbackText').value = '';
+    selectedRating = 0;
+    updateStars();
+  }
+
+  function closeFeedbackModal() {
+    document.getElementById('feedbackModal').style.display = 'none';
+  }
+
+  function updateStars() {
+    const stars = document.querySelectorAll('#star-rating .star');
+    stars.forEach((star, index) => {
+      if (index < selectedRating) {
+        star.classList.add('active');
+        star.style.color = '#ffc107';
+      } else {
+        star.classList.remove('active');
+        star.style.color = '#ddd';
+      }
+    });
+  }
+
+  function highlightStars(rating) {
+    const stars = document.querySelectorAll('#star-rating .star');
+    stars.forEach((star, index) => {
+      if (index < rating) {
+        star.style.color = '#ffc107';
+      } else {
+        star.style.color = '#ddd';
+      }
+    });
+  }
+
+  // Add event listeners for stars
+  document.addEventListener('DOMContentLoaded', function() {
+    const stars = document.querySelectorAll('#star-rating .star');
+    
+    stars.forEach(star => {
+      star.addEventListener('click', function() {
+        selectedRating = parseInt(this.getAttribute('data-rating'));
+        updateStars();
+        document.getElementById('feedbackForm').style.display = 'block';
+      });
+      
+      star.addEventListener('mouseover', function() {
+        const rating = parseInt(this.getAttribute('data-rating'));
+        highlightStars(rating);
+      });
+      
+      star.addEventListener('mouseout', function() {
+        highlightStars(selectedRating);
+      });
+    });
+  });
+
+  function submitFeedback() {
+    const feedbackText = document.getElementById('feedbackText').value;
+    const orderId = document.getElementById('feedbackOrderId').value;
+    
+    if (selectedRating === 0) {
+      alert('Please select a rating');
+      return;
+    }
+    
+    fetch('{% url "submit_feedback" %}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      },
+      body: JSON.stringify({
+        order_id: orderId,
+        rating: selectedRating,
+        comment: feedbackText
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById('feedbackForm').style.display = 'none';
+        document.getElementById('feedbackSuccessMessage').style.display = 'block';
+        // Hide the success message and close the modal after 3 seconds
+        setTimeout(() => {
+          document.getElementById('feedbackSuccessMessage').style.display = 'none';
+          closeFeedbackModal();
+        }, 3000);
+      } else {
+        alert(data.message || 'Error submitting feedback');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error submitting feedback');
+    });
+  }
+
+  // ...existing code...
+</script>
+</body>
+</html>

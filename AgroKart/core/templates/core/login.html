@@ -1,0 +1,270 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login – AgroKart</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    html, body {
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+      width: 100%;
+    }
+
+    .left {
+      width: 70%;
+      background-color: #e0f5d8;
+      padding: 3rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .left .logo {
+      margin-bottom: 10px;
+      padding: 5px 5px;
+      border-radius: 16px;
+    }
+
+    .left .logo img {
+      width: 150px;
+      height: auto;
+    }
+
+    .left .welcome h1 {
+      font-size: 30px;
+      color: #0b3d0b;
+      margin-bottom: 20px;
+    }
+
+    .left .welcome p {
+      font-size: 20px;
+      color: #333;
+      max-width: 100%;
+    }
+
+    .left .plant {
+      width: 500px;
+      margin-top: 10px;
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    .right {
+      width: 70%;
+      background-color: #e0f5d8;
+      background-image: url('{% static "images/leaves.png" %}');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .form-box {
+      width: 80%;
+      max-width: 500px;
+      background: linear-gradient(135deg, #549950);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .form-box img {
+      width: 100px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+    }
+
+    .form-box h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #fff;
+    }
+
+    .form-box label {
+      color: #fff;
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      align-self: flex-start;
+    }
+
+    .form-box input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 18px;
+      border-radius: 60px;
+      border: 1px solid #ccc;
+    }
+
+    .form-box input[type="submit"] {
+      background-color: #804e46;
+      color: white;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .form-box input[type="submit"]:hover {
+      background-color: #6f1313;
+    }
+
+    .form-box .error {
+      color: #2e4b3a;
+      font-size: 13px;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    .message {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+    }
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .forgot-password {
+      display: block;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+      color: white;
+      text-decoration: underline;
+    }
+
+    .password-eye {
+      position: absolute;
+      right: 12px;
+      top: 35%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 1.2em;
+      color: #888;
+      display: block;
+      height: auto;
+    }
+
+    @media screen and (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .left, .right {
+        width: 100%;
+        height: 50vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left">
+      <div class="logo">
+        <img src="{% static 'images/web_logo.png' %}" alt="Logo">
+      </div>
+      <div class="welcome">
+        <h1>Welcome Back!</h1>
+        <p>Log in to continue using Agrokart. This platform helps farmers access the best seeds directly.</p>
+      </div>
+      <img src="{% static 'images/plant.png' %}" class="plant" alt="Plant">
+    </div>
+
+    <div class="right">
+      <div class="form-box">
+        <img src="{% static 'images/Login logo.png' %}" id="login-img" alt="Login Image">
+        <h2>Login</h2>
+        <form name="loginForm" method="post" onsubmit="return handleLoginImageChange()">
+          {% csrf_token %}
+          
+          <!-- Django Messages Display -->
+          {% if messages %}
+            {% for message in messages %}
+              <div class="message {{ message.tags }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+          
+          <div class="error" id="error-msg"></div>
+
+          <label>Username</label>
+          <input type="text" name="username" placeholder="Enter Name">
+
+          <label>Password</label>
+          <div style="position:relative;width:100%;">
+            <input type="password" name="password" id="password-input" placeholder="Enter Password" style="padding-right:40px;">
+            <span id="toggle-password" class="password-eye">
+              <i class="fa fa-eye" id="eye-icon"></i>
+            </span>
+          </div>
+
+          <input type="submit" value="Login">
+
+          <a href="{% url 'forgetpassword' %}" class="forgot-password">Forgot Password?</a>
+          <a href="{% url 'signup' %}" class="forgot-password" style="margin-top: 5px;">Don't have an account? Sign Up</a>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function handleLoginImageChange() {
+      const f = document.forms["loginForm"];
+      const { username, password } = f;
+      const err = document.getElementById("error-msg");
+
+      if (!username.value || !password.value) {
+        err.innerText = "Username and Password are required!";
+        return false;
+      }
+
+
+      return true;
+    }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+  <script>
+    const togglePassword = document.getElementById('toggle-password');
+    const passwordInput = document.getElementById('password-input');
+    const eyeIcon = document.getElementById('eye-icon');
+    togglePassword.addEventListener('click', function() {
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+      }
+    });
+  </script>
+</body>
+</html>

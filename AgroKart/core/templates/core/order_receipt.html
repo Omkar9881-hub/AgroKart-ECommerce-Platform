@@ -1,0 +1,381 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AgroKart - Order Receipt</title>
+    <style>
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: #fff;
+            margin: 0;
+            padding: 0;
+            color: #222;
+        }
+        .receipt-container {
+            max-width: 700px;
+            margin: 30px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 32px 32px 24px 32px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .logo img {
+            height: 80px;
+        }
+        .brand {
+            text-align: center;
+            color: #2e7d32;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 18px;
+        }
+        .receipt-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #219150;
+            margin-bottom: 28px;
+            letter-spacing: 1px;
+        }
+        hr {
+            border: none;
+            border-top: 2px solid #219150;
+            margin: 24px 0 18px 0;
+        }
+        .section-title {
+            color: #219150;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 18px;
+        }
+        .info-table td {
+            padding: 6px 0;
+            font-size: 1rem;
+        }
+        .info-table .label {
+            color: #888;
+            font-weight: 600;
+            width: 120px;
+        }
+        .order-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .order-table th, .order-table td {
+            border: 1px solid #e0e0e0;
+            padding: 10px 8px;
+            text-align: center;
+        }
+        .order-table th {
+            background: #e8f5e9;
+            color: #219150;
+            font-weight: 700;
+        }
+        .order-table td {
+            font-size: 1rem;
+        }
+        .grand-total {
+            text-align: right;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #219150;
+            padding-top: 8px;
+        }
+        .footer {
+            text-align: center;
+            color: #888;
+            font-size: 0.95rem;
+            margin-top: 32px;
+        }
+        @media print {
+            body { background: #fff; }
+            .receipt-container { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt-container">
+        <div class="logo">
+            <img src="{% static 'images/web_logo.png' %}" alt="AgroKart Logo">
+        </div>
+        <div class="brand">AgroKart</div>
+        <div class="subtitle">Empowering Farmers with Quality Seeds</div>
+        <div class="receipt-title">Order Receipt</div>
+        <hr>
+        <div class="section-title">Customer Information</div>
+        <table class="info-table">
+            <tr><td class="label">Name:</td><td id="bill-name">{{ customer.username }}</td></tr>
+            <tr><td class="label">Phone:</td><td id="bill-phone">{{ customer.phone }}</td></tr>
+            <tr><td class="label">Email:</td><td id="bill-email">{{ customer.email }}</td></tr>
+            <tr><td class="label">Address:</td><td id="bill-address">{{ customer.address }}</td></tr>
+        </table>
+        <div class="section-title">Order Details</div>
+        <table class="info-table">
+            <tr><td class="label">Order Name:</td><td>{{ order_details.order_name }}</td></tr>
+            <tr><td class="label">Order ID:</td><td>ORD{{ order_details.order_id }}</td></tr>
+            <tr><td class="label">Order Date:</td><td>{{ order_details.date|date:"d/m/Y H:i" }}</td></tr>
+        </table>
+        <table class="order-table">
+            <tr>
+                <th>Sr.</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Rate</th>
+                <th>Total</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>{{ order_details.order_name }}</td>
+                <td>{{ order_details.quantity }}</td>
+                <td>₹{{ order_details.rate }}</td>
+                <td>₹{{ order_details.total }}</td>
+            </tr>
+        </table>
+        <div class="grand-total">Grand Total: ₹{{ order_details.total }}</div>
+        <hr>
+        <div class="footer">
+            Thank you for your business!<br>
+            Receipt Generated: {{ order_details.date|date:"d/m/Y | H:i:s" }}
+        </div>
+    </div>
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  try {
+    // First, check if any user info is missing from the server-rendered content
+    const phoneElem = document.getElementById('bill-phone');
+    const addressElem = document.getElementById('bill-address');
+    const emailElem = document.getElementById('bill-email');
+    
+    // Check if any user info is missing or shows placeholder values
+    const hasMissingInfo = (
+      !phoneElem.textContent.trim() || 
+      phoneElem.textContent === 'Not provided' ||
+      !addressElem.textContent.trim() || 
+      addressElem.textContent === 'Address not provided' ||
+      !emailElem.textContent.trim()
+    );
+    
+    if (hasMissingInfo) {
+      // Try to get user details from localStorage as fallback
+      // First check for the correct key used by the edit details functionality
+      const editedUserDetails = localStorage.getItem('agrokart_edited_user_details');
+      if (editedUserDetails) {
+        try {
+          const details = JSON.parse(editedUserDetails);
+          if (details.phone && (!phoneElem.textContent.trim() || phoneElem.textContent === 'Not provided')) {
+            phoneElem.textContent = details.phone;
+          }
+          if (details.address && (!addressElem.textContent.trim() || addressElem.textContent === 'Address not provided')) {
+            addressElem.textContent = details.address;
+          }
+          if (details.email && !emailElem.textContent.trim()) {
+            emailElem.textContent = details.email;
+          }
+        } catch (e) {
+          console.error('Error parsing localStorage user details:', e);
+        }
+      }
+      
+      // Also check for the old key for backward compatibility
+      const billUserDetails = localStorage.getItem('billUserDetails');
+      if (billUserDetails) {
+        try {
+          const details = JSON.parse(billUserDetails);
+          if (details.phone && (!phoneElem.textContent.trim() || phoneElem.textContent === 'Not provided')) {
+            phoneElem.textContent = details.phone;
+          }
+          if (details.address && (!addressElem.textContent.trim() || addressElem.textContent === 'Address not provided')) {
+            addressElem.textContent = details.address;
+          }
+          if (details.email && !emailElem.textContent.trim()) {
+            emailElem.textContent = details.email;
+          }
+        } catch (e) {
+          console.error('Error parsing localStorage user details:', e);
+        }
+      }
+      
+      // If still missing, try to get from the user details API
+      if ((!phoneElem.textContent.trim() || phoneElem.textContent === 'Not provided') ||
+          (!addressElem.textContent.trim() || addressElem.textContent === 'Address not provided')) {
+        fetch('/api/current-user-details/')
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              if ((!phoneElem.textContent.trim() || phoneElem.textContent === 'Not provided') && data.user.phone) {
+                phoneElem.textContent = data.user.phone;
+              }
+              if ((!addressElem.textContent.trim() || addressElem.textContent === 'Address not provided') && data.user.address) {
+                addressElem.textContent = data.user.address;
+              }
+              if (!emailElem.textContent.trim() && data.user.email) {
+                emailElem.textContent = data.user.email;
+              }
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching user details:', error);
+          });
+      }
+    }
+    
+    // Final fallback: if still missing, show appropriate messages
+    if (!phoneElem.textContent.trim() || phoneElem.textContent === 'Not provided') {
+      phoneElem.textContent = 'Phone number not provided';
+      phoneElem.style.color = '#999';
+    }
+    
+    if (!addressElem.textContent.trim() || addressElem.textContent === 'Address not provided') {
+      addressElem.textContent = 'Address not provided';
+      addressElem.style.color = '#999';
+    }
+    
+    if (!emailElem.textContent.trim()) {
+      emailElem.textContent = 'Email not provided';
+      emailElem.style.color = '#999';
+    }
+    
+  } catch (e) { 
+    console.error('Error in bill user details processing:', e);
+  }
+  
+  // Add print functionality
+  const printButton = document.createElement('button');
+  printButton.textContent = '🖨️ Print Bill';
+  printButton.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  `;
+  printButton.onclick = function() {
+    window.print();
+  };
+  document.body.appendChild(printButton);
+});
+window.addEventListener('DOMContentLoaded', function() {
+  try {
+    const nameElem = document.getElementById('bill-name');
+    const phoneElem = document.getElementById('bill-phone');
+    const addressElem = document.getElementById('bill-address');
+    const emailElem = document.getElementById('bill-email');
+    
+    const editedUserDetails = localStorage.getItem('agrokart_edited_user_details');
+    if (editedUserDetails) {
+      const details = JSON.parse(editedUserDetails);
+      if (details.name) {
+        nameElem.textContent = details.name;
+      }
+      if (details.phone) {
+        phoneElem.textContent = details.phone;
+      }
+      if (details.email) {
+        emailElem.textContent = details.email;
+      }
+      if (details.address) {
+        addressElem.textContent = details.address;
+      }
+    }
+  } catch (e) {
+    console.error('Error loading edited user details from localStorage:', e);
+  }
+  
+  // Add print functionality
+  const printButton = document.createElement('button');
+  printButton.textContent = '🖨️ Print Bill';
+  printButton.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  `;
+  printButton.onclick = function() {
+    window.print();
+  };
+  document.body.appendChild(printButton);
+});
+window.addEventListener('DOMContentLoaded', function() {
+  try {
+    const nameElem = document.getElementById('bill-name');
+    const phoneElem = document.getElementById('bill-phone');
+    const addressElem = document.getElementById('bill-address');
+    const emailElem = document.getElementById('bill-email');
+    
+    const editedUserDetails = localStorage.getItem('agrokart_edited_user_details');
+    if (editedUserDetails) {
+      const details = JSON.parse(editedUserDetails);
+      if (details.name) {
+        nameElem.textContent = details.name;
+      }
+      if (details.phone) {
+        phoneElem.textContent = details.phone;
+      }
+      if (details.email) {
+        emailElem.textContent = details.email;
+      }
+      if (details.address) {
+        addressElem.textContent = details.address;
+      }
+    }
+  } catch (e) {
+    console.error('Error loading edited user details from localStorage:', e);
+  }
+  
+  // Add print functionality
+  const printButton = document.createElement('button');
+  printButton.textContent = '🖨️ Print Bill';
+  printButton.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  `;
+  printButton.onclick = function() {
+    window.print();
+  };
+  document.body.appendChild(printButton);
+});
+</script>
+</body>
+</html>

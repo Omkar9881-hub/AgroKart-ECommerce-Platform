@@ -1,0 +1,33 @@
+from core.models import Product
+
+# Product 1: Sunflower Seeds
+product1 = Product(
+    name="Premium Sunflower Seeds",
+    description="High-quality sunflower seeds with excellent oil content and disease resistance. Perfect for commercial farming with guaranteed high yield potential.",
+    price=180.00,
+    stock_quantity=150,
+    category="OILSEEDS",
+    is_active=True
+)
+product1.save()
+
+# Product 2: Cotton Seeds  
+product2 = Product(
+    name="Hybrid Cotton Seeds",
+    description="Advanced hybrid cotton variety with superior fiber quality and bollworm resistance. Ideal for textile industry requirements.",
+    price=320.00,
+    stock_quantity=80,
+    category="CASH CROPS", 
+    is_active=True
+)
+product2.save()
+
+print("✅ Products added successfully!")
+print(f"1. {product1.name} - ₹{product1.price}/kg")
+print(f"2. {product2.name} - ₹{product2.price}/kg")
+
+# Check all products
+products = Product.objects.all()
+print(f"\n📦 Total products in database: {products.count()}")
+for p in products:
+    print(f"- {p.name} (₹{p.price}/kg) - Stock: {p.stock_quantity}")

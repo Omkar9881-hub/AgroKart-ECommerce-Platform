@@ -1,0 +1,307 @@
+{% load static %}
+<!-- Common Header Template -->
+<style>
+  /* Header Styles */
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 60;
+    width: 100%;
+    background: linear-gradient(135deg, #363f36, #2E7D32, #1B5E20);
+
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 20px;
+    z-index: 1000;
+    opacity: 1;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    transition: opacity 1s ease-in-out;
+    box-sizing: border-box;
+  }
+
+  .logo img {
+    height: 50px;
+    max-width: 150px;
+    width: auto;
+    transition: height 0.3s, max-width 0.3s;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  nav ul li a:hover {
+    color: #4CAF50;
+  }
+
+  .avatar-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #4CAF50;
+  }
+
+  .dropdown {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: white;
+    color: black;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    white-space: nowrap;
+    z-index: 1001;
+  }
+
+  .lang-toggle {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+  }
+
+  .lang-toggle:hover {
+    background: #217a2c;
+    color: #fff;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    header {
+      padding: 5px 10px;
+    }
+    
+    nav ul {
+      gap: 10px;
+    }
+    
+    .logo img {
+      height: 40px;
+      max-width: 120px;
+    }
+    
+    nav ul li a {
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    header {
+      padding: 6px 2vw;
+    }
+    nav ul {
+      gap: 6px;
+      font-size: 0.95em;
+    }
+  }
+
+header.hide-on-scroll {
+  display: none !important;
+}
+</style>
+
+<header>
+  <div class="logo">
+    <a href="{% url 'home' %}"><img src="{% static 'images/web_logo.png' %}" alt="AgroKart Logo"></a>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="{% url 'home' %}" class="lang-text" data-en="Home" data-mr="मुख्यपृष्ठ">Home</a></li>
+      <li><a href="{% url 'aboutus' %}" class="lang-text" data-en="About Us" data-mr="आमच्याबद्दल">About Us</a></li>
+      <li><a href="{% url 'product' %}" class="lang-text" data-en="Products" data-mr="उत्पादने">Products</a></li>
+      <li><a href="{% url 'contact_us' %}" class="lang-text" data-en="Contact" data-mr="संपर्क">Contact</a></li>
+      <li><a href="{% url 'myorders' %}" class="lang-text" data-en="My Orders" data-mr="माझी ऑर्डर">My Orders</a></li>
+      {% if user.is_authenticated %}
+      <li>
+        <div class="avatar-container">
+          <img src="{% static 'images/login logo.png' %}" class="avatar" title="Profile" onclick="toggleDropdown()">
+          <div class="dropdown" id="dropdown">
+            <p class="lang-text" data-en="User: {{ user.username }}" data-mr="वापरकर्ता: {{ user.username }}">User: {{ user.username }}</p>
+            <hr style="margin: 5px 0; border: 0; border-top: 1px solid #eee;">
+            <a href="/logout" style="display: block; padding: 8px 15px; color: #d32f2f; text-decoration: none; font-size: 0.9em;" class="lang-text" data-en="Logout" data-mr="लॉगआउट">Logout</a>
+          </div>
+        </div>
+      </li>
+      {% else %}
+      <li><a href="{% url 'signup' %}" class="lang-text" data-en="Sign Up" data-mr="नोंदणी">Sign Up</a></li>
+      <li><a href="{% url 'login' %}" class="lang-text" data-en="Login" data-mr="लॉगिन">Login</a></li>
+      {% endif %}
+      <li><button class="lang-toggle" onclick="toggleLanguage()">A/अ</button></li>
+    </ul>
+  </nav>
+</header>
+
+<script>
+// Common Header JavaScript Functions
+function toggleDropdown() {
+  const dropdown = document.getElementById('dropdown');
+  if (dropdown) {
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+  }
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+  const dropdown = document.getElementById('dropdown');
+  const avatar = document.querySelector('.avatar');
+
+  if (dropdown && avatar && !avatar.contains(event.target) && !dropdown.contains(event.target)) {
+    dropdown.style.display = 'none';
+  }
+});
+
+// Translations for contact page
+const translations = {
+  en: {
+    contactTitle: "Contact Us",
+    contactInfo: "AgroKart – Digital Agriculture Platform<br>We connect farmers with trusted seed suppliers.<br>Reach out for support, queries, or feedback!",
+    address: "<strong>Address:</strong> AgroKart, 2nd Floor, Green Plaza, Pune-Nashik Highway, Pune, Maharashtra 411045",
+    phone: "<strong>Phone:</strong> +91 8261840336",
+    email: "<strong>Email:</strong> support@agrokart.in",
+    successMsg: "Thank you! Your message has been sent.",
+    username: "Username",
+    phoneLabel: "Phone No",
+    emailLabel: "Email ID",
+    messageLabel: "Your Message",
+    submitBtn: "Submit"
+  },
+  mr: {
+    contactTitle: "संपर्क करा",
+    contactInfo: "अ‍ॅग्रोकार्ट – डिजिटल शेती प्लॅटफॉर्म<br>आम्ही शेतकऱ्यांना विश्वासार्ह बियाणे पुरवठादारांशी जोडतो.<br>मदतीसाठी, शंका किंवा अभिप्रायासाठी संपर्क साधा!",
+    address: "<strong>पत्ता:</strong> अ‍ॅग्रोकार्ट, दुसरा मजला, ग्रीन प्लाझा, पुणे-नाशिक महामार्ग, पुणे, महाराष्ट्र ४११०४५",
+    phone: "<strong>फोन:</strong> +९१ ८२६१८४०३३६",
+    email: "<strong>ईमेल:</strong> support@agrokart.in",
+    successMsg: "धन्यवाद! तुमचा संदेश पाठवला गेला आहे.",
+    username: "वापरकर्त्याचे नाव",
+    phoneLabel: "फोन नंबर",
+    emailLabel: "ईमेल आयडी",
+    messageLabel: "तुमचा संदेश",
+    submitBtn: "सबमिट करा"
+  }
+};
+
+// Language Toggle Function (if not already defined)
+function toggleLanguage() {
+  const currentLang = localStorage.getItem('language') || 'en';
+  const newLang = currentLang === 'en' ? 'mr' : 'en';
+  localStorage.setItem('language', newLang);
+
+  // Update all elements with lang-text class
+  document.querySelectorAll('.lang-text').forEach(element => {
+    const text = element.getAttribute('data-' + newLang);
+    if (text) {
+      element.textContent = text;
+    }
+  });
+
+  // Update all elements with data-translate attribute (for contact page)
+  document.querySelectorAll('[data-translate]').forEach(el => {
+    const key = el.getAttribute('data-translate');
+    if (translations[newLang] && translations[newLang][key]) {
+      el.innerHTML = translations[newLang][key];
+    }
+  });
+}
+
+// Load saved language on page load
+document.addEventListener('DOMContentLoaded', function() {
+  const header = document.querySelector('header');
+  if (!header) {
+    console.log('Header not found!');
+    return;
+  }
+
+  // Apply saved language
+  const savedLang = localStorage.getItem('language') || 'en';
+  document.querySelectorAll('.lang-text').forEach(element => {
+    const text = element.getAttribute('data-' + savedLang);
+    if (text) {
+      element.textContent = text;
+    }
+  });
+  document.querySelectorAll('[data-translate]').forEach(el => {
+    const key = el.getAttribute('data-translate');
+    if (translations[savedLang] && translations[savedLang][key]) {
+      el.innerHTML = translations[savedLang][key];
+    }
+  });
+
+  // Check if we're on the home page
+  const isHomePage = window.location.pathname === '/' || window.location.pathname === '/home/';
+
+  // Set flag if user visits any page other than home
+  if (!isHomePage) {
+    sessionStorage.setItem('hasVisitedOtherPages', 'true');
+    console.log('User visited other page, flag set');
+  }
+
+  if (!isHomePage) {
+    // Only hide header on scroll for non-home pages
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 0) {
+        header.classList.add('hide-on-scroll');
+        console.log('Header hidden (scrollY > 0)');
+      } else {
+        header.classList.remove('hide-on-scroll');
+        console.log('Header shown (scrollY == 0)');
+      }
+    });
+    // Force check on load (in case page loads scrolled)
+    setTimeout(function() {
+      if (window.scrollY > 0) {
+        header.classList.add('hide-on-scroll');
+        console.log('Header hidden (forced on load)');
+      } else {
+        header.classList.remove('hide-on-scroll');
+        console.log('Header shown (forced on load)');
+      }
+    }, 100);
+  } else {
+    // On home page, keep header always visible
+    header.classList.remove('hide-on-scroll');
+    console.log('Header always visible on home page');
+  }
+
+  // Smooth scroll to footer for Contact button
+  const contactLink = document.querySelector('a[href="#footer"]');
+  if (contactLink) {
+    contactLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      const footer = document.getElementById('footer');
+      if (footer) {
+        footer.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  }
+});
+</script>

@@ -1,0 +1,1470 @@
+{% load static %}
+{% include "core/base_header.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgroKart - My Orders</title>
+  <style>
+* {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background-color: #f4f4f4;
+      overflow-x: hidden;
+      padding-top: 60px;
+    }
+    .banner {
+      width: 100%;
+      height: 15vh;
+      background: url('{% static "images/productbanner.jpg" %}') center/cover no-repeat;
+      position: relative;
+      margin: 0;
+    }
+    .banner h1 {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 2rem;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
+    }
+    .orders-container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .orders-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .orders-header h2 {
+      color: #1a3d1a;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+    .orders-header p {
+      color: #666;
+      font-size: 1.1rem;
+    }
+    .order-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+    .order-card:hover {
+      transform: translateY(-2px);
+    }
+    .order-card.new-order {
+      border: 2px solid #28a745;
+      box-shadow: 0 4px 20px rgba(40, 167, 69, 0.2);
+    }
+    .order-
+    .order-id {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .order-date {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    .order-content {
+      padding: 20px;
+    }
+    .order-item {
+      display: flex;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .order-item:last-child {
+      border-bottom: none;
+    }
+    .item-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-right: 15px;
+      border: 2px solid #f0f0f0;
+    }
+    .item-details {
+      flex: 1;
+    }
+    .item-name {
+      font-weight: bold;
+      color: #1a3d1a;
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+    .item-quantity {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+    }
+    .item-price {
+      color: #4CAF50;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+    .order-status {
+      text-align: right;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+    .status-processing {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+    .status-shipped {
+      background: #d4edda;
+      color: #155724;
+    }
+    .status-delivered {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+    .order-total {
+      text-align: right;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 2px solid #eee;
+    }
+    .total-amount {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #1a3d1a;
+    }
+    .no-orders {
+      text-align: center;
+      padding: 60px 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+    .no-orders img {
+      width: 120px;
+      height: 120px;
+      opacity: 0.5;
+      margin-bottom: 20px;
+    }
+    .no-orders h3 {
+      color: #666;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+    .no-orders p {
+      color: #999;
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+    .shop-now-btn {
+      display: inline-block;
+      background: #4CAF50;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+    .shop-now-btn:hover {
+      background: #45a049;
+    }
+    .order-actions {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .action-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .edit-btn {
+      background: #ffc107;
+      color: #000;
+    }
+    .edit-btn:hover:not(:disabled) {
+      background: #e0a800;
+    }
+    .cancel-btn {
+      background: #dc3545;
+      color: white;
+    }
+    .cancel-btn:hover:not(:disabled) {
+      background: #c82333;
+    }
+    .confirm-btn {
+      background: #28a745;
+      color: white;
+    }
+    .confirm-btn:hover:not(:disabled) {
+      background: #218838;
+    }
+    .add-more-btn {
+      background: #17a2b8;
+      color: white;
+    }
+    .add-more-btn:hover:not(:disabled) {
+      background: #138496;
+    }
+    .receipt-btn {
+      background: #6f42c1;
+      color: white;
+    }
+    .receipt-btn:hover:not(:disabled) {
+      background: #5a32a3;
+    }
+    .action-btn:disabled {
+      background: #6c757d;
+      color: #fff;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    .time-limit-info {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin: 8px 0;
+      font-size: 0.85rem;
+      color: #856404;
+    }
+    .time-expired {
+      background: #f8d7da;
+      border-color: #f5c6cb;
+      color: #721c24;
+    }
+    .time-active {
+      background: #d1ecf1;
+      border-color: #bee5eb;
+      color: #0c5460;
+    }
+    .timer-display {
+      background: #f8f9fa;
+      color: #495057;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      border: 1px solid #dee2e6;
+    }
+    .timer-expired {
+      background: #f8d7da;
+      color: #721c24;
+      border-color: #f5c6cb;
+    }
+    .new-order-badge {
+      background: #28a745;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-left: 10px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+    .additional-badge {
+      background: #17a2b8;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    .additional-product {
+      margin-left: 20px;
+      border-left: 3px solid #17a2b8;
+      background: #f8f9fa;
+    }
+    .order-grand-total {
+      font-weight: bold;
+      color: #28a745;
+      font-size: 1.1em;
+      margin-top: 5px;
+      padding-top: 5px;
+      border-top: 1px solid #eee;
+    }
+    .user-info-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    .user-info-content {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #666;
+    }
+    .close-modal:hover {
+      color: #000;
+    }
+    .user-info-title {
+      color: #1a3d1a;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .info-row {
+      display: flex;
+      margin-bottom: 15px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      align-items: center;
+    }
+    .info-label {
+      font-weight: bold;
+      color: #495057;
+      min-width: 120px;
+    }
+    .info-value {
+      color: #212529;
+      flex: 1;
+      margin-right: 10px;
+    }
+    .edit-info-btn {
+      background: #ffc107;
+      color: #000;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .edit-info-btn:hover {
+      background: #e0a800;
+    }
+    .edit-quantity-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    .edit-quantity-content {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+    }
+    .quantity-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .quantity-controls button {
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: #4CAF50;
+      color: white;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    .quantity-controls input {
+      width: 60px;
+      text-align: center;
+      font-size: 1.1rem;
+      border: 2px solid #4CAF50;
+      border-radius: 6px;
+      padding: 8px;
+    }
+    footer {
+      background: linear-gradient(to right, #2e2929, #5a925c);
+      color: white;
+      padding: 40px 20px 20px;
+      margin-top: 40px;
+    }
+    .footer-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .footer-section {
+      flex: 1;
+      min-width: 250px;
+    }
+    .footer-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .footer-logo img {
+      height: 80px;
+      margin-bottom: 15px;
+    }
+    .footer-social-icons {
+      display: flex;
+      gap: 10px;
+      margin: 15px 0;
+    }
+    .footer-social-icons a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      transition: background 0.3s ease;
+    }
+    .footer-social-icons a:hover {
+      background: #4CAF50;
+    }
+    .footer-social-icons img {
+      width: 28px;
+      height: 28px;
+      filter: brightness(0) invert(1);
+    }
+    .footer-section h3 {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: #4CAF50;
+    }
+    .footer-section p {
+      margin: 8px 0;
+      line-height: 1.6;
+    }
+    .footer-bottom {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: #ccc;
+      font-size: 0.9em;
+    }
+    @media (max-width: 900px) {
+      .footer-main {
+        flex-direction: column;
+        gap: 25px;
+      }
+      .footer-section {
+        min-width: 100%;
+        text-align: center;
+      }
+      .footer-logo {
+        align-items: center;
+      }
+      .order-item {
+        flex-direction: column;
+        text-align: center;
+      }
+      .item-image {
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
+      .order-status {
+        text-align: center;
+        margin-top: 10px;
+      }
+    }
+    @media (max-width: 600px) {
+      .orders-container {
+        padding: 0 15px;
+      }
+      .order-
+      footer {
+        padding: 20px 10px 0;
+      }
+      .footer-logo img {
+        height: 60px;
+      }
+      .footer-social-icons a {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9em;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+
+  <div class="banner">
+    <h1 class="lang-text" data-en="My Orders" data-mr="माझी ऑर्डर">My Orders</h1>
+  </div>
+
+  <div class="orders-container">
+    <div class="orders-header">
+      <h2 class="lang-text" data-en="Order History" data-mr="ऑर्डर इतिहास">Order History</h2>
+      <p class="lang-text" data-en="Track and manage your orders" data-mr="तुमच्या ऑर्डरचा मागोवा घ्या आणि व्यवस्थापन करा">Track and manage your orders</p>
+    </div>
+
+    {% if user.is_authenticated %}
+      <!-- Backend Orders Display -->
+      {% if orders %}
+        <div id="orders-list">
+          {% for order in orders %}
+            <div class="order-card">
+              <div class="order-header">
+                <div class="order-info">
+                  <h3>Order #{{ order.id }}</h3>
+                  <p class="order-date">{{ order.created_at|date:"d M Y, g:i A" }}</p>
+                </div>
+                <div class="order-status status-{{ order.status }}">
+                  {% if order.status == 'pending' %}
+                    🟡 <span class="lang-text" data-en="Pending" data-mr="प्रलंबित">Pending</span>
+                  {% elif order.status == 'confirmed' %}
+                    🟢 <span class="lang-text" data-en="Confirmed" data-mr="पुष्टी केली">Confirmed</span>
+                  {% elif order.status == 'shipped' %}
+                    🚚 <span class="lang-text" data-en="Shipped" data-mr="पाठवले">Shipped</span>
+                  {% elif order.status == 'delivered' %}
+                    ✅ <span class="lang-text" data-en="Delivered" data-mr="वितरित">Delivered</span>
+                  {% elif order.status == 'cancelled' %}
+                    ❌ <span class="lang-text" data-en="Cancelled" data-mr="रद्द केले">Cancelled</span>
+                  {% endif %}
+                </div>
+              </div>
+              
+              <div class="order-body">
+                <div class="product-info">
+                  <div class="product-details">
+                    <h4>{{ order.product_name }}</h4>
+                    <p><span class="lang-text" data-en="Quantity:" data-mr="प्रमाण:">Quantity:</span> {{ order.quantity }} units</p>
+                    <p><span class="lang-text" data-en="Price per unit:" data-mr="प्रति युनिट किंमत:">Price per unit:</span> ₹{{ order.product_price }}</p>
+                    <p><span class="lang-text" data-en="Shipping Address:" data-mr="पत्ता:">Shipping Address:</span> {{ order.shipping_address }}</p>
+                  </div>
+                </div>
+                
+                <div class="order-total">
+                  <h3>₹{{ order.total_price }}</h3>
+                </div>
+              </div>
+              
+              <div class="order-footer">
+                <div class="order-actions">
+                  {% if order.status == 'pending' and order.can_be_edited %}
+                    <button class="action-btn edit-btn" onclick="editOrder({{ order.id }})">
+                      <span class="lang-text" data-en="Edit" data-mr="संपादित करा">Edit</span>
+                    </button>
+                  {% endif %}
+                  
+                  {% if order.status == 'pending' and order.can_be_cancelled %}
+                    <button class="action-btn cancel-btn" onclick="cancelOrder({{ order.id }})">
+                      <span class="lang-text" data-en="Cancel" data-mr="रद्द करा">Cancel</span>
+                    </button>
+                  {% endif %}
+                  
+                  {% if order.status == 'pending' and order.can_be_edited %}
+                    <button class="action-btn add-more-btn" onclick="addMoreProducts({{ order.id }})">
+                      <span class="lang-text" data-en="Add More" data-mr="अधिक जोडा">Add More</span>
+                    </button>
+                  {% endif %}
+                </div>
+                
+                <div class="time-info">
+                  {% if order.status == 'pending' %}
+                    {% if order.can_be_edited %}
+                      <small class="lang-text" data-en="Edit time left: {{ order.time_left_for_edit }} minutes" data-mr="संपादन वेळ शिल्लक: {{ order.time_left_for_edit }} मिनिटे">Edit time left: {{ order.time_left_for_edit }} minutes</small>
+                    {% endif %}
+                    {% if order.can_be_cancelled %}
+                      <small class="lang-text" data-en="Cancel time left: {{ order.time_left_for_cancel }} hours" data-mr="रद्द करण्याची वेळ शिल्लक: {{ order.time_left_for_cancel }} तास">Cancel time left: {{ order.time_left_for_cancel }} hours</small>
+                    {% endif %}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <!-- No Orders Message -->
+        <div id="no-orders-message" class="no-orders">
+          <img src="{% static 'images/agrokart.png' %}" alt="No Orders">
+          <h3 class="lang-text" data-en="No Orders Yet" data-mr="अजून कोणतीही ऑर्डर नाही">No Orders Yet</h3>
+          <p class="lang-text" data-en="You haven't placed any orders yet. Start shopping!" data-mr="तुम्ही अजून कोणतीही ऑर्डर दिली नाही. खरेदी सुरू करा!">You haven't placed any orders yet. Start shopping!</p>
+          <a href="{% url 'product' %}" class="shop-now-btn lang-text" data-en="Shop Now" data-mr="आता खरेदी करा">Shop Now</a>
+        </div>
+      {% endif %}
+
+    {% else %}
+      <!-- Not logged in message -->
+      <div class="no-orders">
+        <img src="{% static 'images/agrokart.png' %}" alt="No Orders">
+        <h3 class="lang-text" data-en="Please Login to View Orders" data-mr="ऑर्डर पाहण्यासाठी कृपया लॉगिन करा">Please Login to View Orders</h3>
+        <p class="lang-text" data-en="You need to be logged in to view your order history" data-mr="तुमचा ऑर्डर इतिहास पाहण्यासाठी तुम्हाला लॉगिन करावे लागेल">You need to be logged in to view your order history</p>
+        <a href="{% url 'signup' %}" class="shop-now-btn lang-text" data-en="Login / Sign Up" data-mr="लॉगिन / नोंदणी करा">Login / Sign Up</a>
+      </div>
+    {% endif %}
+  </div>
+
+  <footer id="footer">
+    <div class="footer-main">
+      <!-- Left Section: Logo & Description -->
+      <div class="footer-section footer-logo">
+        <img src="{% static 'images/web_logo.png' %}" alt="AgroKart Logo">
+        <p class="description lang-text" 
+           data-en="Empowering farmers with quality seeds and modern agricultural solutions for sustainable farming and better yields."
+           data-mr="दर्जेदार बियाणे आणि आधुनिक शेती तंत्रज्ञानाने शेतकऱ्यांना सक्षम करत आहे, शाश्वत शेती आणि चांगल्या उत्पादनासाठी.">
+          Empowering farmers with quality seeds and modern agricultural solutions for sustainable farming and better yields.
+        </p>
+        <div class="footer-social-icons">
+          <a href="#" title="Facebook"><img src="{% static 'images/facebook.png' %}" alt="Facebook"></a>
+          <a href="#" title="Twitter"><img src="{% static 'images/twitter.png' %}" alt="Twitter"></a>
+          <a href="#" title="Instagram"><img src="{% static 'images/instagram.png' %}" alt="Instagram"></a>
+          <a href="#" title="LinkedIn"><img src="{% static 'images/linkedin.png' %}" alt="LinkedIn"></a>
+        </div>
+      </div>
+
+      <!-- Middle Left Section: Quick Links -->
+      <div class="footer-section">
+        <h3 class="lang-text" data-en="Quick Links" data-mr="द्रुत दुवे">Quick Links</h3>
+        <ul>
+          <li><a href="{% url 'home' %}" class="lang-text" data-en="Home" data-mr="मुख्यपृष्ठ">Home</a></li>
+          <li><a href="{% url 'aboutus' %}" class="lang-text" data-en="About Us" data-mr="आमच्याबद्दल">About Us</a></li>
+          <li><a href="{% url 'product' %}" class="lang-text" data-en="Products" data-mr="उत्पादने">Products</a></li>
+          <li><a href="{% url 'myorders' %}" class="lang-text" data-en="My Orders" data-mr="माझी ऑर्डर">My Orders</a></li>
+        </ul>
+      </div>
+
+      <!-- Middle Right Section: Contact Info -->
+      <div class="footer-section">
+        <h3 class="lang-text" data-en="Contact Info" data-mr="संपर्क माहिती">Contact Info</h3>
+        <p>✉️ info@agrokart.com</p>
+        <p>📞 +91 1234567890</p>
+        <p class="lang-text" 
+           data-en="📍 Pune, Maharashtra, India"
+           data-mr="📍 पुणे, महाराष्ट्र, भारत">📍 Pune, Maharashtra, India</p>
+      </div>
+
+      <!-- Rightmost Section: Newsletter -->
+      <div class="footer-section">
+        <h3 class="lang-text" data-en="Newsletter" data-mr="वृत्तपत्र">Newsletter</h3>
+        <p class="lang-text" 
+           data-en="Subscribe to get updates on new products and offers"
+           data-mr="नवीन उत्पादने आणि ऑफर्सची अपडेट्स मिळवण्यासाठी सबस्क्राइब करा">
+          Subscribe to get updates on new products and offers
+        </p>
+      </div>
+    </div>
+
+    <!-- Footer Bottom Strip -->
+    <div class="footer-bottom">
+      <p class="lang-text"
+         data-en="© 2025 AgroKart. All rights reserved. | Student Project"
+         data-mr="© 2025 AgroKart. सर्व हक्क राखीव. | विद्यार्थी प्रकल्प">
+        © 2025 AgroKart. All rights reserved. | Student Project
+      </p>
+    </div>
+  </footer>
+
+  <!-- User Info Modal -->
+  <div id="userInfoModal" class="user-info-modal">
+    <div class="user-info-content">
+      <button class="close-modal" onclick="closeUserInfoModal()">&times;</button>
+      <h3 class="user-info-title lang-text" data-en="User Information" data-mr="वापरकर्ता माहिती">User Information</h3>
+      <div id="userInfoDetails">
+        <!-- User info will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Quantity Modal -->
+  <div id="editQuantityModal" class="edit-quantity-modal">
+    <div class="edit-quantity-content">
+      <button class="close-modal" onclick="closeEditModal()">&times;</button>
+      <h3 class="lang-text" data-en="Edit Quantity" data-mr="प्रमाण संपादित करा">Edit Quantity</h3>
+      <div class="quantity-controls">
+        <button onclick="changeEditQty(-1)">-</button>
+        <input type="number" id="editQtyInput" value="1" min="1" readonly>
+        <button onclick="changeEditQty(1)">+</button>
+      </div>
+      <p id="editTotalPrice">Total: ₹0</p>
+      <div style="margin-top: 20px;">
+        <button class="action-btn confirm-btn" onclick="saveQuantityEdit()">
+          <span class="lang-text" data-en="Save Changes" data-mr="बदल जतन करा">Save Changes</span>
+        </button>
+        <button class="action-btn cancel-btn" onclick="closeEditModal()" style="margin-left: 10px;">
+          <span class="lang-text" data-en="Cancel" data-mr="रद्द करा">Cancel</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let orders = [];
+    let timers = {};
+    let currentEditOrderId = null;
+
+    // Language functionality
+    window.addEventListener('DOMContentLoaded', () => {
+      const preferredLang = localStorage.getItem("preferredLanguage") || "en";
+      setLanguage(preferredLang);
+      loadOrders();
+    });
+
+    function setLanguage(lang) {
+      const elements = document.querySelectorAll(".lang-text");
+      elements.forEach(el => {
+        const text = el.getAttribute(`data-${lang}`);
+        if (text) el.innerText = text;
+      });
+      localStorage.setItem("preferredLanguage", lang);
+    }
+
+    function toggleLanguage() {
+      const currentLang = localStorage.getItem("preferredLanguage") || "en";
+      setLanguage(currentLang === "en" ? "mr" : "en");
+      loadOrders(); // Reload orders with new language
+    }
+
+    function toggleDropdown() {
+      const dropdown = document.getElementById("dropdown");
+      if (dropdown) {
+        dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+      }
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const dropdown = document.getElementById("dropdown");
+      const avatar = document.querySelector(".avatar");
+      
+      if (dropdown && avatar && !avatar.contains(event.target)) {
+        dropdown.style.display = "none";
+      }
+    });
+
+    // Load orders from localStorage (user-specific)
+    function loadOrders() {
+      const currentUser = '{{ user.username }}' || 'guest';
+      const userOrdersKey = `userOrders_${currentUser}`;
+      orders = JSON.parse(localStorage.getItem(userOrdersKey) || '[]');
+      
+      // Sort orders by timestamp (newest first)
+      orders.sort((a, b) => b.timestamp - a.timestamp);
+      displayOrders();
+    }
+
+    // Save orders to user-specific localStorage
+    function saveOrders() {
+      const currentUser = '{{ user.username }}' || 'guest';
+      const userOrdersKey = `userOrders_${currentUser}`;
+      localStorage.setItem(userOrdersKey, JSON.stringify(orders));
+    }
+
+    // Display orders
+    function displayOrders() {
+      const ordersList = document.getElementById('orders-list');
+      const noOrdersMessage = document.getElementById('no-orders-message');
+      const currentLang = localStorage.getItem("preferredLanguage") || "en";
+
+      if (orders.length === 0) {
+        ordersList.innerHTML = '';
+        noOrdersMessage.style.display = 'block';
+        return;
+      }
+
+      noOrdersMessage.style.display = 'none';
+      ordersList.innerHTML = '';
+
+      orders.forEach(order => {
+        const orderCard = createOrderCard(order, currentLang);
+        ordersList.appendChild(orderCard);
+        
+        // Start timer if order is recent (within 10 minutes)
+        const timePassed = Date.now() - order.timestamp;
+        if (timePassed < 600000) { // 10 minutes = 600000ms
+          startTimer(order.id, 600000 - timePassed);
+        }
+      });
+    }
+
+    // Create order card HTML
+    function createOrderCard(order, lang) {
+      const div = document.createElement('div');
+      const timePassed = Date.now() - order.timestamp;
+      const isNew = timePassed < 300000; // 5 minutes
+      
+      // Check if this is an additional product
+      const isAdditional = order.isAdditionalProduct;
+      
+      div.className = isNew ? 'order-card new-order' : 'order-card';
+      if (isAdditional) {
+        div.className += ' additional-product';
+      }
+      div.id = `order-${order.id}`;
+
+      const productName = lang === 'mr' ? order.productMr : order.product;
+      const canEdit = timePassed < 600000; // 10 minutes
+      
+      // Calculate remaining time for add more products
+      const remainingTime = Math.max(0, 600000 - timePassed); // 10 minutes
+      const remainingMinutes = Math.floor(remainingTime / 60000);
+      const remainingSeconds = Math.floor((remainingTime % 60000) / 1000);
+
+      // Get all products with same order ID for total calculation
+      const sameOrderProducts = orders.filter(o => o.id === order.id);
+      const orderTotal = sameOrderProducts.reduce((sum, o) => sum + o.total, 0);
+
+      div.innerHTML = `
+        <div class="order-header">
+          <div>
+            <div class="order-id">
+              Order #${order.id}
+              ${isAdditional ? `<span class="additional-badge">${lang === 'mr' ? 'अतिरिक्त' : 'ADDITIONAL'}</span>` : ''}
+              ${isNew ? `<span class="new-order-badge">${lang === 'mr' ? 'नवीन' : 'NEW'}</span>` : ''}
+            </div>
+            <div class="order-date">Placed on: ${order.date}</div>
+          </div>
+          <div class="order-status">
+            <span class="status-badge status-${order.status}">${order.status.toUpperCase()}</span>
+          </div>
+        </div>
+        <div class="order-content">
+          <div class="order-item">
+            <img src="${order.image}" alt="${productName}" class="item-image">
+            <div class="item-details">
+              <div class="item-name">${productName}</div>
+              <div class="item-quantity">${lang === 'mr' ? 'प्रमाण' : 'Quantity'}: ${order.quantity} kg</div>
+              <div class="item-price">₹${order.price} / kg</div>
+            </div>
+          </div>
+          <div class="order-total">
+            <div class="total-amount">${lang === 'mr' ? 'एकूण' : 'Total'}: ₹${order.total}</div>
+            ${sameOrderProducts.length > 1 && !isAdditional ? 
+              `<div class="order-grand-total">${lang === 'mr' ? 'सर्व उत्पादनांचा एकूण' : 'Grand Total'}: ₹${orderTotal}</div>` : ''}
+          </div>
+          ${!isAdditional ? `
+          <div class="order-actions">
+            ${canEdit ? `
+              <div class="time-limit-info time-active" id="timer-${order.id}">
+                ⏰ ${lang === 'mr' ? 'उत्पादन जोडण्यासाठी वेळ शिल्लक' : 'Time left to add products'}: ${remainingMinutes}:${remainingSeconds.toString().padStart(2, '0')}
+              </div>
+            ` : `
+              <div class="time-limit-info time-expired">
+                ⏰ ${lang === 'mr' ? 'वेळ संपली! आता फक्त बिल तयार करू शकता' : 'Time expired! You can only generate bill now'}
+              </div>
+            `}
+            <button class="action-btn edit-btn" id="edit-${order.id}" 
+                    onclick="editOrder('${order.id}')" ${!canEdit ? 'disabled' : ''}>
+              ${lang === 'mr' ? 'संपादित करा' : 'Edit'}
+            </button>
+            <button class="action-btn cancel-btn" id="cancel-${order.id}" 
+                    onclick="cancelOrder('${order.id}')" ${!canEdit ? 'disabled' : ''}>
+              ${lang === 'mr' ? 'रद्द करा' : 'Cancel'}
+            </button>
+            <button class="action-btn confirm-btn" id="confirm-${order.id}" 
+                    onclick="confirmOrder('${order.id}')" ${canEdit ? 'disabled' : ''}>
+              ${lang === 'mr' ? 'पुष्टी करा' : 'Confirm'}
+            </button>
+            <button class="action-btn add-more-btn" id="add-more-${order.id}" 
+                    onclick="addMoreProducts('${order.id}')" ${!canEdit ? 'disabled' : ''}>
+              ${lang === 'mr' ? 'अधिक उत्पादन जोडा' : 'Add More Product'}
+            </button>
+            <button class="action-btn receipt-btn" id="receipt-${order.id}" 
+                    onclick="generateOrderReceipt('${order.id}')" ${canEdit ? 'disabled' : ''}>
+              ${lang === 'mr' ? 'रसीद' : 'Receipt'}
+            </button>
+          </div>` : ''}
+        </div>
+      `;
+
+      return div;
+    }
+
+    // Start countdown timer
+    function startTimer(orderId, remainingTime) {
+      if (timers[orderId]) {
+        clearInterval(timers[orderId]);
+      }
+
+      let timeLeft = Math.floor(remainingTime / 1000);
+      
+      timers[orderId] = setInterval(() => {
+        timeLeft--;
+        
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        const timerDisplay = document.getElementById(`timer-${orderId}`);
+        
+        if (timerDisplay) {
+          const currentLang = localStorage.getItem("preferredLanguage") || "en";
+          if (timeLeft > 0) {
+            const timeText = currentLang === 'mr' ? 
+              `⏰ उत्पादन जोडण्यासाठी वेळ शिल्लक: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}` :
+              `⏰ Time left to add products: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            timerDisplay.textContent = timeText;
+            timerDisplay.className = 'time-limit-info time-active';
+          } else {
+            const expiredText = currentLang === 'mr' ? 
+              '⏰ वेळ संपली! आता फक्त बिल तयार करू शकता' :
+              '⏰ Time expired! You can only generate bill now';
+            timerDisplay.textContent = expiredText;
+            timerDisplay.className = 'time-limit-info time-expired';
+            
+            // Enable confirm and receipt buttons, disable others
+            document.getElementById(`edit-${orderId}`).disabled = true;
+            document.getElementById(`cancel-${orderId}`).disabled = true;
+            document.getElementById(`confirm-${orderId}`).disabled = false;
+            document.getElementById(`add-more-${orderId}`).disabled = true;
+            
+            // Enable receipt button
+            document.getElementById(`receipt-${orderId}`).disabled = false;
+            
+            // Update order status to SHIPPED
+            const orderIndex = orders.findIndex(o => o.id === orderId);
+            if (orderIndex !== -1) {
+              orders[orderIndex].status = 'shipped';
+              saveOrders();
+              
+              // Update status badge
+              const statusBadge = document.querySelector(`#order-${orderId} .status-badge`);
+              if (statusBadge) {
+                statusBadge.textContent = 'SHIPPED';
+                statusBadge.className = 'status-badge status-shipped';
+              }
+            }
+            
+            clearInterval(timers[orderId]);
+            delete timers[orderId];
+          }
+        }
+      }, 1000);
+    }
+
+    // Edit order function
+    function editOrder(orderId) {
+      const order = orders.find(o => o.id === orderId);
+      if (!order) return;
+
+      currentEditOrderId = orderId;
+      document.getElementById('editQtyInput').value = order.quantity;
+      updateEditTotal();
+      document.getElementById('editQuantityModal').style.display = 'flex';
+    }
+
+    // Cancel order function
+    function cancelOrder(orderId) {
+      const orderProducts = orders.filter(o => o.id === orderId);
+      const productCount = orderProducts.length;
+      const productText = productCount > 1 ? `${productCount} products` : '1 product';
+      
+      if (confirm(`Are you sure you want to cancel this order with ${productText}?`)) {
+        // Remove all products with same order ID
+        orders = orders.filter(o => o.id !== orderId);
+        
+        // Sort remaining orders by timestamp before saving
+        orders.sort((a, b) => b.timestamp - a.timestamp);
+        saveOrders();
+        
+        // Clear timer
+        if (timers[orderId]) {
+          clearInterval(timers[orderId]);
+          delete timers[orderId];
+        }
+        
+        loadOrders();
+        alert('Order cancelled successfully!');
+      }
+    }
+
+    // Confirm order function
+    function confirmOrder(orderId) {
+      showUserInfo();
+    }
+
+    // Add More Products function
+    function addMoreProducts(orderId) {
+      // Check if order is still within time limit (10 minutes)
+      const orderStartTime = localStorage.getItem('orderStartTime');
+      if (orderStartTime) {
+        const timeElapsed = Date.now() - parseInt(orderStartTime);
+        const timeLimit = 10 * 60 * 1000; // 10 minutes in milliseconds
+        
+        if (timeElapsed >= timeLimit) {
+          alert('Time expired! You can no longer add products to this order.');
+          localStorage.removeItem('currentOrderId');
+          localStorage.removeItem('orderStartTime');
+          return;
+        }
+      }
+      
+      // Store the current order ID and start time in localStorage
+      localStorage.setItem('currentOrderId', orderId);
+      if (!orderStartTime) {
+        localStorage.setItem('orderStartTime', Date.now());
+      }
+      
+      // Redirect to products page
+      window.location.href = "{% url 'product' %}";
+    }
+
+    // Generate Order Receipt function
+    function generateOrderReceipt(orderId) {
+      // Get all products with same order ID
+      const orderProducts = orders.filter(o => o.id === orderId);
+      if (orderProducts.length === 0) {
+        alert('Order not found!');
+        return;
+      }
+
+      const currentUser = '{{ user.username }}' || 'guest';
+      const userInfoKey = `userInfo_${currentUser}`;
+      const userInfo = JSON.parse(localStorage.getItem(userInfoKey) || '{}');
+      const currentLang = localStorage.getItem("preferredLanguage") || "en";
+      
+      // Get user info
+      const userDetails = {
+        username: '{{ user.username }}' || 'User',
+        email: userInfo.email || '{{ user.email }}' || 'user@example.com',
+        phone: userInfo.phone || '+91 9876543210',
+        address: userInfo.address || 'Pune, Maharashtra, India'
+      };
+
+      // Calculate total amount for all products in this order
+      const totalAmount = orderProducts.reduce((sum, product) => sum + product.total, 0);
+      
+      // Create product rows for receipt
+      let productRows = '';
+      orderProducts.forEach((product, index) => {
+        const productName = currentLang === 'mr' ? product.productMr : product.product;
+        productRows += `
+          <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;">${index + 1}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${productName}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">${product.quantity} kg</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">₹${product.price}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">₹${product.total}</td>
+          </tr>
+        `;
+      });
+
+      const mainOrder = orderProducts[0]; // Use first product for order details
+
+      // Create receipt HTML for order with all products
+      const receiptHTML = `
+        <div style="max-width: 700px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; background: white;">
+          <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #4CAF50; padding-bottom: 20px;">
+            <img src="{% static 'images/web_logo.png' %}" alt="AgroKart Logo" style="height: 80px; margin-bottom: 10px;">
+            <h1 style="color: #4CAF50; margin: 0;">AgroKart</h1>
+            <p style="color: #666; margin: 5px 0;">Empowering Farmers with Quality Seeds</p>
+            <h2 style="color: #1a3d1a; margin-top: 15px;">
+              ${currentLang === 'mr' ? 'ऑर्डर रसीद' : 'Order Receipt'}
+            </h2>
+          </div>
+          
+          <div style="margin-bottom: 30px;">
+            <h3 style="color: #1a3d1a; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+              ${currentLang === 'mr' ? 'ग्राहक माहिती' : 'Customer Information'}
+            </h3>
+            <div style="margin-top: 15px;">
+              <p><strong>${currentLang === 'mr' ? 'नाव:' : 'Name:'}</strong> ${userDetails.username}</p>
+              <p><strong>${currentLang === 'mr' ? 'फोन:' : 'Phone:'}</strong> ${userDetails.phone}</p>
+              <p><strong>${currentLang === 'mr' ? 'ईमेल:' : 'Email:'}</strong> ${userDetails.email}</p>
+              <p><strong>${currentLang === 'mr' ? 'पत्ता:' : 'Address:'}</strong> ${userDetails.address}</p>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 30px;">
+            <h3 style="color: #1a3d1a; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+              ${currentLang === 'mr' ? 'ऑर्डर तपशील' : 'Order Details'}
+            </h3>
+            <div style="margin-top: 15px;">
+              <p><strong>${currentLang === 'mr' ? 'ऑर्डर ID:' : 'Order ID:'}</strong> ${mainOrder.id}</p>
+              <p><strong>${currentLang === 'mr' ? 'तारीख:' : 'Date:'}</strong> ${mainOrder.date}</p>
+              <p><strong>${currentLang === 'mr' ? 'स्थिती:' : 'Status:'}</strong> ${mainOrder.status.toUpperCase()}</p>
+            </div>
+            
+            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+              <thead>
+                <tr style="background: #4CAF50; color: white;">
+                  <th style="padding: 10px; border: 1px solid #ddd;">${currentLang === 'mr' ? 'अ.क्र.' : 'Sr.'}</th>
+                  <th style="padding: 10px; border: 1px solid #ddd;">${currentLang === 'mr' ? 'उत्पादन' : 'Product'}</th>
+                  <th style="padding: 10px; border: 1px solid #ddd;">${currentLang === 'mr' ? 'प्रमाण' : 'Quantity'}</th>
+                  <th style="padding: 10px; border: 1px solid #ddd;">${currentLang === 'mr' ? 'दर' : 'Rate'}</th>
+                  <th style="padding: 10px; border: 1px solid #ddd;">${currentLang === 'mr' ? 'एकूण' : 'Total'}</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${productRows}
+              </tbody>
+              <tfoot>
+                <tr style="background: #f8f9fa; font-weight: bold;">
+                  <td colspan="4" style="padding: 12px; border: 1px solid #ddd; text-align: right;">
+                    ${currentLang === 'mr' ? 'एकूण रक्कम:' : 'Grand Total:'}
+                  </td>
+                  <td style="padding: 12px; border: 1px solid #ddd; color: #4CAF50; font-size: 1.2rem;">
+                    ₹${totalAmount}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          
+          <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666;">
+            <p><strong>${currentLang === 'mr' ? 'धन्यवाद!' : 'Thank you for your business!'}</strong></p>
+            <p style="font-size: 0.9rem; margin-top: 10px;">
+              ${currentLang === 'mr' ? 'रसीद तयार केली:' : 'Receipt Generated:'} ${new Date().toLocaleDateString('en-GB')} | 
+              ${new Date().toLocaleTimeString('en-GB')}
+            </p>
+          </div>
+        </div>
+      `;
+
+      // Open receipt in new window
+      const receiptWindow = window.open('', '_blank', 'width=700,height=600');
+      receiptWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>AgroKart - Order Receipt</title>
+          <style>
+            body { margin: 0; padding: 20px; background: #f5f5f5; }
+            @media print {
+              body { background: white; }
+              .no-print { display: none; }
+            }
+          </style>
+        </head>
+        <body>
+          ${receiptHTML}
+          <div class="no-print" style="text-align: center; margin-top: 20px;">
+            <button onclick="window.print()" style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-right: 10px;">
+              ${currentLang === 'mr' ? 'प्रिंट करा' : 'Print Receipt'}
+            </button>
+            <button onclick="window.close()" style="background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+              ${currentLang === 'mr' ? 'बंद करा' : 'Close'}
+            </button>
+          </div>
+        </body>
+        </html>
+      `);
+      receiptWindow.document.close();
+    }
+
+    // Show user info modal
+    function showUserInfo() {
+      const currentUser = '{{ user.username }}' || 'guest';
+      const userInfoKey = `userInfo_${currentUser}`;
+      const userInfo = JSON.parse(localStorage.getItem(userInfoKey) || '{}');
+      const currentLang = localStorage.getItem("preferredLanguage") || "en";
+      
+      // Default user info if not found
+      const defaultInfo = {
+        username: '{{ user.username }}' || 'User',
+        email: userInfo.email || '{{ user.email }}' || 'user@example.com',
+        phone: userInfo.phone || '+91 9876543210',
+        address: userInfo.address || 'Pune, Maharashtra, India'
+      };
+
+      const userInfoDetails = document.getElementById('userInfoDetails');
+      userInfoDetails.innerHTML = `
+        <div class="info-row">
+          <div class="info-label">${currentLang === 'mr' ? 'नाव:' : 'Name:'}</div>
+          <div class="info-value">${defaultInfo.username}</div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">${currentLang === 'mr' ? 'ईमेल:' : 'Email:'}</div>
+          <div class="info-value" id="email-value">${defaultInfo.email}</div>
+          <button class="edit-info-btn" onclick="editField('email', '${defaultInfo.email}')">
+            ${currentLang === 'mr' ? 'संपादित करा' : 'Edit'}
+          </button>
+        </div>
+        <div class="info-row">
+          <div class="info-label">${currentLang === 'mr' ? 'फोन:' : 'Phone:'}</div>
+          <div class="info-value" id="phone-value">${defaultInfo.phone}</div>
+          <button class="edit-info-btn" onclick="editField('phone', '${defaultInfo.phone}')">
+            ${currentLang === 'mr' ? 'संपादित करा' : 'Edit'}
+          </button>
+        </div>
+        <div class="info-row">
+          <div class="info-label">${currentLang === 'mr' ? 'पत्ता:' : 'Address:'}</div>
+          <div class="info-value" id="address-value">${defaultInfo.address}</div>
+          <button class="edit-info-btn" onclick="editField('address', '${defaultInfo.address}')">
+            ${currentLang === 'mr' ? 'संपादित करा' : 'Edit'}
+          </button>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+          <button class="action-btn confirm-btn" onclick="generateBill()">
+            ${currentLang === 'mr' ? 'बिल तयार करा' : 'Generate Bill'}
+          </button>
+        </div>
+      `;
+
+      document.getElementById('userInfoModal').style.display = 'flex';
+    }
+
+    // Generate Bill
+    function generateBill() {
+      const currentUser = '{{ user.username }}' || 'guest';
+      const userInfoKey = `userInfo_${currentUser}`;
+      const userInfo = JSON.parse(localStorage.getItem(userInfoKey) || '{}');
+      const currentLang = localStorage.getItem("preferredLanguage") || "en";
+      
+      // Get user info
+      const userDetails = {
+        username: '{{ user.username }}' || 'User',
+        email: userInfo.email || '{{ user.email }}' || 'user@example.com',
+        phone: userInfo.phone || '+91 9876543210',
+        address: userInfo.address || 'Pune, Maharashtra, India'
+      };
+
+      // Calculate total for all orders
+      let totalAmount = 0;
+      let billItems = '';
+      
+      orders.forEach((order, index) => {
+        totalAmount += order.total;
+        const productName = currentLang === 'mr' ? order.productMr : order.product;
+        billItems += `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${order.id}</td>
+            <td>${productName}</td>
+            <td>${order.quantity} kg</td>
+            <td>₹${order.price}</td>
+            <td>₹${order.total}</td>
+          </tr>
+        `;
+      });
+
+      // Create bill HTML
+      const billHTML = `
+        <div style="max-width: 800px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; background: white;">
+          <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #4CAF50; padding-bottom: 20px;">
+            <img src="{% static 'images/web_logo.png' %}" alt="AgroKart Logo" style="height: 80px; margin-bottom: 10px;">
+            <h1 style="color: #4CAF50; margin: 0;">AgroKart</h1>
+            <p style="color: #666; margin: 5px 0;">Empowering Farmers with Quality Seeds</p>
+          </div>
+          
+          <div style="margin-bottom: 30px;">
+            <h2 style="color: #1a3d1a; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+              ${currentLang === 'mr' ? 'ग्राहक माहिती' : 'Customer Information'}
+            </h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+              <div><strong>${currentLang === 'mr' ? 'नाव:' : 'Name:'}</strong> ${userDetails.username}</div>
+              <div><strong>${currentLang === 'mr' ? 'फोन:' : 'Phone:'}</strong> ${userDetails.phone}</div>
+              <div><strong>${currentLang === 'mr' ? 'ईमेल:' : 'Email:'}</strong> ${userDetails.email}</div>
+              <div><strong>${currentLang === 'mr' ? 'पत्ता:' : 'Address:'}</strong> ${userDetails.address}</div>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 30px;">
+            <h2 style="color: #1a3d1a; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+              ${currentLang === 'mr' ? 'ऑर्डर तपशील' : 'Order Details'}
+            </h2>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+              <thead>
+                <tr style="background: #4CAF50; color: white;">
+                  <th style="padding: 12px; border: 1px solid #ddd;">${currentLang === 'mr' ? 'अ.क्र.' : 'Sr.'}</th>
+                  <th style="padding: 12px; border: 1px solid #ddd;">${currentLang === 'mr' ? 'ऑर्डर ID' : 'Order ID'}</th>
+                  <th style="padding: 12px; border: 1px solid #ddd;">${currentLang === 'mr' ? 'उत्पादन' : 'Product'}</th>
+                  <th style="padding: 12px; border: 1px solid #ddd;">${currentLang === 'mr' ? 'प्रमाण' : 'Quantity'}</th>
+                  <th style="padding: 12px; border: 1px solid #ddd;">${currentLang === 'mr' ? 'दर' : 'Rate'}</th>
+                  <th style="padding: 12px; border: 1px solid #ddd;">${currentLang === 'mr' ? 'एकूण' : 'Total'}</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${billItems}
+              </tbody>
+              <tfoot>
+                <tr style="background: #f8f9fa; font-weight: bold;">
+                  <td colspan="5" style="padding: 12px; border: 1px solid #ddd; text-align: right;">
+                    ${currentLang === 'mr' ? 'एकूण रक्कम:' : 'Grand Total:'}
+                  </td>
+                  <td style="padding: 12px; border: 1px solid #ddd; color: #4CAF50; font-size: 1.2rem;">
+                    ₹${totalAmount}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          
+          <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666;">
+            <p>${currentLang === 'mr' ? 'धन्यवाद!' : 'Thank you for your business!'}</p>
+            <p style="font-size: 0.9rem; margin-top: 10px;">
+              ${currentLang === 'mr' ? 'तारीख:' : 'Date:'} ${new Date().toLocaleDateString('en-GB')} | 
+              ${currentLang === 'mr' ? 'वेळ:' : 'Time:'} ${new Date().toLocaleTimeString('en-GB')}
+            </p>
+          </div>
+        </div>
+      `;
+
+      // Open bill in new window
+      const billWindow = window.open('', '_blank', 'width=800,height=600');
+      billWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>AgroKart - Order Bill</title>
+          <style>
+            body { margin: 0; padding: 20px; background: #f5f5f5; }
+            @media print {
+              body { background: white; }
+              .no-print { display: none; }
+            }
+          </style>
+        </head>
+        <body>
+          ${billHTML}
+          <div class="no-print" style="text-align: center; margin-top: 20px;">
+            <button onclick="window.print()" style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-right: 10px;">
+              ${currentLang === 'mr' ? 'प्रिंट करा' : 'Print Bill'}
+            </button>
+            <button onclick="window.close()" style="background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+              ${currentLang === 'mr' ? 'बंद करा' : 'Close'}
+            </button>
+          </div>
+        </body>
+        </html>
+      `);
+      billWindow.document.close();
+    }
+
+    // Edit user info field
+    function editField(fieldName, currentValue) {
+      const newValue = prompt(`Enter new ${fieldName}:`, currentValue);
+      if (newValue && newValue !== currentValue) {
+        const currentUser = '{{ user.username }}' || 'guest';
+        const userInfoKey = `userInfo_${currentUser}`;
+        let userInfo = JSON.parse(localStorage.getItem(userInfoKey) || '{}');
+        
+        userInfo[fieldName] = newValue;
+        localStorage.setItem(userInfoKey, JSON.stringify(userInfo));
+        
+        // Update display
+        document.getElementById(`${fieldName}-value`).textContent = newValue;
+        alert(`${fieldName} updated successfully!`);
+      }
+    }
+
+    // Close user info modal
+    function closeUserInfoModal() {
+      document.getElementById('userInfoModal').style.display = 'none';
+    }
+
+    // Edit quantity functions
+    function changeEditQty(change) {
+      const input = document.getElementById('editQtyInput');
+      let newValue = parseInt(input.value) + change;
+      if (newValue < 1) newValue = 1;
+      input.value = newValue;
+      updateEditTotal();
+    }
+
+    function updateEditTotal() {
+      if (!currentEditOrderId) return;
+      
+      const order = orders.find(o => o.id === currentEditOrderId);
+      if (!order) return;
+      
+      const qty = parseInt(document.getElementById('editQtyInput').value);
+      const total = qty * order.price;
+      document.getElementById('editTotalPrice').textContent = `Total: ₹${total}`;
+    }
+
+    function saveQuantityEdit() {
+      if (!currentEditOrderId) return;
+      
+      const newQty = parseInt(document.getElementById('editQtyInput').value);
+      const orderIndex = orders.findIndex(o => o.id === currentEditOrderId);
+      
+      if (orderIndex !== -1) {
+        orders[orderIndex].quantity = newQty;
+        orders[orderIndex].total = newQty * orders[orderIndex].price;
+        
+        // Sort orders by timestamp before saving
+        orders.sort((a, b) => b.timestamp - a.timestamp);
+        saveOrders();
+        
+        loadOrders();
+        closeEditModal();
+        alert('Order updated successfully!');
+      }
+    }
+
+    function closeEditModal() {
+      document.getElementById('editQuantityModal').style.display = 'none';
+      currentEditOrderId = null;
+    }
+
+
+
+    // Close modals when clicking outside
+    window.onclick = function(event) {
+      const userModal = document.getElementById('userInfoModal');
+      const editModal = document.getElementById('editQuantityModal');
+      
+      if (event.target === userModal) {
+        closeUserInfoModal();
+      }
+      if (event.target === editModal) {
+        closeEditModal();
+      }
+    }
+  </script>
+</body>
+
+
+
+

@@ -1,0 +1,370 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About Us – AgroKart</title>
+
+  <!-- AOS Animation Library -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    html, body {
+      overflow-x: hidden;
+      background: #fff url("{% static 'images/aboutus.jpg' %}") center/cover no-repeat;
+      min-height: 100vh;
+    }
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: linear-gradient(to right, #0e0202, #b2fab4);
+      color: rgb(0, 0, 0);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 40px;
+      z-index: 999;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      opacity: 1;
+    }
+    .logo img {
+      height: 60px;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    nav ul li a, nav ul li span {
+      text-decoration: none;
+      color: rgb(102, 31, 31);
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    nav ul li a:hover, nav ul li span:hover {
+      color: #2d7b2f;
+    }
+    .nav-avatar {
+      display: flex;
+      align-items: center;
+    }
+    .nav-avatar img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+    }
+    .about-section {
+      margin-top: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 70vh;
+    }
+    .about-content {
+      background: rgba(0,0,0,0.65);
+      color: #fff;
+      padding: 48px 40px 40px 40px;
+      border-radius: 18px;
+      max-width: 800px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .about-content h1 {
+      font-size: 48px;
+      margin-bottom: 30px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #90d194;
+    }
+    .about-content p {
+      font-size: 18px;
+      line-height: 1.8;
+      margin-bottom: 25px;
+    }
+    .btn {
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #2d7b2f;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      text-decoration: none;
+    }
+    .btn:hover {
+      background-color: #90d194;
+      color: #2d7b2f;
+    }
+
+    /* Team Cards */
+    .team-section {
+      margin: 60px auto;
+      max-width: 900px;
+      text-align: center;
+    }
+    .team-section h2 {
+      font-size: 32px;
+      color: #90d194;
+      margin-bottom: 20px;
+    }
+    .team-cards {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      width: 200px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease;
+    }
+    .card img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+    }
+    .card h3 {
+      margin: 10px 0 5px 0;
+      font-size: 1.2em;
+      color: #2d7b2f;
+    }
+    .card p {
+      font-size: 0.9em;
+      color: #444;
+    }
+    .card:hover {
+      transform: translateY(-10px);
+    }
+
+    /* Stats */
+    .stats-section {
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      padding: 40px 20px;
+      background: #f0fef1;
+      margin-top: 60px;
+      flex-wrap: wrap;
+    }
+    .stat-box {
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .stat-box h2 {
+      font-size: 2.5em;
+      color: #2d7b2f;
+    }
+    .stat-box p {
+      font-size: 1.1em;
+      color: #333;
+    }
+    .stat-box:hover {
+      transform: scale(1.1);
+    }
+
+    /* Carousel */
+    .carousel-container {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 16px;
+      padding: 40px 20px;
+      margin-top: 40px;
+    }
+    .carousel-img {
+      flex: 0 0 auto;
+      width: 300px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 12px;
+      scroll-snap-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    /* Footer Styles */
+    #footer {
+      background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+      color: white;
+      padding: 60px 0 30px 0;
+      margin-top: 80px;
+      text-align: center;
+    }
+    .footer-social {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    .footer-social a {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .footer-social a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    .footer-social span {
+      color: white;
+    }
+
+    @media (max-width: 900px) {
+      .about-content { padding: 24px 10px; }
+      header { padding: 10px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header id="mainHeader">
+    <div class="logo"><a href="{% url 'home' %}"><img src="{% static 'images/web_logo.png' %}" alt="Logo"></a></div>
+    <nav>
+      <ul>
+        <li><span onclick="setLanguage('en')">Eng</span> / <span onclick="setLanguage('mr')">मराठी</span></li>
+        <li><a href="{% url 'home' %}" class="lang-text" data-en="Home" data-mr="मुखपृष्ठ">Home</a></li>
+        <li><a href="{% url 'product' %}" class="lang-text" data-en="Products" data-mr="उत्पन्न">Products</a></li>
+        <li><a href="#footer" class="lang-text" data-en="Contact" data-mr="संपर्क">Contact</a></li>
+        <li><a href="#" class="lang-text" data-en="About Us" data-mr="आमच्याबद्दल">About Us</a></li>
+        {% if user.is_authenticated %}
+        <li><a href="#" class="lang-text" data-en="My Orders" data-mr="माझी ऑर्डर्स">My Orders</a></li>
+        <li class="nav-avatar" style="position: relative;">
+          <a href="#" onclick="toggleDropdown(event)">
+            <img src="{% static 'images/login logo.png' %}" alt="Avatar" title="My Profile">
+          </a>
+          <div id="userDropdown" style="display: none; position: absolute; top: 40px; right: 0; background: white; border: 1px solid #ccc; padding: 10px; border-radius: 6px; white-space: nowrap;">
+            <strong>{{ user.username }}</strong>
+          </div>
+        </li>
+        {% else %}
+        <li><a href="{% url 'signup' %}" class="lang-text" data-en="SignUp / Login" data-mr="नोंदणी / लॉगिन"><img src="{% static 'images/login_icon.png' %}" style="width: 24px; vertical-align: middle;"> SignUp / Login</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </header>
+
+  <section class="about-section">
+    <div class="about-content" data-aos="fade-up">
+      <h1 class="lang-text" data-en="About Us" data-mr="आमच्याबद्दल">About Us</h1>
+      <p class="lang-text" data-en="AgroKart is built with a vision to empower every farmer by providing access to quality seeds and smart agricultural tools at fair prices." data-mr="अ‍ॅग्रोकार्ट हे एक असे व्यासपीठ आहे जे प्रत्येक शेतकऱ्याला दर्जेदार बियाणे व स्मार्ट शेती साधनं योग्य दरात उपलब्ध करून देण्यासाठी बांधिल आहे."></p>
+      <p class="lang-text" data-en="We believe in supporting the agricultural community by embracing technology, innovation, and trust." data-mr="तंत्रज्ञान, नवकल्पना आणि विश्वास यांच्या माध्यमातून आम्ही शेती समुदायाला समर्थन देतो."></p>
+      <p class="lang-text" data-en="AgroKart isn't just an online store, it's a partner in your agricultural journey." data-mr="अ‍ॅग्रोकार्ट हे फक्त एक ऑनलाइन दुकान नाही, तर तुमच्या शेतीच्या प्रवासातील एक भागीदार आहे."></p>
+      <a href="{% url 'home' %}" class="btn lang-text" data-en="Go to Home" data-mr="मुख्यपृष्ठावर जा">Go to Home</a>
+    </div>
+  </section>
+
+  <div class="team-section" data-aos="fade-up">
+    <h2>Meet Our Team</h2>
+    <div class="team-cards">
+      <div class="card" data-aos="fade-right">
+        <img src="{% static 'images/facebook.png' %}" alt="founder">
+        <h3>Preet Shingavi</h3>
+        <p>Founder & Agronomist</p>
+      </div>
+      <div class="card" data-aos="fade-left">
+        <img src="{% static 'images/facebook.png' %}" alt="founder">
+        <h3>Omkar Shelar</h3>
+        <p>Founder & Agronomist</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="stats-section" data-aos="zoom-in">
+    <div class="stat-box">
+      <h2>5000+</h2>
+      <p>Happy Farmers</p>
+    </div>
+    <div class="stat-box">
+      <h2>100+</h2>
+      <p>Products Delivered</p>
+    </div>
+    <div class="stat-box">
+      <h2>15 States</h2>
+      <p>Across India</p>
+    </div>
+  </section>
+
+  <div class="carousel-container" data-aos="fade-up">
+    <img src="{% static 'images/farm.jpg' %}" class="carousel-img" alt="Crop 1">
+    <img src="{% static 'images/farmer.png' %}" class="carousel-img" alt="Crop 2">
+    <img src="{% static 'images/farmer2.jpeg' %}" class="carousel-img" alt="Crop 3">
+  </div>
+
+  <footer id="footer">
+    <div class="footer-social">
+      <a href="#" title="Instagram"><span>📸</span></a>
+      <a href="#" title="Facebook"><span>📘</span></a>
+      <a href="#" title="Twitter"><span>🐦</span></a>
+    </div>
+    <div>
+      <span class="lang-text" data-en="Contact: agrokart@email.com | +91 9876543210" data-mr="संपर्क: agrokart@email.com | +९१ ९८७६५४३२१०">
+        Contact: agrokart@email.com | +91 9876543210
+      </span>
+    </div>
+    <div style="margin-top: 8px;">
+      &copy; 2025 AgroKart. <span class="lang-text" data-en="All rights reserved." data-mr="सर्व हक्क राखीव.">All rights reserved.</span>
+    </div>
+  </footer>
+
+  <!-- JS: Language + AOS Init -->
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init();
+
+    function setLanguage(lang) {
+      const elements = document.querySelectorAll(".lang-text");
+      elements.forEach(el => {
+        const text = el.getAttribute(`data-${lang}`);
+        if (text) el.innerText = text;
+      });
+      localStorage.setItem("preferredLanguage", lang);
+    }
+
+    window.addEventListener('DOMContentLoaded', function () {
+      const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+      setLanguage(savedLang);
+    });
+
+    document.querySelectorAll('nav ul li a').forEach(link => {
+      link.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          e.preventDefault();
+          document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    function toggleDropdown(event) {
+      event.preventDefault();
+      const dropdown = document.getElementById("userDropdown");
+      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    }
+  </script>
+
+</body>
+</html>
